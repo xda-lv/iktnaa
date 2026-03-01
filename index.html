@@ -61,6 +61,15 @@
       transition: width 0.1s linear;
     }
 
+    /* ===== LANG SWITCH ANIMATION ===== */
+    [data-i18n] {
+      transition: opacity 0.18s ease, transform 0.18s ease;
+    }
+    .lang-switching [data-i18n] {
+      opacity: 0;
+      transform: translateY(3px);
+    }
+
     .container { max-width: var(--max-w); margin: 0 auto; padding: 0 2rem; }
 
     /* ===== HEADER ===== */
@@ -140,7 +149,19 @@
       position: relative;
     }
 
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: 4px;
+      left: 50%;
+      width: 0;
+      height: 1.5px;
+      background: currentColor;
+      transition: width 0.3s var(--ease), left 0.3s var(--ease);
+      border-radius: 1px;
+    }
     .nav-links a:hover { color: var(--white); background: rgba(255,255,255,0.08); }
+    .nav-links a:hover::after { width: 50%; left: 25%; }
 
     .lang-dropdown {
       position: relative;
@@ -836,9 +857,22 @@
       text-decoration: none;
       font-size: 0.875rem;
       transition: color 0.2s;
+      position: relative;
+    }
+
+    .footer-col a::after {
+      content: '';
+      position: absolute;
+      bottom: -2px;
+      left: 0;
+      width: 0;
+      height: 1px;
+      background: rgba(255,255,255,0.4);
+      transition: width 0.3s var(--ease);
     }
 
     .footer-col a:hover { color: var(--white); }
+    .footer-col a:hover::after { width: 100%; }
     .footer-col li:not(:has(a)) { font-size: 0.875rem; color: rgba(255,255,255,0.45); }
 
     .footer-bottom {
@@ -1741,16 +1775,22 @@
         ? 'IKTNAA — IKT nodarbināto atbalsta asociācija'
         : 'IKTNAA — ICT Workers Support Association';
 
-      document.querySelectorAll('[data-i18n]').forEach(el => {
-        const key = el.getAttribute('data-i18n');
-        const val = T[l]?.[key];
-        if (val) {
-          if (val.includes('<')) { el.innerHTML = val; }
-          else { el.textContent = val; }
-        }
-      });
+      // Animate: fade out → swap text → fade in
+      document.body.classList.add('lang-switching');
 
-      // Update dropdown
+      setTimeout(() => {
+        document.querySelectorAll('[data-i18n]').forEach(el => {
+          const key = el.getAttribute('data-i18n');
+          const val = T[l]?.[key];
+          if (val) {
+            if (val.includes('<')) { el.innerHTML = val; }
+            else { el.textContent = val; }
+          }
+        });
+        document.body.classList.remove('lang-switching');
+      }, 180);
+
+      // Update dropdown (instant — not translated content)
       langFlag.textContent = FLAGS[l] || '🇱🇻';
       langLabel.textContent = LABELS[l] || 'LV';
       langListItems.forEach(li => li.classList.toggle('active', li.dataset.lang === l));
