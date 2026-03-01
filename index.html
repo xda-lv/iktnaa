@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="lv">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>IKTNAS — IKT nodarbināto atbalsta asociācija</title>
+  <style>
+    :root {
+      --color-primary: #1a1a2e;
+      --color-accent: #4361ee;
+      --color-text: #333;
+      --color-bg: #fff;
+      --font-main: 'Inter', system-ui, -apple-system, sans-serif;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: var(--font-main);
+      color: var(--color-text);
+      background: var(--color-bg);
+      line-height: 1.6;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 2rem;
+    }
+
+    header {
+      padding: 1.5rem 0;
+      border-bottom: 1px solid #eee;
+    }
+
+    header .container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--color-primary);
+      text-decoration: none;
+    }
+
+    nav a {
+      margin-left: 2rem;
+      text-decoration: none;
+      color: var(--color-text);
+      font-weight: 500;
+    }
+
+    nav a:hover {
+      color: var(--color-accent);
+    }
+
+    .hero {
+      padding: 6rem 0;
+      text-align: center;
+    }
+
+    .hero h1 {
+      font-size: 3rem;
+      color: var(--color-primary);
+      margin-bottom: 1rem;
+    }
+
+    .hero p {
+      font-size: 1.25rem;
+      color: #666;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    footer {
+      padding: 2rem 0;
+      border-top: 1px solid #eee;
+      text-align: center;
+      color: #999;
+      font-size: 0.875rem;
+    }
+  </style>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <header>
+    <div class="container">
+      <a href="/" class="logo">IKTNAS</a>
+      <nav>
+        <a href="/">Sākums</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="container">
+        <h1>IKTNAS</h1>
+        <p>IKT nodarbināto atbalsta asociācija</p>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      <p>&copy; 2026 IKTNAS. Visas tiesības aizsargātas.</p>
+    </div>
+  </footer>
+</body>
+</html>

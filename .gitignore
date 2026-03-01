@@ -1,0 +1,19 @@
+.DS_Store
+node_modules/
+dist/
+.env*
+
+# Automation / Workers
+automation/
+**/automation/
+wrangler.*
+.wrangler/
+
+# AI context — LOCAL ONLY, never push
+.ai/
+context.md
+CLAUDE.md
+ARCHITECTURE.md
+OPERATIONS.md
+PROGRESS.md
+project-status.md
