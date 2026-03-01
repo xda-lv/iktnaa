@@ -5,8 +5,18 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>404 — IKTNAA</title>
   <meta name="robots" content="noindex">
-  <link rel="icon" type="image/png" sizes="32x32" href="/img/favicon-32.png">
-  <link rel="apple-touch-icon" sizes="180x180" href="/img/apple-touch-icon.png">
+  <script>
+    // Detect base path for GitHub Pages (repo name prefix)
+    (function() {
+      var base = document.createElement('base');
+      var path = location.pathname;
+      var repo = path.match(/^\/[^/]+\//);
+      base.href = repo ? repo[0] : '/';
+      document.head.appendChild(base);
+    })();
+  </script>
+  <link rel="icon" type="image/png" sizes="32x32" href="img/favicon-32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="img/apple-touch-icon.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -239,14 +249,14 @@
   </div>
 
   <div class="container">
-    <a href="/" class="logo-link">
-      <img src="/img/logo-white.jpg" alt="IKTNAA">
+    <a href="./" class="logo-link">
+      <img src="img/logo-white.jpg" alt="IKTNAA">
       <span>IKTNAA</span>
     </a>
     <div class="error-code">404</div>
     <h1 data-i18n="title">Lapa nav atrasta</h1>
     <p data-i18n="desc">Izskatās, ka šī lapa neeksistē vai ir pārvietota. Pārbaudiet adresi vai atgriezieties uz sākumlapu.</p>
-    <a href="/" class="btn">
+    <a href="./" class="btn">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
       <span data-i18n="btn">Uz sākumlapu</span>
     </a>
