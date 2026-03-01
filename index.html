@@ -1253,28 +1253,26 @@
     .mobile-lang-toggle {
       display: none;
       position: relative;
-      margin-right: 0.25rem;
+      margin-left: 0.15rem;
     }
 
     .mobile-lang-current {
-      background: rgba(255,255,255,0.08);
-      border: 1px solid rgba(255,255,255,0.12);
+      background: none;
+      border: none;
       border-radius: 8px;
-      padding: 0.35rem 0.55rem;
-      font-family: var(--font);
-      font-size: 0.75rem;
-      font-weight: 600;
-      color: rgba(255,255,255,0.8);
+      padding: 0.4rem;
       cursor: pointer;
       transition: all 0.25s;
       display: flex;
       align-items: center;
-      gap: 0.3rem;
+      gap: 0.2rem;
     }
 
-    .mobile-lang-current:hover { background: rgba(255,255,255,0.12); }
-    .mobile-lang-current .mlc-chevron { font-size: 0.5rem; transition: transform 0.25s; }
+    .mobile-lang-current:hover { background: rgba(255,255,255,0.08); }
+    .mobile-lang-current .mlc-flag { font-size: 1.25rem; line-height: 1; }
+    .mobile-lang-current .mlc-chevron { font-size: 0.45rem; color: rgba(255,255,255,0.5); transition: transform 0.25s; }
     .mobile-lang-toggle.open .mlc-chevron { transform: rotate(180deg); }
+    .header.scrolled .mobile-lang-current .mlc-chevron { color: var(--text-muted); }
 
     .mobile-lang-list {
       position: absolute;
@@ -1321,12 +1319,7 @@
     .mobile-lang-btn:hover { background: rgba(255,255,255,0.06); color: var(--white); }
     .mobile-lang-btn.active { color: var(--white); background: rgba(37,87,167,0.15); }
 
-    .header.scrolled .mobile-lang-current {
-      background: rgba(0,0,0,0.04);
-      border-color: var(--border);
-      color: var(--text);
-    }
-    .header.scrolled .mobile-lang-current:hover { background: rgba(0,0,0,0.07); }
+    .header.scrolled .mobile-lang-current:hover { background: rgba(0,0,0,0.05); }
     .header.scrolled .mobile-lang-list {
       background: var(--white);
       border-color: var(--border);
@@ -1428,7 +1421,8 @@
       .footer-bottom { flex-direction: column; gap: 1rem; text-align: center; }
       .stats-grid { grid-template-columns: repeat(2, 1fr); }
       .stat-item::after { display: none !important; }
-      .stats-bar { margin-top: -1.5rem; }
+      .stats-bar { margin-top: 0; }
+      .cookie-bar { bottom: 5rem; }
     }
 
     @media (max-width: 480px) {
@@ -1439,6 +1433,8 @@
       .cards-grid { grid-template-columns: 1fr; }
       .footer-grid { grid-template-columns: 1fr; }
       .stats-grid { grid-template-columns: 1fr 1fr; }
+      .stats-bar { margin-top: 0; }
+      .cookie-bar { bottom: 5.5rem; }
     }
   </style>
 </head>
@@ -1481,9 +1477,12 @@
           </ul>
         </div>
       </nav>
+      <button class="mobile-toggle" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
       <div class="mobile-lang-toggle" id="mobile-lang-toggle">
         <button class="mobile-lang-current" id="mobile-lang-btn">
-          <span id="mobile-lang-label">LV</span>
+          <span class="mlc-flag" id="mobile-lang-flag">🇱🇻</span>
           <span class="mlc-chevron">▼</span>
         </button>
         <ul class="mobile-lang-list" id="mobile-lang-list">
@@ -1492,9 +1491,6 @@
           <li><button class="mobile-lang-btn" data-lang="ru">🇷🇺 Русский</button></li>
         </ul>
       </div>
-      <button class="mobile-toggle" aria-label="Menu">
-        <span></span><span></span><span></span>
-      </button>
     </div>
   </header>
 
@@ -1887,9 +1883,9 @@
       langLabel.textContent = LABELS[l] || 'LV';
       langListItems.forEach(li => li.classList.toggle('active', li.dataset.lang === l));
 
-      // Update mobile header lang toggle
-      const mobileLangLabel = document.getElementById('mobile-lang-label');
-      if (mobileLangLabel) mobileLangLabel.textContent = LABELS[l] || 'LV';
+      // Update mobile header lang toggle flag
+      const mobileLangFlag = document.getElementById('mobile-lang-flag');
+      if (mobileLangFlag) mobileLangFlag.textContent = FLAGS[l] || '🇱🇻';
       document.querySelectorAll('.mobile-lang-btn').forEach(b =>
         b.classList.toggle('active', b.dataset.lang === l)
       );
