@@ -49,6 +49,18 @@
       overflow-x: hidden;
     }
 
+    /* ===== SCROLL PROGRESS ===== */
+    .scroll-progress {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--accent), #5B9BF0);
+      z-index: 1000;
+      width: 0%;
+      transition: width 0.1s linear;
+    }
+
     .container { max-width: var(--max-w); margin: 0 auto; padding: 0 2rem; }
 
     /* ===== HEADER ===== */
@@ -279,8 +291,14 @@
       background: white;
       border-radius: 10px;
       padding: 4px;
-      box-shadow: 0 2px 16px rgba(0,0,0,0.2);
+      box-shadow: 0 4px 24px rgba(37,87,167,0.25);
       object-fit: contain;
+      animation: float 6s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-8px); }
     }
 
     .hero-badge {
@@ -289,12 +307,26 @@
       gap: 0.5rem;
       font-size: 0.8rem;
       font-weight: 500;
-      color: rgba(255,255,255,0.6);
+      color: rgba(255,255,255,0.7);
       background: rgba(255,255,255,0.06);
       border: 1px solid rgba(255,255,255,0.1);
       padding: 0.4rem 1rem;
       border-radius: 100px;
       margin-bottom: 1.5rem;
+    }
+
+    .hero-badge::before {
+      content: '';
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #34d399;
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(52,211,153,0.4); }
+      50% { opacity: 0.6; box-shadow: 0 0 0 8px rgba(52,211,153,0); }
     }
 
     .hero h1 {
@@ -343,10 +375,27 @@
       color: var(--white);
     }
 
+    .btn-primary::after {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -75%;
+      width: 50%;
+      height: 200%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent);
+      transform: skewX(-20deg);
+      animation: shimmer 4s ease-in-out infinite;
+    }
+
+    @keyframes shimmer {
+      0%, 100% { left: -75%; }
+      50% { left: 125%; }
+    }
+
     .btn-primary:hover {
       background: var(--accent-hover);
-      transform: translateY(-1px);
-      box-shadow: 0 4px 16px rgba(37,87,167,0.25);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 24px rgba(37,87,167,0.3);
     }
 
     .btn-ghost {
@@ -455,6 +504,7 @@
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       gap: 1.25rem;
+      perspective: 1200px;
     }
 
     .card {
@@ -462,9 +512,10 @@
       border: 1px solid var(--border);
       border-radius: var(--r);
       padding: 2rem;
-      transition: all 0.4s var(--ease);
+      transition: all 0.4s var(--ease), transform 0.15s ease-out;
       position: relative;
       overflow: hidden;
+      transform-style: preserve-3d;
     }
 
     .card::before {
@@ -555,11 +606,24 @@
       overflow: hidden;
     }
 
+    .news-card::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--accent), #5B9BF0);
+      transition: width 0.5s var(--ease);
+    }
+
     .news-card:hover {
       border-color: var(--border-hover);
-      transform: translateY(-2px);
-      box-shadow: 0 4px 20px rgba(15,27,53,0.06);
+      transform: translateY(-3px);
+      box-shadow: 0 8px 28px rgba(15,27,53,0.08);
     }
+
+    .news-card:hover::after { width: 100%; }
 
     .news-date {
       font-size: 0.75rem;
@@ -836,45 +900,62 @@
       box-shadow: 0 2px 12px rgba(37,87,167,0.2);
     }
 
-    /* ===== TOP BANNER ===== */
+    /* ===== TOAST NOTIFICATION ===== */
     .top-banner {
       position: fixed;
-      top: -60px;
-      left: 0;
-      right: 0;
-      z-index: 110;
+      top: 1.5rem;
+      left: 50%;
+      transform: translateX(-50%) translateY(-120px);
+      z-index: 200;
       background: var(--dark);
-      color: rgba(255,255,255,0.85);
+      color: rgba(255,255,255,0.9);
       text-align: center;
-      padding: 0.65rem 2rem;
-      font-size: 0.825rem;
+      padding: 0.75rem 2.5rem 0.75rem 1.25rem;
+      font-size: 0.85rem;
       font-weight: 500;
       display: flex;
       align-items: center;
-      justify-content: center;
-      gap: 0.5rem;
-      transition: top 0.4s var(--ease);
-      border-bottom: 1px solid rgba(255,255,255,0.06);
+      gap: 0.625rem;
+      transition: transform 0.5s var(--ease), opacity 0.5s;
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 12px;
+      box-shadow: 0 12px 40px rgba(0,0,0,0.25);
+      white-space: nowrap;
+      opacity: 0;
+      backdrop-filter: blur(12px);
     }
 
-    .top-banner.visible { top: 0; }
-    .top-banner .banner-icon { font-size: 1rem; }
+    .top-banner.visible {
+      transform: translateX(-50%) translateY(0);
+      opacity: 1;
+    }
+
+    .top-banner .banner-icon {
+      font-size: 1.1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 28px;
+      height: 28px;
+      border-radius: 8px;
+      background: rgba(255,255,255,0.06);
+    }
 
     .top-banner .banner-close {
       position: absolute;
-      right: 1rem;
+      right: 0.625rem;
+      top: 50%;
+      transform: translateY(-50%);
       background: none;
       border: none;
-      color: rgba(255,255,255,0.4);
+      color: rgba(255,255,255,0.35);
       cursor: pointer;
-      font-size: 1.1rem;
+      font-size: 0.9rem;
       padding: 0.25rem;
       transition: color 0.2s;
     }
 
     .top-banner .banner-close:hover { color: var(--white); }
-    .top-banner.visible ~ .header { top: 38px; }
-    .top-banner.visible ~ .hero { padding-top: calc(8rem + 38px); }
 
     /* ===== COOKIE BAR ===== */
     .cookie-bar {
@@ -1264,6 +1345,9 @@
     <span id="banner-text">Tulkojums krievu valodā tiek izstrādāts</span>
     <button class="banner-close" id="banner-close">✕</button>
   </div>
+
+  <!-- Scroll progress -->
+  <div class="scroll-progress" id="scroll-progress"></div>
 
   <!-- Header -->
   <header class="header" id="header">
@@ -1764,11 +1848,14 @@
     /* ===== Scroll effects ===== */
     const header = document.getElementById('header');
     const backToTop = document.getElementById('back-to-top');
+    const scrollProgress = document.getElementById('scroll-progress');
 
     window.addEventListener('scroll', () => {
       const y = window.scrollY;
       header.classList.toggle('scrolled', y > 10);
       backToTop.classList.toggle('visible', y > 400);
+      const docH = document.documentElement.scrollHeight - window.innerHeight;
+      scrollProgress.style.width = docH > 0 ? (y / docH * 100) + '%' : '0%';
     }, { passive: true });
 
     backToTop.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
@@ -1808,6 +1895,30 @@
     }, { threshold: 0.5 });
 
     document.querySelectorAll('.counter').forEach(el => counterObserver.observe(el));
+
+    /* ===== Card 3D tilt ===== */
+    document.querySelectorAll('.card').forEach(card => {
+      card.addEventListener('mousemove', e => {
+        const rect = card.getBoundingClientRect();
+        const x = (e.clientX - rect.left) / rect.width - 0.5;
+        const y = (e.clientY - rect.top) / rect.height - 0.5;
+        card.style.transform = `translateY(-4px) rotateY(${x * 6}deg) rotateX(${-y * 6}deg)`;
+      });
+      card.addEventListener('mouseleave', () => {
+        card.style.transform = '';
+      });
+    });
+
+    /* ===== Stat item hover glow ===== */
+    document.querySelectorAll('.stat-item').forEach(item => {
+      item.addEventListener('mouseenter', () => {
+        item.querySelector('.stat-number').style.color = 'var(--accent)';
+        item.querySelector('.stat-number').style.transition = 'color 0.3s';
+      });
+      item.addEventListener('mouseleave', () => {
+        item.querySelector('.stat-number').style.color = '';
+      });
+    });
 
     /* ===== Network canvas animation (hero) ===== */
     (function() {
