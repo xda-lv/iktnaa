@@ -3,28 +3,24 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>IKTNAS — IKT nodarbināto atbalsta asociācija</title>
+  <title>IKTNAA — IKT nodarbināto atbalsta asociācija</title>
   <meta name="description" content="IKT nodarbināto atbalsta asociācija — aizstāvam IT speciālistu intereses valsts pārvaldē un privātajā sektorā.">
   <link rel="icon" type="image/png" sizes="32x32" href="img/favicon-32.png">
   <link rel="apple-touch-icon" sizes="180x180" href="img/apple-touch-icon.png">
-  <meta property="og:title" content="IKTNAS — IKT nodarbināto atbalsta asociācija">
+  <meta property="og:title" content="IKTNAA — IKT nodarbināto atbalsta asociācija">
   <meta property="og:description" content="Aizstāvam informācijas un komunikācijas tehnoloģiju nozarē nodarbināto speciālistu tiesības un profesionālās intereses Latvijā.">
   <meta property="og:image" content="img/logo-white.jpg">
   <meta property="og:type" content="website">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
     :root {
       --dark: #0F1B35;
       --dark-2: #162244;
       --dark-3: #1A2D52;
-      --accent: #2B5CDE;
-      --accent-2: #4D65FF;
-      --accent-cyan: #0E8A6E;
-      --accent-glow: rgba(43, 92, 222, 0.2);
-      --accent-glow-2: rgba(77, 101, 255, 0.15);
-      --cyan-glow: rgba(14, 138, 110, 0.1);
+      --accent: #2557A7;
+      --accent-hover: #1D4A8F;
       --white: #FFFFFF;
       --bg: #FAFBFD;
       --bg-alt: #F0F3F8;
@@ -33,14 +29,12 @@
       --text-muted: #64748B;
       --text-light: #E2E8F0;
       --border: #E2E6EF;
-      --border-hover: rgba(43,92,222,0.25);
-      --font: 'Space Grotesk', system-ui, -apple-system, sans-serif;
-      --mono: 'JetBrains Mono', monospace;
+      --border-hover: rgba(37,87,167,0.2);
+      --font: 'Inter', system-ui, -apple-system, sans-serif;
       --max-w: 1200px;
-      --r: 16px;
-      --r-sm: 10px;
+      --r: 12px;
+      --r-sm: 8px;
       --ease: cubic-bezier(0.22, 1, 0.36, 1);
-      --ease-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
     }
 
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
@@ -53,18 +47,6 @@
       line-height: 1.6;
       -webkit-font-smoothing: antialiased;
       overflow-x: hidden;
-    }
-
-    /* ===== SCROLL PROGRESS ===== */
-    .scroll-progress {
-      position: fixed;
-      top: 0;
-      left: 0;
-      height: 3px;
-      background: linear-gradient(90deg, var(--accent), var(--accent-2), var(--accent-cyan));
-      z-index: 1000;
-      width: 0%;
-      transition: width 0.1s linear;
     }
 
     .container { max-width: var(--max-w); margin: 0 auto; padding: 0 2rem; }
@@ -130,7 +112,7 @@
       border-radius: 6px;
       padding: 2px;
     }
-    .logo-accent { color: var(--accent); }
+    .logo-accent { color: #3B7DD8; }
 
     .nav { display: flex; align-items: center; gap: 2.5rem; }
     .nav-links { list-style: none; display: flex; gap: 0.25rem; }
@@ -212,7 +194,7 @@
     }
 
     .lang-list li:hover { background: rgba(255,255,255,0.06); color: var(--white); }
-    .lang-list li.active { color: var(--white); background: rgba(77,101,255,0.15); }
+    .lang-list li.active { color: var(--white); background: rgba(37,87,167,0.15); }
     .lang-list .flag { font-size: 1rem; }
 
     /* Scrolled header overrides */
@@ -229,7 +211,7 @@
     }
     .header.scrolled .lang-list li { color: var(--text-secondary); }
     .header.scrolled .lang-list li:hover { background: var(--bg-alt); color: var(--dark); }
-    .header.scrolled .lang-list li.active { color: var(--accent); background: rgba(43,92,222,0.06); }
+    .header.scrolled .lang-list li.active { color: var(--accent); background: rgba(37,87,167,0.06); }
 
     .mobile-toggle {
       display: none;
@@ -263,104 +245,69 @@
       position: relative;
       overflow: hidden;
       padding: 8rem 0 5rem;
-      background: var(--dark);
+      background: linear-gradient(160deg, #0B1628 0%, var(--dark) 40%, #122040 100%);
     }
 
-    .hero-canvas {
+    .hero::before {
+      content: '';
       position: absolute;
       inset: 0;
-      z-index: 0;
-    }
-
-    .hero-canvas canvas { width: 100%; height: 100%; }
-
-    .hero-gradient {
-      position: absolute;
-      inset: 0;
-      background:
-        radial-gradient(ellipse 60% 50% at 20% 50%, rgba(77,101,255,0.12) 0%, transparent 70%),
-        radial-gradient(ellipse 40% 60% at 80% 30%, rgba(123,92,255,0.08) 0%, transparent 60%),
-        radial-gradient(ellipse 50% 40% at 50% 80%, rgba(6,214,160,0.06) 0%, transparent 60%);
-      z-index: 1;
+      background: radial-gradient(ellipse 50% 50% at 30% 60%, rgba(37,87,167,0.12) 0%, transparent 70%);
     }
 
     .hero .container { position: relative; z-index: 2; }
 
     .hero-content {
-      max-width: 720px;
+      max-width: 680px;
       display: flex;
       flex-direction: column;
       align-items: flex-start;
     }
 
     .hero-logo {
-      width: 72px;
-      height: 72px;
+      width: 68px;
+      height: 68px;
       margin-bottom: 2rem;
-      animation: float 6s ease-in-out infinite;
       background: white;
       border-radius: 10px;
       padding: 4px;
-      box-shadow: 0 4px 24px rgba(77,101,255,0.25);
+      box-shadow: 0 2px 16px rgba(0,0,0,0.2);
       object-fit: contain;
-    }
-
-    @keyframes float {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-10px); }
     }
 
     .hero-badge {
       display: inline-flex;
       align-items: center;
       gap: 0.5rem;
-      font-family: var(--mono);
-      font-size: 0.75rem;
+      font-size: 0.8rem;
       font-weight: 500;
-      color: var(--accent-cyan);
-      background: rgba(6, 214, 160, 0.08);
-      border: 1px solid rgba(6, 214, 160, 0.15);
+      color: rgba(255,255,255,0.6);
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.1);
       padding: 0.4rem 1rem;
       border-radius: 100px;
       margin-bottom: 1.5rem;
-      letter-spacing: 0.04em;
-    }
-
-    .hero-badge-dot {
-      width: 6px;
-      height: 6px;
-      border-radius: 50%;
-      background: var(--accent-cyan);
-      animation: pulse 2s ease-in-out infinite;
-    }
-
-    @keyframes pulse {
-      0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(6,214,160,0.4); }
-      50% { opacity: 0.7; box-shadow: 0 0 0 8px rgba(6,214,160,0); }
     }
 
     .hero h1 {
-      font-size: clamp(2.5rem, 5.5vw, 4rem);
+      font-size: clamp(2.5rem, 5.5vw, 3.5rem);
       font-weight: 700;
-      line-height: 1.1;
-      letter-spacing: -0.04em;
+      line-height: 1.15;
+      letter-spacing: -0.03em;
       color: var(--white);
       margin-bottom: 1.5rem;
     }
 
     .hero h1 em {
       font-style: normal;
-      background: linear-gradient(135deg, var(--accent), var(--accent-2));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
+      color: #5B9BF0;
     }
 
     .hero-desc {
-      font-size: 1.125rem;
-      color: rgba(255,255,255,0.7);
+      font-size: 1.0625rem;
+      color: rgba(255,255,255,0.65);
       max-width: 560px;
-      line-height: 1.7;
+      line-height: 1.75;
       margin-bottom: 2.5rem;
     }
 
@@ -384,26 +331,15 @@
     }
 
     .btn-primary {
-      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      background: var(--accent);
       color: var(--white);
-      box-shadow: 0 4px 20px rgba(77,101,255,0.3);
     }
 
     .btn-primary:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 30px rgba(77,101,255,0.45);
+      background: var(--accent-hover);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 16px rgba(37,87,167,0.25);
     }
-
-    .btn-primary::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(135deg, rgba(255,255,255,0.15), transparent);
-      opacity: 0;
-      transition: opacity 0.3s;
-    }
-
-    .btn-primary:hover::after { opacity: 1; }
 
     .btn-ghost {
       background: rgba(255,255,255,0.08);
@@ -480,25 +416,14 @@
     .section-header { margin-bottom: 3.5rem; }
 
     .section-tag {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-      font-family: var(--mono);
-      font-size: 0.7rem;
-      font-weight: 500;
+      display: inline-block;
+      font-size: 0.75rem;
+      font-weight: 600;
       text-transform: uppercase;
-      letter-spacing: 0.14em;
+      letter-spacing: 0.1em;
       color: var(--accent);
       padding: 0.35rem 0;
       margin-bottom: 1rem;
-    }
-
-    .section-tag::before {
-      content: '';
-      display: inline-block;
-      width: 24px;
-      height: 1px;
-      background: var(--accent);
     }
 
     .section-header h2 {
@@ -534,68 +459,28 @@
       overflow: hidden;
     }
 
-    .card::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 2px;
-      background: linear-gradient(90deg, var(--accent), var(--accent-2), transparent);
-      opacity: 0;
-      transition: opacity 0.4s;
-    }
-
-    .card::after {
-      content: '';
-      position: absolute;
-      top: -50%;
-      right: -50%;
-      width: 100%;
-      height: 100%;
-      border-radius: 50%;
-      background: radial-gradient(circle, rgba(77,101,255,0.06), transparent 70%);
-      opacity: 0;
-      transition: opacity 0.4s;
-    }
-
     .card:hover {
       border-color: var(--border-hover);
-      transform: translateY(-4px);
-      box-shadow: 0 8px 40px rgba(43,92,222,0.08);
-    }
-
-    .card:hover::before { opacity: 1; }
-    .card:hover::after { opacity: 1; }
-
-    .card > * { position: relative; z-index: 1; }
-
-    .card-num {
-      font-family: var(--mono);
-      font-size: 0.7rem;
-      font-weight: 500;
-      color: var(--text-muted);
-      margin-bottom: 1.25rem;
-      letter-spacing: 0.05em;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 20px rgba(15,27,53,0.06);
     }
 
     .card-icon {
       width: 44px;
       height: 44px;
       border-radius: var(--r-sm);
-      background: rgba(43,92,222,0.06);
-      border: 1px solid rgba(43,92,222,0.1);
+      background: rgba(37,87,167,0.06);
+      border: 1px solid rgba(37,87,167,0.1);
       display: flex;
       align-items: center;
       justify-content: center;
       margin-bottom: 1.25rem;
-      transition: all 0.35s;
+      transition: all 0.3s;
     }
 
     .card:hover .card-icon {
-      background: rgba(43,92,222,0.12);
-      border-color: rgba(43,92,222,0.2);
-      box-shadow: 0 0 20px rgba(43,92,222,0.1);
+      background: rgba(37,87,167,0.1);
+      border-color: rgba(37,87,167,0.18);
     }
 
     .card h3 {
@@ -631,28 +516,13 @@
       overflow: hidden;
     }
 
-    .news-card::before {
-      content: '';
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      height: 2px;
-      background: linear-gradient(90deg, var(--accent), transparent);
-      opacity: 0;
-      transition: opacity 0.4s;
-    }
-
     .news-card:hover {
       border-color: var(--border-hover);
-      transform: translateY(-3px);
-      box-shadow: 0 8px 40px rgba(43,92,222,0.06);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 20px rgba(15,27,53,0.06);
     }
 
-    .news-card:hover::before { opacity: 1; }
-
     .news-date {
-      font-family: var(--mono);
       font-size: 0.75rem;
       font-weight: 500;
       color: var(--accent);
@@ -730,8 +600,8 @@
       width: 24px;
       height: 24px;
       border-radius: 50%;
-      background: rgba(43,92,222,0.08);
-      border: 1px solid rgba(43,92,222,0.12);
+      background: rgba(37,87,167,0.08);
+      border: 1px solid rgba(37,87,167,0.12);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -740,8 +610,7 @@
     }
 
     .benefit-item:hover .check-icon {
-      background: rgba(43,92,222,0.15);
-      box-shadow: 0 0 15px rgba(43,92,222,0.1);
+      background: rgba(37,87,167,0.12);
     }
 
     .members-cta-box {
@@ -760,20 +629,8 @@
       width: 300px;
       height: 300px;
       border-radius: 50%;
-      background: rgba(77,101,255,0.1);
+      background: rgba(37,87,167,0.1);
       filter: blur(60px);
-    }
-
-    .members-cta-box::after {
-      content: '';
-      position: absolute;
-      bottom: -30%;
-      left: -15%;
-      width: 200px;
-      height: 200px;
-      border-radius: 50%;
-      background: rgba(123,92,255,0.08);
-      filter: blur(50px);
     }
 
     .members-cta-box > * { position: relative; z-index: 1; }
@@ -806,8 +663,7 @@
       content: '';
       position: absolute;
       inset: 0;
-      background:
-        radial-gradient(ellipse 50% 50% at 50% 50%, rgba(77,101,255,0.08), transparent 70%);
+      background: radial-gradient(ellipse 50% 50% at 50% 50%, rgba(37,87,167,0.08), transparent 70%);
     }
 
     .quote-mark {
@@ -914,8 +770,8 @@
       position: fixed;
       bottom: 2rem;
       left: 2rem;
-      width: 44px;
-      height: 44px;
+      width: 42px;
+      height: 42px;
       border-radius: 50%;
       background: var(--white);
       border: 1px solid var(--border);
@@ -924,7 +780,7 @@
       align-items: center;
       justify-content: center;
       cursor: pointer;
-      z-index: 90;
+      z-index: 80;
       opacity: 0;
       visibility: hidden;
       transform: translateY(10px);
@@ -937,8 +793,8 @@
       background: var(--accent);
       border-color: var(--accent);
       color: var(--white);
-      transform: translateY(-3px);
-      box-shadow: 0 4px 20px rgba(43,92,222,0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 2px 12px rgba(37,87,167,0.2);
     }
 
     /* ===== TOP BANNER ===== */
@@ -987,7 +843,7 @@
       bottom: 1.5rem;
       left: 50%;
       transform: translateX(-50%) translateY(20px);
-      z-index: 110;
+      z-index: 85;
       background: var(--dark);
       border: 1px solid rgba(255,255,255,0.08);
       border-radius: 12px;
@@ -1023,7 +879,7 @@
       white-space: nowrap;
     }
 
-    .cookie-accept:hover { background: var(--accent-2); }
+    .cookie-accept:hover { background: var(--accent-hover); }
 
     /* ===== CHATBOT ===== */
     /* ===== CHATBOT — modern ===== */
@@ -1204,13 +1060,55 @@
     .chat-q-btn:hover {
       border-color: var(--accent);
       color: var(--accent);
-      background: rgba(43,92,222,0.04);
+      background: rgba(37,87,167,0.04);
     }
 
     @media (max-width: 480px) {
       .chat-window { left: 0.75rem; right: 0.75rem; width: auto; bottom: 1rem; max-height: 75vh; }
       .chat-fab { bottom: 1.25rem; right: 1.25rem; width: 48px; height: 48px; }
-      .back-to-top { bottom: 1.25rem; left: 1.25rem; }
+      .back-to-top { bottom: 1.25rem; left: 1.25rem; width: 38px; height: 38px; }
+      .cookie-bar { bottom: 5rem; left: 0.75rem; right: 0.75rem; transform: translateX(0) translateY(20px); max-width: none; white-space: normal; }
+      .cookie-bar.visible { transform: translateX(0) translateY(0); }
+    }
+
+    /* ===== MOBILE LANG TOGGLE (outside burger, in header) ===== */
+    .mobile-lang-toggle {
+      display: none;
+      align-items: center;
+      gap: 0.35rem;
+      margin-right: 0.5rem;
+    }
+
+    .mobile-lang-btn {
+      background: none;
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 6px;
+      padding: 0.3rem 0.5rem;
+      font-family: var(--font);
+      font-size: 0.7rem;
+      font-weight: 600;
+      color: rgba(255,255,255,0.6);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .mobile-lang-btn.active {
+      background: rgba(255,255,255,0.12);
+      color: var(--white);
+      border-color: rgba(255,255,255,0.25);
+    }
+
+    .mobile-lang-btn:hover:not(.active) { color: var(--white); }
+
+    .header.scrolled .mobile-lang-btn {
+      border-color: var(--border);
+      color: var(--text-muted);
+    }
+
+    .header.scrolled .mobile-lang-btn.active {
+      background: var(--accent);
+      color: var(--white);
+      border-color: var(--accent);
     }
 
     /* ===== MOBILE MENU ===== */
@@ -1225,7 +1123,7 @@
       backdrop-filter: blur(20px);
       -webkit-backdrop-filter: blur(20px);
       z-index: 99;
-      padding: 6rem 2rem 2rem;
+      padding: 5rem 2rem 2rem;
       opacity: 0;
       transition: opacity 0.3s var(--ease);
     }
@@ -1235,6 +1133,27 @@
       flex-direction: column;
       opacity: 1;
     }
+
+    .mobile-menu-close {
+      position: absolute;
+      top: 1.25rem;
+      right: 1.25rem;
+      background: none;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: var(--text);
+      font-size: 1.25rem;
+      transition: all 0.2s;
+      z-index: 1;
+    }
+
+    .mobile-menu-close:hover { background: rgba(0,0,0,0.04); }
 
     .mobile-menu .nav-links { flex-direction: column; gap: 0.25rem; }
 
@@ -1247,30 +1166,6 @@
     }
 
     .mobile-menu .nav-links a:hover { background: rgba(0,0,0,0.04); color: var(--accent) !important; }
-
-    .mobile-lang-list {
-      margin-top: 1.5rem;
-      display: flex;
-      flex-direction: column;
-      gap: 0.25rem;
-    }
-
-    .mobile-lang-item {
-      display: flex;
-      align-items: center;
-      gap: 0.625rem;
-      padding: 0.75rem 1rem;
-      border-radius: var(--r-sm);
-      font-size: 1rem;
-      font-weight: 500;
-      color: var(--text-secondary);
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-
-    .mobile-lang-item:hover { background: rgba(0,0,0,0.04); color: var(--dark); }
-    .mobile-lang-item.active { color: var(--accent); background: rgba(43,92,222,0.06); }
-    .mobile-lang-item .flag { font-size: 1.25rem; }
 
     /* ===== REVEAL ===== */
     .reveal {
@@ -1297,6 +1192,7 @@
 
     @media (max-width: 768px) {
       .nav { display: none; }
+      .mobile-lang-toggle { display: flex; }
       .mobile-toggle { display: flex; }
       .hero { min-height: auto; padding: 8rem 0 4rem; }
       .hero-logo { width: 64px; height: 64px; }
@@ -1330,13 +1226,10 @@
     <button class="banner-close" id="banner-close">✕</button>
   </div>
 
-  <!-- Scroll progress -->
-  <div class="scroll-progress" id="scroll-progress"></div>
-
   <!-- Header -->
   <header class="header" id="header">
     <div class="container">
-      <a href="/" class="logo"><img src="img/logo-white.jpg" alt="IKTNAS" class="logo-img"><span class="logo-text">IKT<span class="logo-accent">NAS</span></span></a>
+      <a href="/" class="logo"><img src="img/logo-white.jpg" alt="IKTNAA" class="logo-img"><span class="logo-text">IKT<span class="logo-accent">NAA</span></span></a>
       <nav class="nav">
         <ul class="nav-links">
           <li><a href="#par-mums" data-i18n="nav.about">Par mums</a></li>
@@ -1357,6 +1250,10 @@
           </ul>
         </div>
       </nav>
+      <div class="mobile-lang-toggle" id="mobile-lang-toggle">
+        <button class="mobile-lang-btn active" data-lang="lv">LV</button>
+        <button class="mobile-lang-btn" data-lang="en">EN</button>
+      </div>
       <button class="mobile-toggle" aria-label="Menu">
         <span></span><span></span><span></span>
       </button>
@@ -1365,28 +1262,21 @@
 
   <!-- Mobile Menu -->
   <div class="mobile-menu" id="mobile-menu">
+    <button class="mobile-menu-close" id="mobile-menu-close">✕</button>
     <ul class="nav-links">
       <li><a href="#par-mums" data-i18n="nav.about">Par mums</a></li>
       <li><a href="#aktualitates" data-i18n="nav.news">Aktualitātes</a></li>
       <li><a href="#biedriem" data-i18n="nav.members">Biedriem</a></li>
       <li><a href="#kontakti" data-i18n="nav.contact">Kontakti</a></li>
     </ul>
-    <div class="mobile-lang-list">
-      <div class="mobile-lang-item" data-lang="lv"><span class="flag">🇱🇻</span> Latviešu</div>
-      <div class="mobile-lang-item" data-lang="en"><span class="flag">🇬🇧</span> English</div>
-      <div class="mobile-lang-item" data-lang="ru"><span class="flag">🇷🇺</span> Русский</div>
-    </div>
   </div>
 
   <!-- Hero -->
   <section class="hero">
-    <div class="hero-canvas" id="hero-canvas"></div>
-    <div class="hero-gradient"></div>
     <div class="container">
       <div class="hero-content">
         <img src="img/logo-white.jpg" alt="" class="hero-logo">
         <div class="hero-badge">
-          <span class="hero-badge-dot"></span>
           <span data-i18n="hero.tag">Asociācija dibināta 2025. gadā</span>
         </div>
         <h1 data-i18n="hero.title">IKT nodarbināto <em>atbalsta</em> asociācija</h1>
@@ -1413,7 +1303,7 @@
         </div>
         <div class="stat-item reveal reveal-delay-2">
           <div class="stat-number"><span class="counter" data-target="2025">0</span></div>
-          <div class="stat-label" data-i18n="stats.l3">Gads, kad dibināta IKTNAS</div>
+          <div class="stat-label" data-i18n="stats.l3">Gads, kad dibināta IKTNAA</div>
         </div>
         <div class="stat-item reveal reveal-delay-3">
           <div class="stat-number"><span class="counter" data-target="100">0</span><span>+</span></div>
@@ -1429,11 +1319,11 @@
       <div class="section-header reveal">
         <div class="section-tag" data-i18n="about.tag">Par mums</div>
         <h2 data-i18n="about.title">Aizstāvam IT speciālistu intereses</h2>
-        <p data-i18n="about.desc">IKTNAS ir dibināta, lai nodrošinātu IKT nozarē strādājošo speciālistu tiesisko aizsardzību, veicinātu profesionālo attīstību un stiprinātu nozares kopienu Latvijā.</p>
+        <p data-i18n="about.desc">IKTNAA ir dibināta, lai nodrošinātu IKT nozarē strādājošo speciālistu tiesisko aizsardzību, veicinātu profesionālo attīstību un stiprinātu nozares kopienu Latvijā.</p>
       </div>
       <div class="cards-grid">
         <div class="card reveal">
-          <div class="card-num">01</div>
+
           <div class="card-icon">
             <svg width="22" height="22" fill="none" stroke="var(--accent)" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M11 21s7.5-3.75 7.5-9.375V4.688L11 2 3.5 4.688v6.937C3.5 17.25 11 21 11 21z"/></svg>
           </div>
@@ -1441,7 +1331,7 @@
           <p data-i18n="about.card1.desc">Pārstāvam IKT speciālistu profesionālās intereses, attīstot standartus, ētiku un kvalifikācijas atzīšanu, aizstāvot nozares reputāciju institūcijās.</p>
         </div>
         <div class="card reveal reveal-delay-1">
-          <div class="card-num">02</div>
+
           <div class="card-icon">
             <svg width="22" height="22" fill="none" stroke="var(--accent)" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1v4M12 17v4M5.64 5.64l2.83 2.83M13.54 13.54l2.83 2.83M1 12h4M17 12h4M5.64 18.36l2.83-2.83M13.54 8.46l2.83-2.83"/><circle cx="12" cy="12" r="4"/></svg>
           </div>
@@ -1449,7 +1339,7 @@
           <p data-i18n="about.card2.desc">Veicinām taisnīgu un konkurētspējīgu atalgojumu, nodarbinātības drošību un darba tirgus caurspīdīgumu IKT nozarē.</p>
         </div>
         <div class="card reveal reveal-delay-2">
-          <div class="card-num">03</div>
+
           <div class="card-icon">
             <svg width="22" height="22" fill="none" stroke="var(--accent)" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 000-7.78z"/></svg>
           </div>
@@ -1457,7 +1347,7 @@
           <p data-i18n="about.card3.desc">Iestājamies par drošiem un iekļaujošiem darba apstākļiem, darba-dzīves līdzsvaru, sociālajām garantijām un diskriminācijas mazināšanu.</p>
         </div>
         <div class="card reveal reveal-delay-3">
-          <div class="card-num">04</div>
+
           <div class="card-icon">
             <svg width="22" height="22" fill="none" stroke="var(--accent)" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v14a2 2 0 002 2h10a2 2 0 002-2V6l-4-4z"/><path d="M14 2v4h4M16 13H6M16 17H6M8 9H6"/></svg>
           </div>
@@ -1465,7 +1355,7 @@
           <p data-i18n="about.card4.desc">Aizstāvam darbinieku tiesības un intereses attiecībās ar darba devēju, veicinot tiesiskus, samērīgus un caurspīdīgus lēmumu procesus.</p>
         </div>
         <div class="card reveal reveal-delay-4">
-          <div class="card-num">05</div>
+
           <div class="card-icon">
             <svg width="22" height="22" fill="none" stroke="var(--accent)" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="10"/><path d="M2 11h20M11 1a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10A15.3 15.3 0 0111 1z"/></svg>
           </div>
@@ -1473,7 +1363,7 @@
           <p data-i18n="about.card5.desc">Veicinām IKT nozares attīstību Latvijā un Baltijā, stiprinot sociālo dialogu ar valsti, darba devējiem un izglītības iestādēm.</p>
         </div>
         <div class="card reveal reveal-delay-5">
-          <div class="card-num">06</div>
+
           <div class="card-icon">
             <svg width="22" height="22" fill="none" stroke="var(--accent)" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg>
           </div>
@@ -1489,7 +1379,7 @@
     <div class="container">
       <div class="quote-mark reveal">"</div>
       <p class="quote-text reveal reveal-delay-1" data-i18n="quote.text">Profesionālais risks nedrīkst tikt automātiski kvalificēts kā krimināltiesiska atbildība. IT speciālistiem ir jāstrādā ar novecojušām sistēmām, ierobežotiem budžetiem un sarežģītu normatīvo regulējumu.</p>
-      <p class="quote-author reveal reveal-delay-2"><strong>Jorens Liopa</strong> · <span data-i18n="quote.role">IKTNAS valdes loceklis</span></p>
+      <p class="quote-author reveal reveal-delay-2"><strong>Jorens Liopa</strong> · <span data-i18n="quote.role">IKTNAA valdes loceklis</span></p>
     </div>
   </section>
 
@@ -1498,20 +1388,20 @@
     <div class="container">
       <div class="section-header reveal">
         <div class="section-tag" data-i18n="news.tag">Aktualitātes</div>
-        <h2 data-i18n="news.title">Jaunākais no IKTNAS</h2>
+        <h2 data-i18n="news.title">Jaunākais no IKTNAA</h2>
       </div>
       <div class="news-grid">
         <article class="news-card reveal">
           <div class="news-date" data-i18n="news.item1.date">2026. gada 27. februāris</div>
           <h3 data-i18n="news.item1.title">Kriminālatbildības risks padziļinas IT speciālistu trūkumu valsts pārvaldē</h3>
-          <p data-i18n="news.item1.desc">IKTNAS pauž bažas, ka kriminālatbildības nenoteiktība un risks kiberdrošības jomā atturēs kvalificētus IT speciālistus no darba valsts sektorā, kur jau pastāv būtisks kadru trūkums.</p>
+          <p data-i18n="news.item1.desc">IKTNAA pauž bažas, ka kriminālatbildības nenoteiktība un risks kiberdrošības jomā atturēs kvalificētus IT speciālistus no darba valsts sektorā, kur jau pastāv būtisks kadru trūkums.</p>
           <a href="https://notepad.lv/preses-relizes/ikt-nodarbinato-atbalsta-asociacija-kriminalatbildibas-risks-padzilinas-it-specialistu-trukumu-valsts-parvalde/" class="news-link" target="_blank" rel="noopener"><span data-i18n="news.readmore">Lasīt vairāk</span> <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l6-5-6-5"/></svg></a>
         </article>
         <article class="news-card reveal reveal-delay-1">
           <div class="news-date" data-i18n="news.item2.date">2026. gada februāris</div>
-          <h3 data-i18n="news.item2.title">IKTNAS pozīcija: profesionālais risks nav krimināltiesiska atbildība</h3>
+          <h3 data-i18n="news.item2.title">IKTNAA pozīcija: profesionālais risks nav krimināltiesiska atbildība</h3>
           <p data-i18n="news.item2.desc">Asociācija aicina uz atbilstošu tiesību normu interpretāciju, jaunu amatu klasifikāciju IT nozarē un birokrātiskās slodzes mazināšanu IT projektos valsts pārvaldē.</p>
-          <a href="https://www.linkedin.com/company/iktnas" class="news-link" target="_blank" rel="noopener"><span data-i18n="news.readmore">Lasīt vairāk</span> <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l6-5-6-5"/></svg></a>
+          <a href="https://www.linkedin.com/company/iktnaa" class="news-link" target="_blank" rel="noopener"><span data-i18n="news.readmore">Lasīt vairāk</span> <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l6-5-6-5"/></svg></a>
         </article>
       </div>
     </div>
@@ -1522,7 +1412,7 @@
     <div class="container">
       <div class="section-header reveal">
         <div class="section-tag" data-i18n="members.tag">Biedriem</div>
-        <h2 data-i18n="members.title">Kāpēc pievienoties IKTNAS?</h2>
+        <h2 data-i18n="members.title">Kāpēc pievienoties IKTNAA?</h2>
       </div>
       <div class="members-layout">
         <ul class="benefits-list">
@@ -1549,8 +1439,8 @@
         </ul>
         <div class="members-cta-box reveal">
           <h3 data-i18n="members.cta.title">Pievienojies mums!</h3>
-          <p data-i18n="members.cta.desc">Kļūsti par IKTNAS biedru un palīdzi veidot labāku nākotni IKT nozarē strādājošajiem Latvijā.</p>
-          <a href="mailto:info@iktnas.lv" class="btn btn-primary" data-i18n="members.cta.btn">Sazināties par biedra statusu</a>
+          <p data-i18n="members.cta.desc">Kļūsti par IKTNAA biedru un palīdzi veidot labāku nākotni IKT nozarē strādājošajiem Latvijā.</p>
+          <a href="mailto:info@iktnaa.lv" class="btn btn-primary" data-i18n="members.cta.btn">Sazināties par biedra statusu</a>
         </div>
       </div>
     </div>
@@ -1561,7 +1451,7 @@
     <div class="container">
       <div class="footer-grid">
         <div class="footer-brand">
-          <a href="/" class="logo"><img src="img/logo-white.jpg" alt="IKTNAS" class="logo-img"><span class="logo-text">IKT<span class="logo-accent">NAS</span></span></a>
+          <a href="/" class="logo"><img src="img/logo-white.jpg" alt="IKTNAA" class="logo-img"><span class="logo-text">IKT<span class="logo-accent">NAA</span></span></a>
           <p data-i18n="footer.desc">IKT nodarbināto atbalsta asociācija — aizstāvam IT speciālistu intereses Latvijā.</p>
           <p class="footer-tagline" data-i18n="footer.tagline">Par stipru, godīgu un profesionālu IKT nozari.</p>
         </div>
@@ -1576,8 +1466,8 @@
         <div class="footer-col">
           <h4 data-i18n="footer.contact">Kontakti</h4>
           <ul>
-            <li><a href="mailto:info@iktnas.lv">info@iktnas.lv</a></li>
-            <li><a href="https://www.linkedin.com/company/iktnas" target="_blank" rel="noopener">LinkedIn</a></li>
+            <li><a href="mailto:info@iktnaa.lv">info@iktnaa.lv</a></li>
+            <li><a href="https://www.linkedin.com/company/iktnaa" target="_blank" rel="noopener">LinkedIn</a></li>
           </ul>
         </div>
         <div class="footer-col">
@@ -1589,9 +1479,9 @@
         </div>
       </div>
       <div class="footer-bottom">
-        <span>&copy; 2026 IKTNAS</span>
+        <span>&copy; 2026 IKTNAA</span>
         <div class="social-links">
-          <a href="https://www.linkedin.com/company/iktnas" target="_blank" rel="noopener" aria-label="LinkedIn">
+          <a href="https://www.linkedin.com/company/iktnaa" target="_blank" rel="noopener" aria-label="LinkedIn">
             <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
           </a>
         </div>
@@ -1621,7 +1511,7 @@
       <div class="chat-head-info">
         <img src="img/logo-white.jpg" alt="" class="chat-head-avatar">
         <div>
-          <div class="chat-head-name">IKTNAS</div>
+          <div class="chat-head-name">IKTNAA</div>
           <div class="chat-head-status" data-i18n="chat.status">Tiešsaistē</div>
         </div>
       </div>
@@ -1642,10 +1532,10 @@
         'hero.cta': 'Kļūsti par biedru', 'hero.cta2': 'Uzzināt vairāk',
         'stats.l1': 'IT vakanču neaizpildītas valsts sektorā',
         'stats.l2': 'Algu atšķirība starp privāto un publisko sektoru',
-        'stats.l3': 'Gads, kad dibināta IKTNAS',
+        'stats.l3': 'Gads, kad dibināta IKTNAA',
         'stats.l4': 'IKT speciālisti, kurus pārstāvam',
         'about.tag': 'Par mums', 'about.title': 'Aizstāvam IT speciālistu intereses',
-        'about.desc': 'IKTNAS ir dibināta, lai nodrošinātu IKT nozarē strādājošo speciālistu tiesisko aizsardzību, veicinātu profesionālo attīstību un stiprinātu nozares kopienu Latvijā.',
+        'about.desc': 'IKTNAA ir dibināta, lai nodrošinātu IKT nozarē strādājošo speciālistu tiesisko aizsardzību, veicinātu profesionālo attīstību un stiprinātu nozares kopienu Latvijā.',
         'about.card1.title': 'Profesionālo interešu aizstāvība', 'about.card1.desc': 'Pārstāvam IKT speciālistu profesionālās intereses, attīstot standartus, ētiku un kvalifikācijas atzīšanu, aizstāvot nozares reputāciju institūcijās.',
         'about.card2.title': 'Ekonomisko interešu aizstāvība', 'about.card2.desc': 'Veicinām taisnīgu un konkurētspējīgu atalgojumu, nodarbinātības drošību un darba tirgus caurspīdīgumu IKT nozarē.',
         'about.card3.title': 'Sociālā labbūtība', 'about.card3.desc': 'Iestājamies par drošiem un iekļaujošiem darba apstākļiem, darba-dzīves līdzsvaru, sociālajām garantijām un diskriminācijas mazināšanu.',
@@ -1653,26 +1543,26 @@
         'about.card5.title': 'Nozares attīstība', 'about.card5.desc': 'Veicinām IKT nozares attīstību Latvijā un Baltijā, stiprinot sociālo dialogu ar valsti, darba devējiem un izglītības iestādēm.',
         'about.card6.title': 'Profesionālā pilnveide', 'about.card6.desc': 'Sekmējam nepārtrauktu profesionālo attīstību — apmācības, sertifikācijas atbalsts, mentorings un starptautiska sadarbība.',
         'quote.text': 'Profesionālais risks nedrīkst tikt automātiski kvalificēts kā krimināltiesiska atbildība. IT speciālistiem ir jāstrādā ar novecojušām sistēmām, ierobežotiem budžetiem un sarežģītu normatīvo regulējumu.',
-        'quote.role': 'IKTNAS valdes loceklis',
-        'news.tag': 'Aktualitātes', 'news.title': 'Jaunākais no IKTNAS',
+        'quote.role': 'IKTNAA valdes loceklis',
+        'news.tag': 'Aktualitātes', 'news.title': 'Jaunākais no IKTNAA',
         'news.item1.date': '2026. gada 27. februāris', 'news.item1.title': 'Kriminālatbildības risks padziļinas IT speciālistu trūkumu valsts pārvaldē',
-        'news.item1.desc': 'IKTNAS pauž bažas, ka kriminālatbildības nenoteiktība un risks kiberdrošības jomā atturēs kvalificētus IT speciālistus no darba valsts sektorā, kur jau pastāv būtisks kadru trūkums.',
-        'news.item2.date': '2026. gada februāris', 'news.item2.title': 'IKTNAS pozīcija: profesionālais risks nav krimināltiesiska atbildība',
+        'news.item1.desc': 'IKTNAA pauž bažas, ka kriminālatbildības nenoteiktība un risks kiberdrošības jomā atturēs kvalificētus IT speciālistus no darba valsts sektorā, kur jau pastāv būtisks kadru trūkums.',
+        'news.item2.date': '2026. gada februāris', 'news.item2.title': 'IKTNAA pozīcija: profesionālais risks nav krimināltiesiska atbildība',
         'news.item2.desc': 'Asociācija aicina uz atbilstošu tiesību normu interpretāciju, jaunu amatu klasifikāciju IT nozarē un birokrātiskās slodzes mazināšanu IT projektos valsts pārvaldē.',
         'news.readmore': 'Lasīt vairāk',
-        'members.tag': 'Biedriem', 'members.title': 'Kāpēc pievienoties IKTNAS?',
+        'members.tag': 'Biedriem', 'members.title': 'Kāpēc pievienoties IKTNAA?',
         'members.b1': 'Profesionālā interešu aizstāvība valsts un pašvaldību līmenī',
         'members.b2': 'Juridiskais atbalsts un konsultācijas darba tiesību jautājumos',
         'members.b3': 'Pieredzes apmaiņa ar citiem IKT profesionāļiem',
         'members.b4': 'Dalība asociācijas pasākumos un darba grupās',
         'members.b5': 'Ietekme uz nozares politikas veidošanu Latvijā',
-        'members.cta.title': 'Pievienojies mums!', 'members.cta.desc': 'Kļūsti par IKTNAS biedru un palīdzi veidot labāku nākotni IKT nozarē strādājošajiem Latvijā.',
+        'members.cta.title': 'Pievienojies mums!', 'members.cta.desc': 'Kļūsti par IKTNAA biedru un palīdzi veidot labāku nākotni IKT nozarē strādājošajiem Latvijā.',
         'members.cta.btn': 'Sazināties par biedra statusu',
         'footer.desc': 'IKT nodarbināto atbalsta asociācija — aizstāvam IT speciālistu intereses Latvijā.',
         'footer.tagline': 'Par stipru, godīgu un profesionālu IKT nozari.',
         'footer.nav': 'Navigācija', 'footer.contact': 'Kontakti', 'footer.legal': 'Rekvizīti',
         'cookie.text': 'Šī vietne izmanto sīkdatnes darbības uzlabošanai.', 'cookie.accept': 'Piekrītu',
-        'chat.status': 'Tiešsaistē', 'chat.welcome': 'Sveiki! 👋 Esmu IKTNAS virtuālais palīgs. Kā varu palīdzēt?'
+        'chat.status': 'Tiešsaistē', 'chat.welcome': 'Sveiki! 👋 Esmu IKTNAA virtuālais palīgs. Kā varu palīdzēt?'
       },
       en: {
         'nav.about': 'About Us', 'nav.news': 'News', 'nav.members': 'Membership', 'nav.contact': 'Contact',
@@ -1682,10 +1572,10 @@
         'hero.cta': 'Become a Member', 'hero.cta2': 'Learn More',
         'stats.l1': 'IT vacancies unfilled in the public sector',
         'stats.l2': 'Salary gap between private and public sector',
-        'stats.l3': 'Year IKTNAS was founded',
+        'stats.l3': 'Year IKTNAA was founded',
         'stats.l4': 'ICT specialists we represent',
         'about.tag': 'About Us', 'about.title': 'Advocating for IT professionals',
-        'about.desc': 'IKTNAS was founded to ensure legal protection for ICT professionals, promote professional development, and strengthen the industry community in Latvia.',
+        'about.desc': 'IKTNAA was founded to ensure legal protection for ICT professionals, promote professional development, and strengthen the industry community in Latvia.',
         'about.card1.title': 'Professional Advocacy', 'about.card1.desc': 'We represent ICT professionals\' interests by developing standards, ethics, and qualification recognition, and defending the industry\'s reputation.',
         'about.card2.title': 'Economic Interests', 'about.card2.desc': 'We promote fair and competitive compensation, employment security, and labor market transparency in the ICT sector.',
         'about.card3.title': 'Social Well-being', 'about.card3.desc': 'We advocate for safe and inclusive working conditions, work-life balance, social guarantees, and reduction of discrimination.',
@@ -1693,38 +1583,38 @@
         'about.card5.title': 'Industry Development', 'about.card5.desc': 'We promote ICT sector growth in Latvia and the Baltics through social dialogue with government, employers, and educational institutions.',
         'about.card6.title': 'Professional Growth', 'about.card6.desc': 'We foster continuous professional development — training, certification support, mentoring, and international cooperation.',
         'quote.text': 'Professional risk must not be automatically classified as criminal liability. IT specialists have to work with outdated systems, limited budgets, and complex regulatory frameworks.',
-        'quote.role': 'IKTNAS Board Member',
-        'news.tag': 'News', 'news.title': 'Latest from IKTNAS',
+        'quote.role': 'IKTNAA Board Member',
+        'news.tag': 'News', 'news.title': 'Latest from IKTNAA',
         'news.item1.date': 'February 27, 2026', 'news.item1.title': 'Criminal Liability Risk Deepens IT Specialist Shortage in Public Administration',
-        'news.item1.desc': 'IKTNAS expresses concern that criminal liability uncertainty in cybersecurity will deter qualified IT specialists from working in the public sector, where a significant staff shortage already exists.',
-        'news.item2.date': 'February 2026', 'news.item2.title': 'IKTNAS Position: Professional Risk Is Not Criminal Liability',
+        'news.item1.desc': 'IKTNAA expresses concern that criminal liability uncertainty in cybersecurity will deter qualified IT specialists from working in the public sector, where a significant staff shortage already exists.',
+        'news.item2.date': 'February 2026', 'news.item2.title': 'IKTNAA Position: Professional Risk Is Not Criminal Liability',
         'news.item2.desc': 'The association calls for appropriate legal interpretation, new job classifications in IT, and reduced bureaucratic burden on IT projects in public administration.',
         'news.readmore': 'Read more',
-        'members.tag': 'Membership', 'members.title': 'Why join IKTNAS?',
+        'members.tag': 'Membership', 'members.title': 'Why join IKTNAA?',
         'members.b1': 'Professional advocacy at national and municipal level',
         'members.b2': 'Legal support and consultations on employment law',
         'members.b3': 'Experience exchange with other ICT professionals',
         'members.b4': 'Participation in association events and working groups',
         'members.b5': 'Influence on industry policy-making in Latvia',
-        'members.cta.title': 'Join us!', 'members.cta.desc': 'Become an IKTNAS member and help build a better future for ICT workers in Latvia.',
+        'members.cta.title': 'Join us!', 'members.cta.desc': 'Become an IKTNAA member and help build a better future for ICT workers in Latvia.',
         'members.cta.btn': 'Contact us about membership',
         'footer.desc': 'ICT Workers Support Association — advocating for IT professionals in Latvia.',
         'footer.tagline': 'For a strong, fair, and professional ICT industry.',
         'footer.nav': 'Navigation', 'footer.contact': 'Contact', 'footer.legal': 'Details',
         'cookie.text': 'This site uses cookies to improve your experience.', 'cookie.accept': 'Accept',
-        'chat.status': 'Online', 'chat.welcome': 'Hello! 👋 I\'m the IKTNAS virtual assistant. How can I help?'
+        'chat.status': 'Online', 'chat.welcome': 'Hello! 👋 I\'m the IKTNAA virtual assistant. How can I help?'
       }
     };
 
-    let lang = localStorage.getItem('iktnas-lang') || 'lv';
+    let lang = localStorage.getItem('iktnaa-lang') || 'lv';
 
     function setLang(l) {
       lang = l;
-      localStorage.setItem('iktnas-lang', l);
+      localStorage.setItem('iktnaa-lang', l);
       document.documentElement.lang = l;
       document.title = l === 'lv'
-        ? 'IKTNAS — IKT nodarbināto atbalsta asociācija'
-        : 'IKTNAS — ICT Workers Support Association';
+        ? 'IKTNAA — IKT nodarbināto atbalsta asociācija'
+        : 'IKTNAA — ICT Workers Support Association';
 
       document.querySelectorAll('[data-i18n]').forEach(el => {
         const key = el.getAttribute('data-i18n');
@@ -1740,9 +1630,9 @@
       langLabel.textContent = LABELS[l] || 'LV';
       langListItems.forEach(li => li.classList.toggle('active', li.dataset.lang === l));
 
-      // Update mobile
-      document.querySelectorAll('.mobile-lang-item').forEach(el =>
-        el.classList.toggle('active', el.dataset.lang === l)
+      // Update mobile header lang toggle
+      document.querySelectorAll('.mobile-lang-btn').forEach(b =>
+        b.classList.toggle('active', b.dataset.lang === l)
       );
     }
 
@@ -1783,9 +1673,14 @@
       });
     });
 
-    /* ===== Mobile lang ===== */
-    document.querySelectorAll('.mobile-lang-item').forEach(el => {
-      el.addEventListener('click', () => handleLangClick(el.dataset.lang));
+    /* ===== Mobile lang toggle (in header) ===== */
+    document.querySelectorAll('.mobile-lang-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        handleLangClick(btn.dataset.lang);
+        document.querySelectorAll('.mobile-lang-btn').forEach(b =>
+          b.classList.toggle('active', b.dataset.lang === lang)
+        );
+      });
     });
 
     /* ===== Top banner ===== */
@@ -1805,6 +1700,13 @@
     /* ===== Mobile menu ===== */
     const toggle = document.querySelector('.mobile-toggle');
     const mob = document.getElementById('mobile-menu');
+    const mobClose = document.getElementById('mobile-menu-close');
+
+    function closeMobileMenu() {
+      toggle.classList.remove('open');
+      mob.classList.remove('open');
+      document.body.style.overflow = '';
+    }
 
     toggle.addEventListener('click', () => {
       toggle.classList.toggle('open');
@@ -1812,28 +1714,19 @@
       document.body.style.overflow = mob.classList.contains('open') ? 'hidden' : '';
     });
 
+    mobClose.addEventListener('click', closeMobileMenu);
+
     mob.querySelectorAll('a').forEach(a =>
-      a.addEventListener('click', () => {
-        toggle.classList.remove('open');
-        mob.classList.remove('open');
-        document.body.style.overflow = '';
-      })
+      a.addEventListener('click', closeMobileMenu)
     );
 
     /* ===== Scroll effects ===== */
     const header = document.getElementById('header');
-    const scrollProgress = document.getElementById('scroll-progress');
     const backToTop = document.getElementById('back-to-top');
 
     window.addEventListener('scroll', () => {
       const y = window.scrollY;
       header.classList.toggle('scrolled', y > 10);
-
-      // Scroll progress
-      const docH = document.documentElement.scrollHeight - window.innerHeight;
-      scrollProgress.style.width = docH > 0 ? (y / docH * 100) + '%' : '0%';
-
-      // Back to top
       backToTop.classList.toggle('visible', y > 400);
     }, { passive: true });
 
@@ -1875,100 +1768,13 @@
 
     document.querySelectorAll('.counter').forEach(el => counterObserver.observe(el));
 
-    /* ===== Network canvas animation (hero) ===== */
-    (function() {
-      const container = document.getElementById('hero-canvas');
-      const canvas = document.createElement('canvas');
-      container.appendChild(canvas);
-      const ctx = canvas.getContext('2d');
-      let w, h, particles = [], mouse = { x: -1000, y: -1000 };
-
-      function resize() {
-        w = canvas.width = container.offsetWidth;
-        h = canvas.height = container.offsetHeight;
-      }
-
-      function init() {
-        resize();
-        particles = [];
-        const count = Math.min(Math.floor(w * h / 12000), 80);
-        for (let i = 0; i < count; i++) {
-          particles.push({
-            x: Math.random() * w,
-            y: Math.random() * h,
-            vx: (Math.random() - 0.5) * 0.4,
-            vy: (Math.random() - 0.5) * 0.4,
-            r: Math.random() * 2 + 1
-          });
-        }
-      }
-
-      function draw() {
-        ctx.clearRect(0, 0, w, h);
-        const maxDist = 150;
-
-        for (let i = 0; i < particles.length; i++) {
-          const p = particles[i];
-          p.x += p.vx;
-          p.y += p.vy;
-          if (p.x < 0 || p.x > w) p.vx *= -1;
-          if (p.y < 0 || p.y > h) p.vy *= -1;
-
-          // Mouse repel
-          const dx = p.x - mouse.x;
-          const dy = p.y - mouse.y;
-          const dist = Math.sqrt(dx * dx + dy * dy);
-          if (dist < 120) {
-            p.x += dx * 0.02;
-            p.y += dy * 0.02;
-          }
-
-          // Draw dot
-          ctx.beginPath();
-          ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-          ctx.fillStyle = 'rgba(77, 101, 255, 0.5)';
-          ctx.fill();
-
-          // Connect lines
-          for (let j = i + 1; j < particles.length; j++) {
-            const p2 = particles[j];
-            const dx2 = p.x - p2.x;
-            const dy2 = p.y - p2.y;
-            const d = Math.sqrt(dx2 * dx2 + dy2 * dy2);
-            if (d < maxDist) {
-              ctx.beginPath();
-              ctx.moveTo(p.x, p.y);
-              ctx.lineTo(p2.x, p2.y);
-              ctx.strokeStyle = `rgba(77, 101, 255, ${0.12 * (1 - d / maxDist)})`;
-              ctx.lineWidth = 0.5;
-              ctx.stroke();
-            }
-          }
-        }
-
-        requestAnimationFrame(draw);
-      }
-
-      container.addEventListener('mousemove', e => {
-        const rect = container.getBoundingClientRect();
-        mouse.x = e.clientX - rect.left;
-        mouse.y = e.clientY - rect.top;
-      });
-
-      container.addEventListener('mouseleave', () => { mouse.x = -1000; mouse.y = -1000; });
-      window.addEventListener('resize', () => { resize(); });
-
-      init();
-      draw();
-    })();
-
     /* ===== Cookie bar ===== */
     const cookieBar = document.getElementById('cookie-bar');
-    if (!localStorage.getItem('iktnas-cookies')) {
+    if (!localStorage.getItem('iktnaa-cookies')) {
       setTimeout(() => cookieBar.classList.add('visible'), 1500);
     }
     document.getElementById('cookie-accept').addEventListener('click', () => {
-      localStorage.setItem('iktnas-cookies', '1');
+      localStorage.setItem('iktnaa-cookies', '1');
       cookieBar.classList.remove('visible');
     });
 
@@ -1980,25 +1786,25 @@
 
     const CHAT_QA = {
       lv: {
-        welcome: 'Sveiki! 👋 Esmu IKTNAS virtuālais palīgs. Kā varu palīdzēt?',
+        welcome: 'Sveiki! 👋 Esmu IKTNAA virtuālais palīgs. Kā varu palīdzēt?',
         questions: [
-          { q: 'Kas ir IKTNAS?', a: 'IKTNAS ir IKT nodarbināto atbalsta asociācija — biedrība, kas dibināta 2025. gadā, lai aizstāvētu informācijas un komunikācijas tehnoloģiju nozarē strādājošo profesionālās, ekonomiskās un sociālās intereses Latvijā.' },
-          { q: 'Kā kļūt par biedru?', a: 'Lai pievienotos IKTNAS, rakstiet mums uz info@iktnas.lv vai sazinieties caur LinkedIn. Biedra statuss ir pieejams visiem IKT nozarē nodarbinātajiem — gan publiskajā, gan privātajā sektorā.' },
+          { q: 'Kas ir IKTNAA?', a: 'IKTNAA ir IKT nodarbināto atbalsta asociācija — biedrība, kas dibināta 2025. gadā, lai aizstāvētu informācijas un komunikācijas tehnoloģiju nozarē strādājošo profesionālās, ekonomiskās un sociālās intereses Latvijā.' },
+          { q: 'Kā kļūt par biedru?', a: 'Lai pievienotos IKTNAA, rakstiet mums uz info@iktnaa.lv vai sazinieties caur LinkedIn. Biedra statuss ir pieejams visiem IKT nozarē nodarbinātajiem — gan publiskajā, gan privātajā sektorā.' },
           { q: 'Kādi ir mērķi?', a: 'Mūsu galvenie mērķi: 1) Profesionālo interešu aizstāvība, 2) Taisnīgs atalgojums un nodarbinātības drošība, 3) Droši darba apstākļi un sociālās garantijas, 4) Tiesību aizstāvība attiecībās ar darba devēju, 5) Nozares attīstība Latvijā un Baltijā, 6) Profesionālā pilnveide un starptautiskā sadarbība.' },
-          { q: 'Vai ir biedra maksa?', a: 'Par biedra maksas apmēru un nosacījumiem lūdzam sazināties ar mums tiešā veidā — info@iktnas.lv. Mūsu mērķis ir padarīt dalību pieejamu ikvienam IKT speciālistam.' },
-          { q: 'Kāpēc tas ir svarīgi?', a: 'Latvijā 30% IT vakanču valsts sektorā ir neaizpildītas, algas ir 2x zemākas nekā privātajā sektorā, un pastāv kriminālatbildības risks par profesionāliem lēmumiem. IKTNAS iestājas par to, lai IT speciālisti strādātu taisnīgos un drošos apstākļos.' },
-          { q: 'Kontaktinformācija?', a: 'E-pasts: info@iktnas.lv\nLinkedIn: linkedin.com/company/iktnas\nReģ. nr.: 50008356581\nRīga, Latvija' }
+          { q: 'Vai ir biedra maksa?', a: 'Par biedra maksas apmēru un nosacījumiem lūdzam sazināties ar mums tiešā veidā — info@iktnaa.lv. Mūsu mērķis ir padarīt dalību pieejamu ikvienam IKT speciālistam.' },
+          { q: 'Kāpēc tas ir svarīgi?', a: 'Latvijā 30% IT vakanču valsts sektorā ir neaizpildītas, algas ir 2x zemākas nekā privātajā sektorā, un pastāv kriminālatbildības risks par profesionāliem lēmumiem. IKTNAA iestājas par to, lai IT speciālisti strādātu taisnīgos un drošos apstākļos.' },
+          { q: 'Kontaktinformācija?', a: 'E-pasts: info@iktnaa.lv\nLinkedIn: linkedin.com/company/iktnaa\nReģ. nr.: 50008356581\nRīga, Latvija' }
         ]
       },
       en: {
-        welcome: 'Hello! 👋 I\'m the IKTNAS virtual assistant. How can I help you?',
+        welcome: 'Hello! 👋 I\'m the IKTNAA virtual assistant. How can I help you?',
         questions: [
-          { q: 'What is IKTNAS?', a: 'IKTNAS is the ICT Workers Support Association — founded in 2025 to advocate for the professional, economic, and social interests of information and communications technology workers in Latvia.' },
-          { q: 'How to join?', a: 'To join IKTNAS, contact us at info@iktnas.lv or through LinkedIn. Membership is available to all ICT professionals — both in the public and private sectors.' },
+          { q: 'What is IKTNAA?', a: 'IKTNAA is the ICT Workers Support Association — founded in 2025 to advocate for the professional, economic, and social interests of information and communications technology workers in Latvia.' },
+          { q: 'How to join?', a: 'To join IKTNAA, contact us at info@iktnaa.lv or through LinkedIn. Membership is available to all ICT professionals — both in the public and private sectors.' },
           { q: 'What are the goals?', a: 'Our main goals: 1) Professional advocacy, 2) Fair compensation and job security, 3) Safe working conditions and social guarantees, 4) Workers\' rights protection, 5) Industry development in Latvia and the Baltics, 6) Professional growth and international cooperation.' },
-          { q: 'Is there a fee?', a: 'For information about membership fees and conditions, please contact us directly at info@iktnas.lv. Our goal is to make membership accessible to every ICT specialist.' },
-          { q: 'Why does it matter?', a: 'In Latvia, 30% of IT vacancies in the public sector remain unfilled, salaries are 2x lower than in the private sector, and there is criminal liability risk for professional decisions. IKTNAS advocates for fair and safe working conditions for IT specialists.' },
-          { q: 'Contact info?', a: 'Email: info@iktnas.lv\nLinkedIn: linkedin.com/company/iktnas\nReg. nr.: 50008356581\nRīga, Latvia' }
+          { q: 'Is there a fee?', a: 'For information about membership fees and conditions, please contact us directly at info@iktnaa.lv. Our goal is to make membership accessible to every ICT specialist.' },
+          { q: 'Why does it matter?', a: 'In Latvia, 30% of IT vacancies in the public sector remain unfilled, salaries are 2x lower than in the private sector, and there is criminal liability risk for professional decisions. IKTNAA advocates for fair and safe working conditions for IT specialists.' },
+          { q: 'Contact info?', a: 'Email: info@iktnaa.lv\nLinkedIn: linkedin.com/company/iktnaa\nReg. nr.: 50008356581\nRīga, Latvia' }
         ]
       }
     };
