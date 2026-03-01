@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="lv">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Privātuma politika — IKTNAA</title>
+  <meta name="description" content="IKTNAA privātuma politika — kā mēs apstrādājam personas datus.">
+  <link rel="icon" type="image/png" sizes="32x32" href="/img/favicon-32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/img/apple-touch-icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --dark: #0F1B35;
+      --dark-2: #162244;
+      --accent: #2557A7;
+      --accent-hover: #1D4A8F;
+      --white: #FFFFFF;
+      --bg: #FAFBFD;
+      --bg-alt: #F0F3F8;
+      --text: #1E293B;
+      --text-secondary: #475569;
+      --text-muted: #64748B;
+      --border: #E2E6EF;
+      --font: 'Inter', system-ui, -apple-system, sans-serif;
+      --max-w: 800px;
+      --r: 12px;
+      --r-sm: 8px;
+      --ease: cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--font);
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ===== LANG SWITCH ANIMATION ===== */
+    [data-i18n] { transition: opacity 0.18s ease, transform 0.18s ease; }
+    .lang-switching [data-i18n] { opacity: 0; transform: translateY(3px); }
+    .lang-loading-bar {
+      position: fixed; top: 0; left: 0; height: 2px; width: 0;
+      background: linear-gradient(90deg, var(--accent), #5B9BF0, var(--accent));
+      z-index: 1001; pointer-events: none; opacity: 0; transition: opacity 0.15s;
+    }
+    .lang-loading-bar.active { opacity: 1; animation: langLoad 0.5s var(--ease) forwards; }
+    @keyframes langLoad { 0% { width: 0; } 40% { width: 65%; } 100% { width: 100%; } }
+
+    /* ===== HEADER ===== */
+    .header {
+      background: var(--dark);
+      padding: 1rem 0;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .header .container {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 0 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .header-left { display: flex; align-items: center; gap: 1.5rem; }
+
+    .logo {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      text-decoration: none;
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--white);
+    }
+
+    .logo img {
+      height: 28px;
+      width: auto;
+      border-radius: 6px;
+      background: white;
+      padding: 2px;
+    }
+
+    .logo-accent { color: #3B7DD8; }
+
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      color: rgba(255,255,255,0.5);
+      text-decoration: none;
+      font-size: 0.8rem;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+
+    .back-link:hover { color: var(--white); }
+
+    .back-link svg { width: 14px; height: 14px; }
+
+    .lang-toggle {
+      display: flex;
+      gap: 0.35rem;
+    }
+
+    .lang-btn {
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 6px;
+      padding: 0.3rem 0.5rem;
+      font-family: var(--font);
+      font-size: 0.7rem;
+      font-weight: 600;
+      color: rgba(255,255,255,0.4);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .lang-btn.active {
+      background: rgba(37,87,167,0.2);
+      color: var(--white);
+      border-color: rgba(37,87,167,0.35);
+    }
+
+    .lang-btn:hover:not(.active) { color: rgba(255,255,255,0.7); }
+
+    /* ===== CONTENT ===== */
+    .content {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 3rem 2rem 5rem;
+    }
+
+    .page-title {
+      font-size: clamp(1.75rem, 4vw, 2.25rem);
+      font-weight: 700;
+      color: var(--dark);
+      letter-spacing: -0.03em;
+      margin-bottom: 0.5rem;
+    }
+
+    .page-meta {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      margin-bottom: 3rem;
+      padding-bottom: 2rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .section {
+      margin-bottom: 2.5rem;
+    }
+
+    .section h2 {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: var(--dark);
+      margin-bottom: 1rem;
+      letter-spacing: -0.01em;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .section h2::before {
+      content: '';
+      width: 3px;
+      height: 20px;
+      border-radius: 2px;
+      background: var(--accent);
+      flex-shrink: 0;
+    }
+
+    .section p, .section li {
+      font-size: 0.9375rem;
+      color: var(--text-secondary);
+      line-height: 1.8;
+    }
+
+    .section p + p { margin-top: 0.75rem; }
+
+    .section ul {
+      list-style: none;
+      margin-top: 0.75rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .section li {
+      padding-left: 1.5rem;
+      position: relative;
+    }
+
+    .section li::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0.65rem;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: rgba(37,87,167,0.25);
+      border: 1px solid rgba(37,87,167,0.15);
+    }
+
+    .section a {
+      color: var(--accent);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .section a:hover { color: var(--accent-hover); text-decoration: underline; }
+
+    .info-box {
+      background: var(--bg-alt);
+      border: 1px solid var(--border);
+      border-radius: var(--r);
+      padding: 1.25rem 1.5rem;
+      margin-top: 1rem;
+    }
+
+    .info-box p {
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+    }
+
+    .info-box strong { color: var(--text); }
+
+    /* ===== FOOTER ===== */
+    .footer {
+      background: var(--dark);
+      padding: 2rem 0;
+      text-align: center;
+    }
+
+    .footer .container {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 0 2rem;
+    }
+
+    .footer p {
+      font-size: 0.8rem;
+      color: rgba(255,255,255,0.35);
+    }
+
+    .footer a {
+      color: rgba(255,255,255,0.5);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .footer a:hover { color: var(--white); }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 600px) {
+      .content { padding: 2rem 1.25rem 4rem; }
+      .header-left { gap: 1rem; }
+      .back-link span { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <div class="lang-loading-bar" id="lang-loading-bar"></div>
+
+  <header class="header">
+    <div class="container">
+      <div class="header-left">
+        <a href="/" class="logo">
+          <img src="/img/logo-white.jpg" alt="IKTNAA">
+          <span>IKT<span class="logo-accent">NAA</span></span>
+        </a>
+        <a href="/" class="back-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+          <span data-i18n="back">Atpakaļ</span>
+        </a>
+      </div>
+      <div class="lang-toggle">
+        <button class="lang-btn active" data-lang="lv">LV</button>
+        <button class="lang-btn" data-lang="en">EN</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="content">
+    <h1 class="page-title" data-i18n="title">Privātuma politika</h1>
+    <p class="page-meta" data-i18n="updated">Pēdējo reizi atjaunināta: 2026. gada 1. marts</p>
+
+    <div class="section">
+      <h2 data-i18n="s1.title">Vispārīgā informācija</h2>
+      <p data-i18n="s1.p1">Biedrība "IKT nodarbināto atbalsta asociācija" (turpmāk — IKTNAA), reģistrācijas Nr. 50008356581, ir atbildīga par jūsu personas datu apstrādi.</p>
+      <p data-i18n="s1.p2">Šī privātuma politika izskaidro, kādus personas datus mēs apkopojam, kāpēc un kā tos apstrādājam, kā arī jūsu tiesības attiecībā uz saviem datiem.</p>
+    </div>
+
+    <div class="section">
+      <h2 data-i18n="s2.title">Kādus datus mēs apkopojam</h2>
+      <p data-i18n="s2.intro">Mēs varam apkopot šādus datus:</p>
+      <ul>
+        <li data-i18n="s2.li1">Vārds, uzvārds un kontaktinformācija — ja pievienojaties kā biedrs vai sazināties ar mums</li>
+        <li data-i18n="s2.li2">E-pasta adrese — sarakstei un informatīvu paziņojumu nosūtīšanai</li>
+        <li data-i18n="s2.li3">Sīkdatņu dati — vietnes darbības uzlabošanai (valodas preferences)</li>
+        <li data-i18n="s2.li4">Tehniskie dati — IP adrese, pārlūkprogrammas tips, apmeklējuma laiks (servera žurnālfaili)</li>
+      </ul>
+    </div>
+
+    <div class="section">
+      <h2 data-i18n="s3.title">Datu apstrādes mērķi</h2>
+      <ul>
+        <li data-i18n="s3.li1">Biedru reģistrācija un saziņa ar biedriem</li>
+        <li data-i18n="s3.li2">Atbilžu sniegšana uz pieprasījumiem</li>
+        <li data-i18n="s3.li3">Vietnes darbības nodrošināšana un uzlabošana</li>
+        <li data-i18n="s3.li4">Likumā noteikto pienākumu izpilde</li>
+      </ul>
+    </div>
+
+    <div class="section">
+      <h2 data-i18n="s4.title">Tiesiskais pamats</h2>
+      <p data-i18n="s4.p1">Personas datu apstrādi veicam, pamatojoties uz:</p>
+      <ul>
+        <li data-i18n="s4.li1">Jūsu piekrišanu (piemēram, sīkdatņu izmantošanai)</li>
+        <li data-i18n="s4.li2">Līguma izpildi (biedra statusa nodrošināšanai)</li>
+        <li data-i18n="s4.li3">Leģitīmajām interesēm (vietnes drošība un darbība)</li>
+        <li data-i18n="s4.li4">Juridisko pienākumu izpildi</li>
+      </ul>
+    </div>
+
+    <div class="section">
+      <h2 data-i18n="s5.title">Sīkdatnes</h2>
+      <p data-i18n="s5.p1">Mūsu vietne izmanto tikai nepieciešamās sīkdatnes, lai saglabātu jūsu valodas izvēli. Mēs neizmantojam analītikas vai reklāmas sīkdatnes.</p>
+      <div class="info-box">
+        <p><strong data-i18n="s5.cookie_name">iktnaa-lang</strong> — <span data-i18n="s5.cookie_desc">saglabā izvēlēto vietnes valodu (lv/en). Derīguma termiņš: neierobežots. Tips: nepieciešamā sīkdatne.</span></p>
+        <p style="margin-top: 0.5rem;"><strong data-i18n="s5.cookie_name2">iktnaa-cookies</strong> — <span data-i18n="s5.cookie_desc2">atzīmē, ka esat piekritis sīkdatņu izmantošanai. Derīguma termiņš: neierobežots. Tips: nepieciešamā sīkdatne.</span></p>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2 data-i18n="s6.title">Datu glabāšana un drošība</h2>
+      <p data-i18n="s6.p1">Personas datus glabājam tikai tik ilgi, cik tas nepieciešams iepriekš minēto mērķu sasniegšanai. Vietne tiek mitināta GitHub Pages platformā, kas nodrošina HTTPS šifrēšanu.</p>
+    </div>
+
+    <div class="section">
+      <h2 data-i18n="s7.title">Jūsu tiesības</h2>
+      <p data-i18n="s7.intro">Saskaņā ar Vispārīgo datu aizsardzības regulu (GDPR) jums ir šādas tiesības:</p>
+      <ul>
+        <li data-i18n="s7.li1">Piekļūt saviem personas datiem</li>
+        <li data-i18n="s7.li2">Labot neprecīzus datus</li>
+        <li data-i18n="s7.li3">Dzēst savus datus ("tiesības tikt aizmirstam")</li>
+        <li data-i18n="s7.li4">Ierobežot datu apstrādi</li>
+        <li data-i18n="s7.li5">Pārnest datus</li>
+        <li data-i18n="s7.li6">Iebilst pret datu apstrādi</li>
+        <li data-i18n="s7.li7">Atsaukt savu piekrišanu jebkurā laikā</li>
+      </ul>
+    </div>
+
+    <div class="section">
+      <h2 data-i18n="s8.title">Kontaktinformācija</h2>
+      <p data-i18n="s8.p1">Ja jums ir jautājumi par privātuma politiku vai vēlaties izmantot savas tiesības, sazinieties ar mums:</p>
+      <div class="info-box">
+        <p><strong>IKTNAA</strong> — IKT nodarbināto atbalsta asociācija</p>
+        <p>E-pasts: <a href="mailto:info@iktnaa.lv">info@iktnaa.lv</a></p>
+        <p data-i18n="s8.dpa">Ja uzskatāt, ka jūsu datu apstrāde ir pārkāpta, jums ir tiesības iesniegt sūdzību Datu valsts inspekcijai (<a href="https://www.dvi.gov.lv" target="_blank" rel="noopener">www.dvi.gov.lv</a>).</p>
+      </div>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <p>&copy; 2026 IKTNAA &middot; <a href="/" data-i18n="footer.home">Sākumlapa</a></p>
+    </div>
+  </footer>
+
+  <script>
+    const T = {
+      lv: {
+        back: 'Atpakaļ',
+        title: 'Privātuma politika',
+        updated: 'Pēdējo reizi atjaunināta: 2026. gada 1. marts',
+        's1.title': 'Vispārīgā informācija',
+        's1.p1': 'Biedrība "IKT nodarbināto atbalsta asociācija" (turpmāk — IKTNAA), reģistrācijas Nr. 50008356581, ir atbildīga par jūsu personas datu apstrādi.',
+        's1.p2': 'Šī privātuma politika izskaidro, kādus personas datus mēs apkopojam, kāpēc un kā tos apstrādājam, kā arī jūsu tiesības attiecībā uz saviem datiem.',
+        's2.title': 'Kādus datus mēs apkopojam',
+        's2.intro': 'Mēs varam apkopot šādus datus:',
+        's2.li1': 'Vārds, uzvārds un kontaktinformācija — ja pievienojaties kā biedrs vai sazināties ar mums',
+        's2.li2': 'E-pasta adrese — sarakstei un informatīvu paziņojumu nosūtīšanai',
+        's2.li3': 'Sīkdatņu dati — vietnes darbības uzlabošanai (valodas preferences)',
+        's2.li4': 'Tehniskie dati — IP adrese, pārlūkprogrammas tips, apmeklējuma laiks (servera žurnālfaili)',
+        's3.title': 'Datu apstrādes mērķi',
+        's3.li1': 'Biedru reģistrācija un saziņa ar biedriem',
+        's3.li2': 'Atbilžu sniegšana uz pieprasījumiem',
+        's3.li3': 'Vietnes darbības nodrošināšana un uzlabošana',
+        's3.li4': 'Likumā noteikto pienākumu izpilde',
+        's4.title': 'Tiesiskais pamats',
+        's4.p1': 'Personas datu apstrādi veicam, pamatojoties uz:',
+        's4.li1': 'Jūsu piekrišanu (piemēram, sīkdatņu izmantošanai)',
+        's4.li2': 'Līguma izpildi (biedra statusa nodrošināšanai)',
+        's4.li3': 'Leģitīmajām interesēm (vietnes drošība un darbība)',
+        's4.li4': 'Juridisko pienākumu izpildi',
+        's5.title': 'Sīkdatnes',
+        's5.p1': 'Mūsu vietne izmanto tikai nepieciešamās sīkdatnes, lai saglabātu jūsu valodas izvēli. Mēs neizmantojam analītikas vai reklāmas sīkdatnes.',
+        's5.cookie_name': 'iktnaa-lang',
+        's5.cookie_desc': 'saglabā izvēlēto vietnes valodu (lv/en). Derīguma termiņš: neierobežots. Tips: nepieciešamā sīkdatne.',
+        's5.cookie_name2': 'iktnaa-cookies',
+        's5.cookie_desc2': 'atzīmē, ka esat piekritis sīkdatņu izmantošanai. Derīguma termiņš: neierobežots. Tips: nepieciešamā sīkdatne.',
+        's6.title': 'Datu glabāšana un drošība',
+        's6.p1': 'Personas datus glabājam tikai tik ilgi, cik tas nepieciešams iepriekš minēto mērķu sasniegšanai. Vietne tiek mitināta GitHub Pages platformā, kas nodrošina HTTPS šifrēšanu.',
+        's7.title': 'Jūsu tiesības',
+        's7.intro': 'Saskaņā ar Vispārīgo datu aizsardzības regulu (GDPR) jums ir šādas tiesības:',
+        's7.li1': 'Piekļūt saviem personas datiem',
+        's7.li2': 'Labot neprecīzus datus',
+        's7.li3': 'Dzēst savus datus ("tiesības tikt aizmirstam")',
+        's7.li4': 'Ierobežot datu apstrādi',
+        's7.li5': 'Pārnest datus',
+        's7.li6': 'Iebilst pret datu apstrādi',
+        's7.li7': 'Atsaukt savu piekrišanu jebkurā laikā',
+        's8.title': 'Kontaktinformācija',
+        's8.p1': 'Ja jums ir jautājumi par privātuma politiku vai vēlaties izmantot savas tiesības, sazinieties ar mums:',
+        's8.dpa': 'Ja uzskatāt, ka jūsu datu apstrāde ir pārkāpta, jums ir tiesības iesniegt sūdzību Datu valsts inspekcijai (<a href="https://www.dvi.gov.lv" target="_blank" rel="noopener">www.dvi.gov.lv</a>).',
+        'footer.home': 'Sākumlapa'
+      },
+      en: {
+        back: 'Back',
+        title: 'Privacy Policy',
+        updated: 'Last updated: March 1, 2026',
+        's1.title': 'General Information',
+        's1.p1': 'The association "ICT Workers Support Association" (hereinafter — IKTNAA), registration No. 50008356581, is responsible for the processing of your personal data.',
+        's1.p2': 'This privacy policy explains what personal data we collect, why and how we process it, and your rights regarding your data.',
+        's2.title': 'What Data We Collect',
+        's2.intro': 'We may collect the following data:',
+        's2.li1': 'Name and contact information — if you join as a member or contact us',
+        's2.li2': 'Email address — for correspondence and informational notifications',
+        's2.li3': 'Cookie data — to improve website functionality (language preferences)',
+        's2.li4': 'Technical data — IP address, browser type, visit time (server log files)',
+        's3.title': 'Purpose of Data Processing',
+        's3.li1': 'Member registration and communication with members',
+        's3.li2': 'Responding to inquiries',
+        's3.li3': 'Ensuring and improving website functionality',
+        's3.li4': 'Fulfilling legal obligations',
+        's4.title': 'Legal Basis',
+        's4.p1': 'We process personal data based on:',
+        's4.li1': 'Your consent (e.g., for the use of cookies)',
+        's4.li2': 'Performance of a contract (to provide membership services)',
+        's4.li3': 'Legitimate interests (website security and operation)',
+        's4.li4': 'Fulfillment of legal obligations',
+        's5.title': 'Cookies',
+        's5.p1': 'Our website uses only essential cookies to save your language preference. We do not use analytics or advertising cookies.',
+        's5.cookie_name': 'iktnaa-lang',
+        's5.cookie_desc': 'stores the selected website language (lv/en). Expiry: unlimited. Type: essential cookie.',
+        's5.cookie_name2': 'iktnaa-cookies',
+        's5.cookie_desc2': 'marks that you have accepted the use of cookies. Expiry: unlimited. Type: essential cookie.',
+        's6.title': 'Data Storage and Security',
+        's6.p1': 'We store personal data only as long as necessary for the purposes mentioned above. The website is hosted on GitHub Pages, which provides HTTPS encryption.',
+        's7.title': 'Your Rights',
+        's7.intro': 'Under the General Data Protection Regulation (GDPR) you have the following rights:',
+        's7.li1': 'Access your personal data',
+        's7.li2': 'Rectify inaccurate data',
+        's7.li3': 'Erase your data ("right to be forgotten")',
+        's7.li4': 'Restrict data processing',
+        's7.li5': 'Data portability',
+        's7.li6': 'Object to data processing',
+        's7.li7': 'Withdraw your consent at any time',
+        's8.title': 'Contact Information',
+        's8.p1': 'If you have questions about the privacy policy or wish to exercise your rights, contact us:',
+        's8.dpa': 'If you believe your data processing has been violated, you have the right to file a complaint with the Data State Inspectorate (<a href="https://www.dvi.gov.lv" target="_blank" rel="noopener">www.dvi.gov.lv</a>).',
+        'footer.home': 'Homepage'
+      }
+    };
+
+    let lang = localStorage.getItem('iktnaa-lang') || 'lv';
+
+    function setLang(l) {
+      lang = l;
+      localStorage.setItem('iktnaa-lang', l);
+      document.documentElement.lang = l;
+
+      // Title
+      document.title = l === 'lv'
+        ? 'Privātuma politika — IKTNAA'
+        : 'Privacy Policy — IKTNAA';
+
+      // Loading bar
+      const loadBar = document.getElementById('lang-loading-bar');
+      loadBar.classList.remove('active');
+      void loadBar.offsetWidth;
+      loadBar.classList.add('active');
+
+      // Fade out
+      document.body.classList.add('lang-switching');
+
+      setTimeout(() => {
+        document.querySelectorAll('[data-i18n]').forEach(el => {
+          const val = T[l]?.[el.getAttribute('data-i18n')];
+          if (val) {
+            if (val.includes('<')) { el.innerHTML = val; }
+            else { el.textContent = val; }
+          }
+        });
+        document.body.classList.remove('lang-switching');
+        setTimeout(() => loadBar.classList.remove('active'), 350);
+      }, 180);
+
+      document.querySelectorAll('.lang-btn').forEach(b =>
+        b.classList.toggle('active', b.dataset.lang === l)
+      );
+    }
+
+    document.querySelectorAll('.lang-btn').forEach(btn => {
+      btn.addEventListener('click', () => setLang(btn.dataset.lang));
+    });
+
+    setLang(lang);
+  </script>
+</body>
+</html>
