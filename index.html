@@ -245,14 +245,22 @@
       position: relative;
       overflow: hidden;
       padding: 8rem 0 5rem;
-      background: linear-gradient(160deg, #0B1628 0%, var(--dark) 40%, #122040 100%);
+      background: var(--dark);
     }
 
-    .hero::before {
-      content: '';
+    .hero-canvas {
       position: absolute;
       inset: 0;
-      background: radial-gradient(ellipse 50% 50% at 30% 60%, rgba(37,87,167,0.12) 0%, transparent 70%);
+      z-index: 0;
+    }
+
+    .hero-canvas canvas { width: 100%; height: 100%; }
+
+    .hero-gradient {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 55% 50% at 25% 55%, rgba(37,87,167,0.1) 0%, transparent 70%);
+      z-index: 1;
     }
 
     .hero .container { position: relative; z-index: 2; }
@@ -459,11 +467,41 @@
       overflow: hidden;
     }
 
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--accent), rgba(37,87,167,0.3), transparent);
+      opacity: 0;
+      transition: opacity 0.4s;
+    }
+
+    .card::after {
+      content: '';
+      position: absolute;
+      top: -50%;
+      right: -50%;
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(37,87,167,0.05), transparent 70%);
+      opacity: 0;
+      transition: opacity 0.4s;
+    }
+
     .card:hover {
       border-color: var(--border-hover);
-      transform: translateY(-2px);
-      box-shadow: 0 4px 20px rgba(15,27,53,0.06);
+      transform: translateY(-4px);
+      box-shadow: 0 8px 32px rgba(37,87,167,0.08);
     }
+
+    .card:hover::before { opacity: 1; }
+    .card:hover::after { opacity: 1; }
+
+    .card > * { position: relative; z-index: 1; }
 
     .card-icon {
       width: 44px;
@@ -475,12 +513,13 @@
       align-items: center;
       justify-content: center;
       margin-bottom: 1.25rem;
-      transition: all 0.3s;
+      transition: all 0.35s;
     }
 
     .card:hover .card-icon {
-      background: rgba(37,87,167,0.1);
-      border-color: rgba(37,87,167,0.18);
+      background: rgba(37,87,167,0.12);
+      border-color: rgba(37,87,167,0.2);
+      box-shadow: 0 0 16px rgba(37,87,167,0.08);
     }
 
     .card h3 {
@@ -1273,6 +1312,8 @@
 
   <!-- Hero -->
   <section class="hero">
+    <div class="hero-canvas" id="hero-canvas"></div>
+    <div class="hero-gradient"></div>
     <div class="container">
       <div class="hero-content">
         <img src="img/logo-white.jpg" alt="" class="hero-logo">
@@ -1767,6 +1808,90 @@
     }, { threshold: 0.5 });
 
     document.querySelectorAll('.counter').forEach(el => counterObserver.observe(el));
+
+    /* ===== Network canvas animation (hero) ===== */
+    (function() {
+      const container = document.getElementById('hero-canvas');
+      const canvas = document.createElement('canvas');
+      container.appendChild(canvas);
+      const ctx = canvas.getContext('2d');
+      let w, h, particles = [], mouse = { x: -1000, y: -1000 };
+
+      function resize() {
+        w = canvas.width = container.offsetWidth;
+        h = canvas.height = container.offsetHeight;
+      }
+
+      function init() {
+        resize();
+        particles = [];
+        const count = Math.min(Math.floor(w * h / 14000), 60);
+        for (let i = 0; i < count; i++) {
+          particles.push({
+            x: Math.random() * w,
+            y: Math.random() * h,
+            vx: (Math.random() - 0.5) * 0.3,
+            vy: (Math.random() - 0.5) * 0.3,
+            r: Math.random() * 1.5 + 0.8
+          });
+        }
+      }
+
+      function draw() {
+        ctx.clearRect(0, 0, w, h);
+        const maxDist = 140;
+
+        for (let i = 0; i < particles.length; i++) {
+          const p = particles[i];
+          p.x += p.vx;
+          p.y += p.vy;
+          if (p.x < 0 || p.x > w) p.vx *= -1;
+          if (p.y < 0 || p.y > h) p.vy *= -1;
+
+          const dx = p.x - mouse.x;
+          const dy = p.y - mouse.y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          if (dist < 120) {
+            p.x += dx * 0.015;
+            p.y += dy * 0.015;
+          }
+
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+          ctx.fillStyle = 'rgba(37, 87, 167, 0.4)';
+          ctx.fill();
+
+          for (let j = i + 1; j < particles.length; j++) {
+            const p2 = particles[j];
+            const dx2 = p.x - p2.x;
+            const dy2 = p.y - p2.y;
+            const d = Math.sqrt(dx2 * dx2 + dy2 * dy2);
+            if (d < maxDist) {
+              ctx.beginPath();
+              ctx.moveTo(p.x, p.y);
+              ctx.lineTo(p2.x, p2.y);
+              ctx.strokeStyle = `rgba(37, 87, 167, ${0.1 * (1 - d / maxDist)})`;
+              ctx.lineWidth = 0.5;
+              ctx.stroke();
+            }
+          }
+        }
+
+        requestAnimationFrame(draw);
+      }
+
+      container.addEventListener('mousemove', e => {
+        const rect = container.getBoundingClientRect();
+        mouse.x = e.clientX - rect.left;
+        mouse.y = e.clientY - rect.top;
+      });
+
+      container.addEventListener('mouseleave', () => { mouse.x = -1000; mouse.y = -1000; });
+      window.addEventListener('resize', resize);
+
+      init();
+      draw();
+    })();
 
     /* ===== Cookie bar ===== */
     const cookieBar = document.getElementById('cookie-bar');
