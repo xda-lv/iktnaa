@@ -371,7 +371,7 @@
       to { opacity: 1; transform: translateY(0); }
     }
 
-    .hero-logo { animation: heroIn 0.8s var(--ease) 0.1s both, float 6s ease-in-out 1s infinite; }
+    .hero-logo { animation: heroIn 0.8s var(--ease) 0.1s both, logoGlow 3s ease-in-out 1s infinite; }
     .hero-badge { animation: heroIn 0.8s var(--ease) 0.2s both; }
     .hero h1 { animation: heroIn 0.8s var(--ease) 0.3s both; }
     .hero-desc { animation: heroIn 0.8s var(--ease) 0.4s both; }
@@ -387,6 +387,11 @@
       padding: 6px;
       box-shadow: 0 8px 40px rgba(37,87,167,0.35);
       object-fit: contain;
+      animation: logoGlow 3s ease-in-out infinite;
+    }
+    @keyframes logoGlow {
+      0%, 100% { box-shadow: 0 8px 40px rgba(37,87,167,0.35); }
+      50% { box-shadow: 0 8px 60px rgba(91,155,240,0.5), 0 0 20px rgba(52,211,153,0.15); }
     }
 
     @keyframes float {
@@ -438,6 +443,25 @@
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
+    }
+
+    /* Typing effect for rotating phrases */
+    .hero-typing-wrap {
+      display: block;
+      margin-bottom: 2rem;
+      min-height: 1.6em;
+    }
+    .hero-typed {
+      font-size: 1.1rem;
+      font-weight: 500;
+      color: rgba(255,255,255,0.5);
+      border-right: 2px solid #5B9BF0;
+      padding-right: 3px;
+      animation: blink 0.75s step-end infinite;
+      letter-spacing: 0.01em;
+    }
+    @keyframes blink {
+      50% { border-color: transparent; }
     }
 
     .hero-desc {
@@ -732,8 +756,47 @@
     }
 
     /* ===== SECTIONS ===== */
-    .section { padding: 6rem 0; position: relative; background: var(--bg); }
+    .section { padding: 6rem 0; position: relative; background: var(--bg); overflow: hidden; }
     .section-alt { background: var(--bg-alt); }
+
+    /* Floating dots in section backgrounds */
+    .section-dots {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden;
+    }
+    .section-dot {
+      position: absolute;
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+      background: var(--accent);
+      opacity: 0.08;
+    }
+    .section-dot:nth-child(1) { top: 15%; left: 8%; animation: dotDrift1 20s linear infinite; }
+    .section-dot:nth-child(2) { top: 60%; right: 12%; animation: dotDrift2 25s linear infinite; width: 6px; height: 6px; }
+    .section-dot:nth-child(3) { bottom: 20%; left: 25%; animation: dotDrift3 18s linear infinite; }
+    .section-dot:nth-child(4) { top: 35%; right: 30%; animation: dotDrift1 22s linear infinite reverse; width: 3px; height: 3px; opacity: 0.06; }
+    .section-dot:nth-child(5) { bottom: 40%; left: 60%; animation: dotDrift2 28s linear infinite; opacity: 0.05; }
+    @keyframes dotDrift1 {
+      0% { transform: translate(0, 0); }
+      25% { transform: translate(30px, -20px); }
+      50% { transform: translate(-10px, -40px); }
+      75% { transform: translate(20px, -15px); }
+      100% { transform: translate(0, 0); }
+    }
+    @keyframes dotDrift2 {
+      0% { transform: translate(0, 0); }
+      33% { transform: translate(-25px, 15px); }
+      66% { transform: translate(15px, -25px); }
+      100% { transform: translate(0, 0); }
+    }
+    @keyframes dotDrift3 {
+      0% { transform: translate(0, 0) scale(1); }
+      50% { transform: translate(20px, 10px) scale(1.5); }
+      100% { transform: translate(0, 0) scale(1); }
+    }
 
     .section-header { margin-bottom: 3.5rem; text-align: center; }
 
@@ -797,15 +860,13 @@
       left: 0;
       right: 0;
       height: 2px;
-      background: linear-gradient(90deg, var(--accent), #5B9BF0, #34d399);
-      background-size: 200% 100%;
-      opacity: 0;
-      transition: opacity 0.4s;
-      animation: gradientSlide 3s ease infinite;
+      background: linear-gradient(90deg, var(--accent), #5B9BF0, #34d399, var(--accent));
+      background-size: 300% 100%;
+      animation: gradientSlide 4s linear infinite;
     }
     @keyframes gradientSlide {
-      0%, 100% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
+      0% { background-position: 0% 50%; }
+      100% { background-position: 300% 50%; }
     }
 
     .card::after {
@@ -827,15 +888,14 @@
       box-shadow: 0 8px 32px rgba(37,87,167,0.08);
     }
 
-    .card:hover::before { opacity: 1; }
     .card:hover::after { opacity: 1; }
 
     .card > * { position: relative; z-index: 1; }
 
     .card-icon {
-      width: 44px;
-      height: 44px;
-      border-radius: var(--r-sm);
+      width: 48px;
+      height: 48px;
+      border-radius: 14px;
       background: rgba(37,87,167,0.06);
       border: 1px solid rgba(37,87,167,0.1);
       display: flex;
@@ -843,12 +903,24 @@
       justify-content: center;
       margin-bottom: 1.25rem;
       transition: all 0.35s;
+      animation: iconFloat 4s ease-in-out infinite;
+    }
+    .card:nth-child(2) .card-icon { animation-delay: -0.7s; }
+    .card:nth-child(3) .card-icon { animation-delay: -1.4s; }
+    .card:nth-child(4) .card-icon { animation-delay: -2.1s; }
+    .card:nth-child(5) .card-icon { animation-delay: -2.8s; }
+    .card:nth-child(6) .card-icon { animation-delay: -3.5s; }
+    @keyframes iconFloat {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-4px); }
     }
 
     .card:hover .card-icon {
       background: rgba(37,87,167,0.12);
       border-color: rgba(37,87,167,0.2);
-      box-shadow: 0 0 16px rgba(37,87,167,0.08);
+      box-shadow: 0 0 20px rgba(37,87,167,0.12);
+      animation: none;
+      transform: scale(1.1);
     }
 
     .card h3 {
@@ -891,10 +963,11 @@
       position: absolute;
       bottom: 0;
       left: 0;
-      width: 0;
+      width: 100%;
       height: 2px;
-      background: linear-gradient(90deg, var(--accent), #5B9BF0);
-      transition: width 0.5s var(--ease);
+      background: linear-gradient(90deg, var(--accent), #5B9BF0, #34d399, var(--accent));
+      background-size: 300% 100%;
+      animation: gradientSlide 4s linear infinite;
     }
 
     .news-card:hover {
@@ -903,7 +976,7 @@
       box-shadow: 0 8px 28px rgba(15,27,53,0.08);
     }
 
-    .news-card:hover::after { width: 100%; }
+    .news-card:hover::after { height: 3px; }
 
     .news-date {
       font-size: 0.75rem;
@@ -982,8 +1055,8 @@
 
     .check-icon {
       flex-shrink: 0;
-      width: 24px;
-      height: 24px;
+      width: 26px;
+      height: 26px;
       border-radius: 50%;
       background: rgba(37,87,167,0.08);
       border: 1px solid rgba(37,87,167,0.12);
@@ -992,11 +1065,25 @@
       justify-content: center;
       margin-top: 2px;
       transition: all 0.3s;
+      animation: checkPulse 3s ease-in-out infinite;
+    }
+    .benefit-item:nth-child(1) .check-icon { animation-delay: 0s; }
+    .benefit-item:nth-child(2) .check-icon { animation-delay: 0.6s; }
+    .benefit-item:nth-child(3) .check-icon { animation-delay: 1.2s; }
+    .benefit-item:nth-child(4) .check-icon { animation-delay: 1.8s; }
+    .benefit-item:nth-child(5) .check-icon { animation-delay: 2.4s; }
+    @keyframes checkPulse {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(37,87,167,0); background: rgba(37,87,167,0.08); }
+      50% { box-shadow: 0 0 12px rgba(37,87,167,0.15); background: rgba(37,87,167,0.15); }
     }
 
     .benefit-item:hover .check-icon {
-      background: rgba(37,87,167,0.12);
+      background: var(--accent);
+      border-color: var(--accent);
+      animation: none;
+      box-shadow: 0 0 16px rgba(37,87,167,0.25);
     }
+    .benefit-item:hover .check-icon svg { stroke: white; }
 
     .members-cta-box {
       background: linear-gradient(135deg, var(--dark), var(--dark-3));
@@ -1886,8 +1973,9 @@
         <div class="hero-badge">
           <span data-i18n="hero.tag">Asociācija dibināta 2026. gadā</span>
         </div>
-        <h1 data-i18n="hero.title">IKT nodarbināto <em>atbalsta</em> asociācija</h1>
+        <h1>IKT nodarbināto <em>atbalsta</em> asociācija</h1>
         <p class="hero-desc" data-i18n="hero.desc">Aizstāvam informācijas un komunikācijas tehnoloģiju nozarē nodarbināto speciālistu tiesības un profesionālās intereses Latvijā.</p>
+        <div class="hero-typing-wrap"><span class="hero-typed" id="hero-typed"></span></div>
         <div class="hero-actions">
           <a href="mailto:info@iktnaa.lv" class="btn btn-accent" data-i18n="hero.cta">Kļūsti par biedru</a>
           <a href="#aktualitates" class="btn btn-primary" data-i18n="hero.cta3">Aktualitātes</a>
@@ -1925,6 +2013,7 @@
 
   <!-- Par mums -->
   <section class="section" id="par-mums">
+    <div class="section-dots"><span class="section-dot"></span><span class="section-dot"></span><span class="section-dot"></span><span class="section-dot"></span><span class="section-dot"></span></div>
     <div class="container">
       <div class="section-header reveal">
         <div class="section-tag" data-i18n="about.tag">Par mums</div>
@@ -1995,6 +2084,7 @@
 
   <!-- Aktualitātes -->
   <section class="section" id="aktualitates">
+    <div class="section-dots"><span class="section-dot"></span><span class="section-dot"></span><span class="section-dot"></span><span class="section-dot"></span><span class="section-dot"></span></div>
     <div class="container">
       <div class="section-header reveal">
         <div class="section-tag" data-i18n="news.tag">Aktualitātes</div>
@@ -2020,6 +2110,7 @@
 
   <!-- Biedriem -->
   <section class="section section-alt" id="biedriem">
+    <div class="section-dots"><span class="section-dot"></span><span class="section-dot"></span><span class="section-dot"></span><span class="section-dot"></span><span class="section-dot"></span></div>
     <div class="container">
       <div class="section-header reveal">
         <div class="section-tag" data-i18n="members.tag">Biedriem</div>
@@ -2674,6 +2765,59 @@
       chatBody.appendChild(div);
       chatBody.scrollTop = chatBody.scrollHeight;
     }
+
+    /* ===== Typing effect ===== */
+    const TYPED_PHRASES = {
+      lv: [
+        'Profesionālo interešu aizstāvība',
+        'Taisnīgs atalgojums IT speciālistiem',
+        'Droši darba apstākļi nozarē',
+        'Kopiena, kas iestājas par tavām tiesībām',
+        'Stiprināta IKT nozare Latvijā'
+      ],
+      en: [
+        'Professional advocacy for IT workers',
+        'Fair compensation for ICT specialists',
+        'Safe working conditions in the sector',
+        'A community that stands for your rights',
+        'A stronger ICT sector in Latvia'
+      ]
+    };
+    TYPED_PHRASES.ru = TYPED_PHRASES.lv;
+
+    (function initTyping() {
+      const el = document.getElementById('hero-typed');
+      if (!el) return;
+      let phraseIdx = 0, charIdx = 0, deleting = false;
+
+      function tick() {
+        const phrases = TYPED_PHRASES[lang] || TYPED_PHRASES.lv;
+        const phrase = phrases[phraseIdx % phrases.length];
+
+        if (!deleting) {
+          el.textContent = phrase.slice(0, charIdx + 1);
+          charIdx++;
+          if (charIdx >= phrase.length) {
+            setTimeout(() => { deleting = true; tick(); }, 2200);
+            return;
+          }
+          setTimeout(tick, 55);
+        } else {
+          el.textContent = phrase.slice(0, charIdx);
+          charIdx--;
+          if (charIdx < 0) {
+            deleting = false;
+            charIdx = 0;
+            phraseIdx++;
+            setTimeout(tick, 400);
+            return;
+          }
+          setTimeout(tick, 30);
+        }
+      }
+
+      setTimeout(tick, 1200);
+    })();
 
     /* ===== Init ===== */
     setLang(lang);
