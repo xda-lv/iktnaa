@@ -2484,8 +2484,14 @@
       .nav { display: none; }
       .mobile-toggle { display: flex; }
       .header { z-index: 112; }
-      .header { padding: 1.5rem 0; }
-      .header.scrolled { padding: 1.15rem 0; }
+      .header { padding: 1.75rem 0; }
+      .header.scrolled { padding: 1.35rem 0; }
+      .mobile-toggle { min-width: 56px; min-height: 56px; padding: 1.1rem; }
+      .mobile-toggle span { width: 34px; height: 3px; }
+      .mobile-toggle span:nth-child(1) { margin-bottom: 9px; }
+      .mobile-toggle span:nth-child(2) { margin-bottom: 9px; width: 24px; }
+      .mobile-toggle.open span:nth-child(1) { transform: translateY(12px) rotate(45deg); }
+      .mobile-toggle.open span:nth-child(3) { transform: translateY(-12px) rotate(-45deg); }
       .header.menu-open {
         background: transparent !important;
         backdrop-filter: none !important;
