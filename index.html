@@ -38,6 +38,14 @@
     }
 
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    /* Pause all animations in off-screen sections */
+    .anim-paused,
+    .anim-paused *,
+    .anim-paused *::before,
+    .anim-paused *::after {
+      animation-play-state: paused !important;
+    }
     html { scroll-behavior: smooth; scroll-padding-top: 80px; }
 
     body {
@@ -311,21 +319,35 @@
       background: transparent;
     }
 
+    /* Scrolled — only padding compression (always when past hero) */
     .header.scrolled {
+      padding: 0.85rem 0;
+    }
+
+    /* ===== ON-LIGHT sections: white header bg + dark nav ===== */
+    .header.header--on-light {
       background: rgba(255, 255, 255, 0.92);
       backdrop-filter: blur(20px);
       -webkit-backdrop-filter: blur(20px);
       border-bottom: 1px solid var(--border);
-      padding: 0.85rem 0;
-      transition: all 0.5s var(--ease);
     }
+    .header.header--on-light .nav {
+      background: var(--dark);
+      border-color: var(--dark-2);
+    }
+    .header.header--on-light .nav-links a { color: rgba(255,255,255,0.7); }
+    .header.header--on-light .nav-links a:hover { color: var(--white); background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.08); }
+    .header.header--on-light .lang-current { background: rgba(255,255,255,0.08); color: rgba(255,255,255,0.8); }
+    .header.header--on-light .lang-current:hover { background: rgba(255,255,255,0.12); }
+    .header.header--on-light .mobile-toggle span { background: var(--text); }
 
-    /* scrolled nav overrides moved to .header.scrolled .nav block */
-    .header.scrolled .lang-toggle { background: rgba(0,0,0,0.05); }
-    .header.scrolled .lang-toggle button { color: var(--text-muted); }
-    .header.scrolled .lang-toggle button.active { background: var(--accent); color: var(--white); }
-    .header.scrolled .lang-toggle button:hover:not(.active) { color: var(--dark); }
-    .header.scrolled .mobile-toggle span { background: var(--text); }
+    /* ===== ON-DARK sections when scrolled: subtle dark glass bg ===== */
+    .header.scrolled:not(.header--on-light) {
+      background: rgba(15, 27, 53, 0.85);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
 
     .header .container { display: flex; align-items: center; justify-content: center; position: relative; }
 
@@ -364,31 +386,24 @@
       display: flex;
       align-items: center;
       gap: 0.75rem;
-      background: rgba(255,255,255,0.06);
+      background: rgba(255,255,255,0.95);
       backdrop-filter: blur(16px);
       -webkit-backdrop-filter: blur(16px);
-      border: 1px solid rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.3);
       border-radius: 100px;
       padding: 0.35rem;
+      transition: background 0.5s var(--ease), border-color 0.5s var(--ease);
     }
-    .header.scrolled .nav {
-      background: var(--dark);
-      border-color: var(--dark-2);
-    }
-    .header.scrolled .nav-links a { color: rgba(255,255,255,0.7); }
-    .header.scrolled .nav-links a:hover { color: var(--white); background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.08); }
-    .header.scrolled .lang-current { background: rgba(255,255,255,0.08); color: rgba(255,255,255,0.8); }
-    .header.scrolled .lang-current:hover { background: rgba(255,255,255,0.12); }
     .nav-links { list-style: none; display: flex; gap: 0.2rem; }
 
     .nav-links a {
-      color: rgba(255,255,255,0.75);
+      color: var(--text);
       text-decoration: none;
       font-size: 0.9rem;
       font-weight: 600;
       padding: 0.55rem 1.25rem;
       border-radius: 100px;
-      transition: all 0.25s var(--ease);
+      transition: color 0.4s var(--ease), background 0.25s var(--ease), border-color 0.25s var(--ease);
       position: relative;
       border: 1px solid transparent;
       background: transparent;
@@ -396,9 +411,9 @@
     }
 
     .nav-links a:hover {
-      color: var(--white);
-      background: rgba(255,255,255,0.12);
-      border-color: rgba(255,255,255,0.1);
+      color: var(--accent);
+      background: rgba(37,87,167,0.08);
+      border-color: rgba(37,87,167,0.1);
     }
 
     .lang-dropdown {
@@ -409,7 +424,7 @@
       display: flex;
       align-items: center;
       gap: 0.4rem;
-      background: rgba(255,255,255,0.08);
+      background: rgba(0,0,0,0.05);
       border: 1px solid transparent;
       border-radius: 100px;
       padding: 0.45rem 0.75rem;
@@ -417,11 +432,11 @@
       font-family: var(--font);
       font-size: 0.8rem;
       font-weight: 500;
-      color: rgba(255,255,255,0.8);
-      transition: all 0.25s;
+      color: var(--text-muted);
+      transition: all 0.4s var(--ease);
     }
 
-    .lang-current:hover { background: rgba(255,255,255,0.12); border-color: rgba(255,255,255,0.18); }
+    .lang-current:hover { background: rgba(0,0,0,0.08); border-color: rgba(0,0,0,0.1); }
 
     .lang-current .flag { font-size: 1rem; line-height: 1; }
     .lang-current .chevron { font-size: 0.6rem; margin-left: 0.15rem; transition: transform 0.25s; }
@@ -431,12 +446,12 @@
       position: absolute;
       top: calc(100% + 6px);
       right: 0;
-      background: var(--dark);
-      border: 1px solid rgba(255,255,255,0.1);
+      background: var(--white);
+      border: 1px solid var(--border);
       border-radius: 8px;
       padding: 4px;
       min-width: 130px;
-      box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+      box-shadow: 0 8px 30px rgba(0,0,0,0.1);
       opacity: 0;
       visibility: hidden;
       transform: translateY(-6px);
@@ -460,23 +475,23 @@
       cursor: pointer;
       font-size: 0.8rem;
       font-weight: 500;
-      color: rgba(255,255,255,0.6);
+      color: var(--text-secondary);
       transition: all 0.2s;
     }
 
-    .lang-list li:hover { background: rgba(255,255,255,0.06); color: var(--white); }
-    .lang-list li.active { color: var(--white); background: rgba(37,87,167,0.15); }
+    .lang-list li:hover { background: rgba(37,87,167,0.06); color: var(--text); }
+    .lang-list li.active { color: var(--accent); background: rgba(37,87,167,0.08); }
     .lang-list .flag { font-size: 1rem; }
 
-    /* Scrolled header overrides — nav stays dark */
-    .header.scrolled .lang-list {
+    /* On-light header: dark nav → dark dropdown */
+    .header.header--on-light .lang-list {
       background: var(--dark);
       border-color: rgba(255,255,255,0.1);
       box-shadow: 0 8px 30px rgba(0,0,0,0.3);
     }
-    .header.scrolled .lang-list li { color: rgba(255,255,255,0.6); }
-    .header.scrolled .lang-list li:hover { background: rgba(255,255,255,0.06); color: var(--white); }
-    .header.scrolled .lang-list li.active { color: var(--white); background: rgba(37,87,167,0.15); }
+    .header.header--on-light .lang-list li { color: rgba(255,255,255,0.6); }
+    .header.header--on-light .lang-list li:hover { background: rgba(255,255,255,0.06); color: var(--white); }
+    .header.header--on-light .lang-list li.active { color: var(--white); background: rgba(37,87,167,0.15); }
 
     .mobile-toggle {
       display: none;
@@ -626,7 +641,6 @@
       0%, 100% { box-shadow: 0 8px 40px rgba(37,87,167,0.35); }
       50% { box-shadow: 0 8px 60px rgba(91,155,240,0.5), 0 0 20px rgba(52,211,153,0.15); }
     }
-
     @keyframes float {
       0%, 100% { transform: translateY(0); }
       50% { transform: translateY(-8px); }
@@ -1081,10 +1095,9 @@
       border: 1px solid var(--border);
       border-radius: 16px;
       padding: 2.25rem;
-      transition: all 0.5s var(--ease), transform 0.18s ease-out;
+      transition: border-color 0.3s var(--ease), box-shadow 0.3s var(--ease), transform 0.15s ease-out;
       position: relative;
       overflow: hidden;
-      transform-style: preserve-3d;
     }
 
     .card::before {
@@ -1192,7 +1205,6 @@
       flex-direction: column;
       position: relative;
       overflow: hidden;
-      transform-style: preserve-3d;
     }
 
     .news-card::after {
@@ -2571,14 +2583,14 @@
         </div>
       </div>
       <div class="mobile-menu-footer">
-        <a href="mailto:info@iktnaa.lv">info@iktnaa.lv</a>
+        <a href="mailto:info@itna.lv">info@itna.lv</a>
         <span class="mm-tagline" data-i18n="footer.tagline">Par spēcīgu, taisnīgu un profesionālu IKT nozari.</span>
       </div>
     </div>
   </div>
 
   <!-- Hero -->
-  <section class="hero">
+  <section class="hero" data-theme="dark">
     <div class="hero-canvas" id="hero-canvas"></div>
     <div class="hero-gradient"></div>
     <div class="hero-orb hero-orb-1"></div>
@@ -2597,7 +2609,7 @@
         <p class="hero-desc" data-i18n="hero.desc">Aizstāvam informācijas un komunikācijas tehnoloģiju nozarē nodarbināto speciālistu tiesības un profesionālās intereses Latvijā.</p>
         <div class="hero-typing-wrap"><span class="hero-typed" id="hero-typed"></span></div>
         <div class="hero-actions">
-          <a href="mailto:info@iktnaa.lv" class="btn btn-accent" data-i18n="hero.cta">Kļūsti par biedru</a>
+          <a href="mailto:info@itna.lv" class="btn btn-accent" data-i18n="hero.cta">Kļūsti par biedru</a>
           <a href="#aktualitates" class="btn btn-primary" data-i18n="hero.cta3">Aktualitātes</a>
           <a href="#par-mums" class="btn btn-ghost" data-i18n="hero.cta2">Uzzināt vairāk</a>
           <a href="https://www.linkedin.com/company/iktnaa" class="btn btn-ghost" target="_blank" rel="noopener"><svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M20.47 2H3.53A1.45 1.45 0 002.06 3.43v17.14A1.45 1.45 0 003.53 22h16.94a1.45 1.45 0 001.47-1.43V3.43A1.45 1.45 0 0020.47 2zM8.09 18.74h-3v-9h3v9zM6.59 8.48a1.56 1.56 0 110-3.12 1.56 1.56 0 010 3.12zM18.91 18.74h-3v-4.38c0-1.05-.02-2.38-1.45-2.38-1.45 0-1.67 1.13-1.67 2.3v4.46h-3v-9h2.88v1.23h.04a3.16 3.16 0 012.85-1.56c3.04 0 3.6 2 3.6 4.61v4.72z"/></svg> <span data-i18n="hero.cta4">LinkedIn</span></a>
@@ -2625,12 +2637,12 @@
   </section>
 
   <!-- Ticker -->
-  <div class="ticker" id="ticker">
+  <div class="ticker" id="ticker" data-theme="dark">
     <div class="ticker-track" id="ticker-track"></div>
   </div>
 
   <!-- Par mums -->
-  <section class="section" id="par-mums">
+  <section class="section" id="par-mums" data-theme="light">
     <div class="section-dots"><span class="section-dot"></span><span class="section-dot"></span><span class="section-dot"></span><span class="section-dot"></span><span class="section-dot"></span></div>
     <div class="container">
       <div class="section-header reveal">
@@ -2650,7 +2662,7 @@
         <div class="card reveal reveal-delay-1">
 
           <div class="card-icon">
-            <svg width="22" height="22" fill="none" stroke="var(--accent)" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1v4M12 17v4M5.64 5.64l2.83 2.83M13.54 13.54l2.83 2.83M1 12h4M17 12h4M5.64 18.36l2.83-2.83M13.54 8.46l2.83-2.83"/><circle cx="12" cy="12" r="4"/></svg>
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 4.22l1.42 1.42"/></svg>
           </div>
           <h3 data-i18n="about.card2.title">Ekonomisko interešu aizstāvība</h3>
           <p data-i18n="about.card2.desc">Veicinām taisnīgu un konkurētspējīgu atalgojumu, nodarbinātības drošību un darba tirgus caurspīdīgumu IKT nozarē.</p>
@@ -2692,7 +2704,7 @@
   </section>
 
   <!-- Misija un vīzija -->
-  <section class="mission-section">
+  <section class="mission-section" data-theme="dark">
     <div class="container">
       <div class="mission-grid">
         <div class="mission-item reveal">
@@ -2714,7 +2726,7 @@
   </section>
 
   <!-- Skaitļi un fakti -->
-  <section class="data-section">
+  <section class="data-section" data-theme="light">
     <div class="section-dots"><span class="section-dot"></span><span class="section-dot"></span><span class="section-dot"></span><span class="section-dot"></span><span class="section-dot"></span></div>
     <div class="container">
       <div class="section-header reveal">
@@ -2749,7 +2761,7 @@
   </section>
 
   <!-- Quote -->
-  <section class="quote-section">
+  <section class="quote-section" data-theme="dark">
     <div class="container">
       <div class="quote-mark reveal">"</div>
       <p class="quote-text reveal reveal-delay-1" data-i18n="quote.text">Profesionālais risks nedrīkst tikt automātiski kvalificēts kā krimināltiesiska atbildība. IT speciālistiem ir jāstrādā ar novecojušām sistēmām, ierobežotiem budžetiem un sarežģītu normatīvo regulējumu.</p>
@@ -2758,7 +2770,7 @@
   </section>
 
   <!-- Aktualitātes -->
-  <section class="section" id="aktualitates">
+  <section class="section" id="aktualitates" data-theme="light">
     <div class="section-dots"><span class="section-dot"></span><span class="section-dot"></span><span class="section-dot"></span><span class="section-dot"></span><span class="section-dot"></span></div>
     <div class="container">
       <div class="section-header reveal">
@@ -2790,7 +2802,7 @@
   </section>
 
   <!-- Viedokļi -->
-  <section class="testimonials-section">
+  <section class="testimonials-section" data-theme="light">
     <div class="section-dots"><span class="section-dot"></span><span class="section-dot"></span><span class="section-dot"></span><span class="section-dot"></span><span class="section-dot"></span></div>
     <div class="container">
       <div class="section-header reveal">
@@ -2833,16 +2845,16 @@
   </section>
 
   <!-- CTA Banner -->
-  <section class="cta-banner">
+  <section class="cta-banner" data-theme="dark">
     <div class="container">
       <h2 class="reveal" data-i18n="ctab.title">Kopā mēs varam vairāk</h2>
       <p class="reveal reveal-delay-1" data-i18n="ctab.desc">Pievienojies IKTNAA un palīdzi veidot nozari, kurā IT speciālisti strādā taisnīgi atlīdzinātā, droši regulētā un profesionāli atzītā vidē.</p>
-      <a href="mailto:info@iktnaa.lv" class="btn btn-white reveal reveal-delay-2" data-i18n="ctab.btn">Sazināties ar mums</a>
+      <a href="mailto:info@itna.lv" class="btn btn-white reveal reveal-delay-2" data-i18n="ctab.btn">Sazināties ar mums</a>
     </div>
   </section>
 
   <!-- Darbības virzieni -->
-  <section class="focus-section">
+  <section class="focus-section" data-theme="light">
     <div class="section-dots"><span class="section-dot"></span><span class="section-dot"></span><span class="section-dot"></span><span class="section-dot"></span><span class="section-dot"></span></div>
     <div class="container">
       <div class="section-header reveal">
@@ -2876,7 +2888,7 @@
   </section>
 
   <!-- Biedriem -->
-  <section class="section section-alt" id="biedriem">
+  <section class="section section-alt" id="biedriem" data-theme="light">
     <div class="section-dots"><span class="section-dot"></span><span class="section-dot"></span><span class="section-dot"></span><span class="section-dot"></span><span class="section-dot"></span></div>
     <div class="container">
       <div class="section-header reveal">
@@ -2909,14 +2921,14 @@
         <div class="members-cta-box reveal">
           <h3 data-i18n="members.cta.title">Pievienojies mums!</h3>
           <p data-i18n="members.cta.desc">Kļūsti par IKTNAA biedru un palīdzi veidot labāku nākotni IKT nozarē strādājošajiem Latvijā.</p>
-          <a href="mailto:info@iktnaa.lv" class="btn btn-primary" data-i18n="members.cta.btn">Sazināties par biedra statusu</a>
+          <a href="mailto:info@itna.lv" class="btn btn-primary" data-i18n="members.cta.btn">Sazināties par biedra statusu</a>
         </div>
       </div>
     </div>
   </section>
 
   <!-- Footer -->
-  <footer class="footer" id="kontakti">
+  <footer class="footer" id="kontakti" data-theme="dark">
     <div class="container">
       <div class="footer-grid">
         <div class="footer-brand">
@@ -2935,7 +2947,7 @@
         <div class="footer-col">
           <h4 data-i18n="footer.contact">Kontakti</h4>
           <ul>
-            <li><a href="mailto:info@iktnaa.lv">info@iktnaa.lv</a></li>
+            <li><a href="mailto:info@itna.lv">info@itna.lv</a></li>
             <li><a href="https://www.linkedin.com/company/iktnaa" target="_blank" rel="noopener">LinkedIn</a></li>
           </ul>
         </div>
@@ -3027,7 +3039,7 @@
         'ticker.2': 'IT kadru trūkums valsts sektorā — 30% vakanču nav aizpildītas',
         'ticker.3': 'Algas publiskajā sektorā 2x zemākas nekā privātajā',
         'ticker.4': 'Jauna pozīcija: profesionālais risks nav kriminālatbildība',
-        'ticker.5': 'Pievienojies asociācijai — info@iktnaa.lv',
+        'ticker.5': 'Pievienojies asociācijai — info@itna.lv',
         'members.tag': 'Biedriem', 'members.title': 'Kāpēc pievienoties IKTNAA?',
         'members.b1': 'Profesionālā interešu aizstāvība valsts un pašvaldību līmenī',
         'members.b2': 'Juridiskais atbalsts un konsultācijas darba tiesību jautājumos',
@@ -3103,7 +3115,7 @@
         'ticker.2': 'IT staff shortage in public sector — 30% of vacancies unfilled',
         'ticker.3': 'Public sector salaries 2x lower than private',
         'ticker.4': 'New position: professional risk is not criminal liability',
-        'ticker.5': 'Join the association — info@iktnaa.lv',
+        'ticker.5': 'Join the association — info@itna.lv',
         'members.tag': 'Membership', 'members.title': 'Why join IKTNAA?',
         'members.b1': 'Professional advocacy at national and municipal level',
         'members.b2': 'Legal support and consultations on employment law',
@@ -3324,16 +3336,46 @@
     const header = document.getElementById('header');
     const backToTop = document.getElementById('back-to-top');
     const scrollProgress = document.getElementById('scroll-progress');
+    const themeSections = document.querySelectorAll('[data-theme]');
+    let scrollTicking = false;
 
     window.addEventListener('scroll', () => {
-      const y = window.scrollY;
-      header.classList.toggle('scrolled', y > 10);
-      backToTop.classList.toggle('visible', y > 400);
-      const docH = document.documentElement.scrollHeight - window.innerHeight;
-      scrollProgress.style.width = docH > 0 ? (y / docH * 100) + '%' : '0%';
+      if (scrollTicking) return;
+      scrollTicking = true;
+      requestAnimationFrame(() => {
+        const y = window.scrollY;
+        header.classList.toggle('scrolled', y > 10);
+        backToTop.classList.toggle('visible', y > 400);
+        const docH = document.documentElement.scrollHeight - window.innerHeight;
+        scrollProgress.style.width = docH > 0 ? (y / docH * 100) + '%' : '0%';
+
+        /* Detect which section the header overlaps */
+        const headerMid = header.offsetHeight / 2;
+        let onLight = false;
+        for (let i = 0; i < themeSections.length; i++) {
+          const rect = themeSections[i].getBoundingClientRect();
+          if (rect.top <= headerMid && rect.bottom > headerMid) {
+            onLight = themeSections[i].dataset.theme === 'light';
+            break;
+          }
+        }
+        header.classList.toggle('header--on-light', onLight);
+        scrollTicking = false;
+      });
     }, { passive: true });
 
     backToTop.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+
+    /* ===== Pause animations in off-screen sections ===== */
+    const animObserver = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        e.target.classList.toggle('anim-paused', !e.isIntersecting);
+      });
+    }, { rootMargin: '100px 0px' });
+    document.querySelectorAll('section, .ticker, footer, .hero').forEach(el => {
+      el.classList.add('anim-paused');
+      animObserver.observe(el);
+    });
 
     /* ===== Reveal on scroll ===== */
     const observer = new IntersectionObserver(entries => {
@@ -3371,31 +3413,41 @@
 
     document.querySelectorAll('.counter').forEach(el => counterObserver.observe(el));
 
-    /* ===== Card 3D tilt + cursor glow ===== */
+    /* ===== Card 3D tilt + cursor glow (rAF throttled) ===== */
     document.querySelectorAll('.card').forEach(card => {
+      let rafId = 0;
       card.addEventListener('mousemove', e => {
-        const rect = card.getBoundingClientRect();
-        const x = (e.clientX - rect.left) / rect.width - 0.5;
-        const y = (e.clientY - rect.top) / rect.height - 0.5;
-        card.style.transform = `translateY(-10px) scale(1.02) rotateY(${x * 10}deg) rotateX(${-y * 10}deg)`;
-        card.style.background = `radial-gradient(400px circle at ${e.clientX - rect.left}px ${e.clientY - rect.top}px, rgba(37,87,167,0.08), transparent 40%) no-repeat, var(--white)`;
+        cancelAnimationFrame(rafId);
+        rafId = requestAnimationFrame(() => {
+          const rect = card.getBoundingClientRect();
+          const x = (e.clientX - rect.left) / rect.width - 0.5;
+          const y = (e.clientY - rect.top) / rect.height - 0.5;
+          card.style.transform = `translateY(-10px) scale(1.02) rotateY(${x * 10}deg) rotateX(${-y * 10}deg)`;
+          card.style.background = `radial-gradient(400px circle at ${e.clientX - rect.left}px ${e.clientY - rect.top}px, rgba(37,87,167,0.08), transparent 40%) no-repeat, var(--white)`;
+        });
       });
       card.addEventListener('mouseleave', () => {
+        cancelAnimationFrame(rafId);
         card.style.transform = '';
         card.style.background = '';
       });
     });
 
-    /* ===== News card 3D tilt + glow ===== */
+    /* ===== News card 3D tilt + glow (rAF throttled) ===== */
     document.querySelectorAll('.news-card').forEach(card => {
+      let rafId = 0;
       card.addEventListener('mousemove', e => {
-        const rect = card.getBoundingClientRect();
-        const x = (e.clientX - rect.left) / rect.width - 0.5;
-        const y = (e.clientY - rect.top) / rect.height - 0.5;
-        card.style.transform = `translateY(-8px) scale(1.03) rotateY(${x * 12}deg) rotateX(${-y * 12}deg)`;
-        card.style.background = `radial-gradient(350px circle at ${e.clientX - rect.left}px ${e.clientY - rect.top}px, rgba(37,87,167,0.06), transparent 40%) no-repeat, var(--white)`;
+        cancelAnimationFrame(rafId);
+        rafId = requestAnimationFrame(() => {
+          const rect = card.getBoundingClientRect();
+          const x = (e.clientX - rect.left) / rect.width - 0.5;
+          const y = (e.clientY - rect.top) / rect.height - 0.5;
+          card.style.transform = `translateY(-8px) scale(1.03) rotateY(${x * 12}deg) rotateX(${-y * 12}deg)`;
+          card.style.background = `radial-gradient(350px circle at ${e.clientX - rect.left}px ${e.clientY - rect.top}px, rgba(37,87,167,0.06), transparent 40%) no-repeat, var(--white)`;
+        });
       });
       card.addEventListener('mouseleave', () => {
+        cancelAnimationFrame(rafId);
         card.style.transform = '';
         card.style.background = '';
       });
@@ -3472,7 +3524,10 @@
         }
       }
 
+      let canvasRunning = true;
+
       function draw() {
+        if (!canvasRunning) return;
         ctx.clearRect(0, 0, w, h);
         const maxDist = 140;
 
@@ -3515,6 +3570,13 @@
         requestAnimationFrame(draw);
       }
 
+      /* Pause canvas when hero not visible */
+      const heroObs = new IntersectionObserver(entries => {
+        canvasRunning = entries[0].isIntersecting;
+        if (canvasRunning) draw();
+      }, { threshold: 0 });
+      heroObs.observe(container);
+
       container.addEventListener('mousemove', e => {
         const rect = container.getBoundingClientRect();
         mouse.x = e.clientX - rect.left;
@@ -3549,22 +3611,22 @@
         welcome: 'Sveiki! 👋 Esmu IKTNAA virtuālais palīgs. Kā varu palīdzēt?',
         questions: [
           { q: 'Kas ir IKTNAA?', a: 'IKTNAA ir IKT nodarbināto atbalsta asociācija — biedrība, kas dibināta 2026. gadā, lai aizstāvētu informācijas un komunikācijas tehnoloģiju nozarē strādājošo profesionālās, ekonomiskās un sociālās intereses Latvijā.' },
-          { q: 'Kā kļūt par biedru?', a: 'Lai pievienotos IKTNAA, rakstiet mums uz info@iktnaa.lv vai sazinieties caur LinkedIn. Biedra statuss ir pieejams visiem IKT nozarē nodarbinātajiem — gan publiskajā, gan privātajā sektorā.' },
+          { q: 'Kā kļūt par biedru?', a: 'Lai pievienotos IKTNAA, rakstiet mums uz info@itna.lv vai sazinieties caur LinkedIn. Biedra statuss ir pieejams visiem IKT nozarē nodarbinātajiem — gan publiskajā, gan privātajā sektorā.' },
           { q: 'Kādi ir mērķi?', a: 'Mūsu galvenie mērķi: 1) Profesionālo interešu aizstāvība, 2) Taisnīgs atalgojums un nodarbinātības drošība, 3) Droši darba apstākļi un sociālās garantijas, 4) Tiesību aizstāvība attiecībās ar darba devēju, 5) Nozares attīstība Latvijā un Baltijā, 6) Profesionālā pilnveide un starptautiskā sadarbība.' },
-          { q: 'Vai ir biedra maksa?', a: 'Par biedra maksas apmēru un nosacījumiem lūdzam sazināties ar mums tiešā veidā — info@iktnaa.lv. Mūsu mērķis ir padarīt dalību pieejamu ikvienam IKT speciālistam.' },
+          { q: 'Vai ir biedra maksa?', a: 'Par biedra maksas apmēru un nosacījumiem lūdzam sazināties ar mums tiešā veidā — info@itna.lv. Mūsu mērķis ir padarīt dalību pieejamu ikvienam IKT speciālistam.' },
           { q: 'Kāpēc tas ir svarīgi?', a: 'Latvijā 30% IT vakanču valsts sektorā ir neaizpildītas, algas ir 2x zemākas nekā privātajā sektorā, un pastāv kriminālatbildības risks par profesionāliem lēmumiem. IKTNAA iestājas par to, lai IT speciālisti strādātu taisnīgos un drošos apstākļos.' },
-          { q: 'Kontaktinformācija?', a: 'E-pasts: info@iktnaa.lv\nLinkedIn: linkedin.com/company/iktnaa\nReģ. nr.: 50008356581\nRīga, Latvija' }
+          { q: 'Kontaktinformācija?', a: 'E-pasts: info@itna.lv\nLinkedIn: linkedin.com/company/iktnaa\nReģ. nr.: 50008356581\nRīga, Latvija' }
         ]
       },
       en: {
         welcome: 'Hello! 👋 I\'m the IKTNAA virtual assistant. How can I help you?',
         questions: [
           { q: 'What is IKTNAA?', a: 'IKTNAA is the ICT Workers Support Association — founded in 2026 to advocate for the professional, economic, and social interests of information and communications technology workers in Latvia.' },
-          { q: 'How to join?', a: 'To join IKTNAA, contact us at info@iktnaa.lv or through LinkedIn. Membership is available to all ICT professionals — both in the public and private sectors.' },
+          { q: 'How to join?', a: 'To join IKTNAA, contact us at info@itna.lv or through LinkedIn. Membership is available to all ICT professionals — both in the public and private sectors.' },
           { q: 'What are the goals?', a: 'Our main goals: 1) Professional advocacy, 2) Fair compensation and job security, 3) Safe working conditions and social guarantees, 4) Workers\' rights protection, 5) Industry development in Latvia and the Baltics, 6) Professional growth and international cooperation.' },
-          { q: 'Is there a fee?', a: 'For information about membership fees and conditions, please contact us directly at info@iktnaa.lv. Our goal is to make membership accessible to every ICT specialist.' },
+          { q: 'Is there a fee?', a: 'For information about membership fees and conditions, please contact us directly at info@itna.lv. Our goal is to make membership accessible to every ICT specialist.' },
           { q: 'Why does it matter?', a: 'In Latvia, 30% of IT vacancies in the public sector remain unfilled, salaries are 2x lower than in the private sector, and there is criminal liability risk for professional decisions. IKTNAA advocates for fair and safe working conditions for IT specialists.' },
-          { q: 'Contact info?', a: 'Email: info@iktnaa.lv\nLinkedIn: linkedin.com/company/iktnaa\nReg. nr.: 50008356581\nRīga, Latvia' }
+          { q: 'Contact info?', a: 'Email: info@itna.lv\nLinkedIn: linkedin.com/company/iktnaa\nReg. nr.: 50008356581\nRīga, Latvia' }
         ]
       }
     };
