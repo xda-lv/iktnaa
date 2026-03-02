@@ -1735,30 +1735,32 @@
       display: inline-flex;
       align-items: center;
       gap: 0.5rem;
-      padding: 0.35rem 0.75rem;
+      padding: 0.6rem 1.1rem;
       border-radius: 100px;
-      background: linear-gradient(135deg, rgba(255,255,255,0.03), rgba(37,87,167,0.04));
-      border: 1px solid rgba(255,255,255,0.08);
+      background: linear-gradient(135deg, rgba(255,255,255,0.05), rgba(37,87,167,0.08));
+      border: 1px solid rgba(255,255,255,0.12);
       text-decoration: none;
       transition: all 0.3s;
       position: relative;
       z-index: 2;
       cursor: pointer;
+      -webkit-tap-highlight-color: rgba(37,87,167,0.2);
+      min-height: 44px;
     }
     .xda-badge:hover {
       border-color: rgba(37,87,167,0.25);
       box-shadow: 0 0 20px rgba(37,87,167,0.08);
     }
     .xda-badge img {
-      width: 22px;
-      height: 22px;
+      width: 26px;
+      height: 26px;
       border-radius: 6px;
       object-fit: cover;
     }
     .xda-badge span {
-      font-size: 0.6875rem;
+      font-size: 0.75rem;
       font-weight: 600;
-      color: rgba(255,255,255,0.3);
+      color: rgba(255,255,255,0.4);
       transition: color 0.3s;
     }
     .xda-badge:hover span { color: rgba(255,255,255,0.6); }
