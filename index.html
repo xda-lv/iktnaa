@@ -498,28 +498,43 @@
       background: none;
       border: none;
       cursor: pointer;
-      padding: 0.5rem;
+      padding: 1rem;
       flex-direction: column;
-      gap: 5px;
+      gap: 0;
       position: absolute;
-      right: 2rem;
-      top: 50%;
+      right: 0.5rem;
+      top: 62%;
       transform: translateY(-50%);
+      min-width: 52px;
+      min-height: 52px;
+      align-items: center;
+      justify-content: center;
+      z-index: 111;
     }
 
     .mobile-toggle span {
       display: block;
-      width: 22px;
-      height: 2px;
+      width: 32px;
+      height: 2.5px;
       background: var(--white);
-      transition: all 0.3s;
       border-radius: 2px;
-      transition: all 0.3s;
+      transition: transform 0.4s var(--ease), opacity 0.3s ease, width 0.3s var(--ease);
+      transform-origin: center;
     }
+    .mobile-toggle span:nth-child(1) { margin-bottom: 8px; }
+    .mobile-toggle span:nth-child(2) { margin-bottom: 8px; width: 22px; margin-left: auto; }
 
-    .mobile-toggle.open span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
-    .mobile-toggle.open span:nth-child(2) { opacity: 0; }
-    .mobile-toggle.open span:nth-child(3) { transform: rotate(-45deg) translate(5px, -5px); }
+    /* Smooth X animation */
+    .mobile-toggle.open span:nth-child(1) {
+      transform: translateY(10.5px) rotate(45deg);
+    }
+    .mobile-toggle.open span:nth-child(2) {
+      opacity: 0;
+      width: 0;
+    }
+    .mobile-toggle.open span:nth-child(3) {
+      transform: translateY(-10.5px) rotate(-45deg);
+    }
 
     /* ===== HERO ===== */
     .hero {
@@ -1656,20 +1671,15 @@
       justify-content: center;
       z-index: 95;
       box-shadow: 0 8px 32px rgba(0,0,0,0.2);
-      transition: all 0.3s var(--ease);
+      transition: background 0.3s var(--ease), transform 0.3s var(--ease), box-shadow 0.3s var(--ease), border-color 0.3s var(--ease), opacity 0.3s var(--ease);
     }
-    .chat-fab::before {
-      content: '';
-      position: absolute;
-      inset: -2px;
-      border-radius: 20px;
+    .chat-fab svg { flex-shrink: 0; }
+    .chat-fab:hover {
+      transform: translateY(-3px) scale(1.05);
+      box-shadow: 0 12px 40px rgba(0,0,0,0.25);
       background: linear-gradient(135deg, var(--accent), #34d399);
-      z-index: -1;
-      opacity: 0;
-      transition: opacity 0.3s;
+      border-color: rgba(255,255,255,0.2);
     }
-    .chat-fab:hover { transform: translateY(-3px) scale(1.05); box-shadow: 0 12px 40px rgba(0,0,0,0.25); }
-    .chat-fab:hover::before { opacity: 1; }
     .chat-fab-label {
       font-family: var(--font);
       font-size: 0.85rem;
@@ -1854,10 +1864,24 @@
 
     @media (max-width: 480px) {
       .chat-window { left: 0.75rem; right: 0.75rem; width: auto; bottom: 1rem; max-height: 75vh; }
-      .chat-fab { bottom: 1.25rem; right: 1.25rem; width: 48px; height: 48px; }
+      .chat-fab { bottom: 1.25rem; right: 1rem; height: 48px; padding: 0 1rem; gap: 0.4rem; border-radius: 14px; }
+      .chat-fab svg { width: 20px; height: 20px; }
+      .chat-fab-label { font-size: 0.8rem; }
       .back-to-top { bottom: 1.25rem; left: 1.25rem; width: 38px; height: 38px; }
-      .cookie-bar { bottom: 5rem; left: 0.75rem; right: 0.75rem; transform: translateX(0) translateY(20px); max-width: none; white-space: normal; }
+      .cookie-bar {
+        bottom: 4.5rem;
+        left: 0.75rem;
+        right: 0.75rem;
+        transform: translateX(0) translateY(20px);
+        max-width: none;
+        white-space: normal;
+        flex-direction: column;
+        text-align: center;
+        gap: 0.625rem;
+        padding: 0.875rem 1rem;
+      }
       .cookie-bar.visible { transform: translateX(0) translateY(0); }
+      .cookie-accept { width: 100%; padding: 0.5rem; }
     }
 
     /* ===== MOBILE LANG TOGGLE (outside burger, in header) ===== */
@@ -1992,21 +2016,8 @@
     }
 
     .mobile-menu-close {
-      background: rgba(255,255,255,0.06);
-      border: 1px solid rgba(255,255,255,0.1);
-      border-radius: 10px;
-      width: 40px;
-      height: 40px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      color: rgba(255,255,255,0.6);
-      font-size: 1.1rem;
-      transition: all 0.25s;
+      display: none;
     }
-
-    .mobile-menu-close:hover { background: rgba(255,255,255,0.1); color: var(--white); }
 
     .mobile-menu .nav-links {
       flex-direction: column;
@@ -2472,6 +2483,15 @@
     @media (max-width: 768px) {
       .nav { display: none; }
       .mobile-toggle { display: flex; }
+      .header { z-index: 112; }
+      .header { padding: 1.5rem 0; }
+      .header.scrolled { padding: 1.15rem 0; }
+      .header.menu-open {
+        background: transparent !important;
+        backdrop-filter: none !important;
+        -webkit-backdrop-filter: none !important;
+        border-bottom-color: transparent !important;
+      }
       .hero { min-height: auto; padding: 8rem 0 5rem; }
       .hero-logo { width: 64px; height: 64px; }
       .hero-stats { gap: 1.5rem; }
@@ -2481,7 +2501,8 @@
       .news-grid { grid-template-columns: 1fr; }
       .footer-grid { grid-template-columns: 1fr 1fr; gap: 2rem; }
       .footer-bottom { flex-direction: column; gap: 1rem; text-align: center; }
-      .cookie-bar { bottom: 5rem; }
+      .cookie-bar { bottom: 5rem; max-width: 90vw; }
+      .chat-fab { height: 48px; padding: 0 1.1rem; border-radius: 16px; }
       .data-grid { grid-template-columns: 1fr; }
       .testimonials-grid { grid-template-columns: 1fr; }
     }
@@ -2497,7 +2518,7 @@
       .hero-stat-label { max-width: none; }
       .cards-grid { grid-template-columns: 1fr; }
       .footer-grid { grid-template-columns: 1fr; }
-      .cookie-bar { bottom: 5.5rem; }
+      .cookie-bar { bottom: 5rem; }
       .focus-grid { grid-template-columns: 1fr; }
     }
   </style>
@@ -2984,7 +3005,7 @@
 
   <!-- Chat FAB -->
   <button class="chat-fab" id="chat-fab" aria-label="Chat">
-    <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
     <span class="chat-fab-label" data-i18n="chat.fab">Jautā</span>
   </button>
 
@@ -3313,17 +3334,21 @@
     const toggle = document.querySelector('.mobile-toggle');
     const mob = document.getElementById('mobile-menu');
     const mobClose = document.getElementById('mobile-menu-close');
+    const headerEl = document.getElementById('header');
 
     function closeMobileMenu() {
       toggle.classList.remove('open');
       mob.classList.remove('open');
+      headerEl.classList.remove('menu-open');
       document.body.style.overflow = '';
     }
 
     toggle.addEventListener('click', () => {
       toggle.classList.toggle('open');
       mob.classList.toggle('open');
-      document.body.style.overflow = mob.classList.contains('open') ? 'hidden' : '';
+      const isOpen = mob.classList.contains('open');
+      headerEl.classList.toggle('menu-open', isOpen);
+      document.body.style.overflow = isOpen ? 'hidden' : '';
     });
 
     mobClose.addEventListener('click', closeMobileMenu);
@@ -3333,7 +3358,6 @@
     );
 
     /* ===== Scroll effects ===== */
-    const header = document.getElementById('header');
     const backToTop = document.getElementById('back-to-top');
     const scrollProgress = document.getElementById('scroll-progress');
     const themeSections = document.querySelectorAll('[data-theme]');
@@ -3344,13 +3368,13 @@
       scrollTicking = true;
       requestAnimationFrame(() => {
         const y = window.scrollY;
-        header.classList.toggle('scrolled', y > 10);
+        headerEl.classList.toggle('scrolled', y > 10);
         backToTop.classList.toggle('visible', y > 400);
         const docH = document.documentElement.scrollHeight - window.innerHeight;
         scrollProgress.style.width = docH > 0 ? (y / docH * 100) + '%' : '0%';
 
         /* Detect which section the header overlaps */
-        const headerMid = header.offsetHeight / 2;
+        const headerMid = headerEl.offsetHeight / 2;
         let onLight = false;
         for (let i = 0; i < themeSections.length; i++) {
           const rect = themeSections[i].getBoundingClientRect();
@@ -3359,7 +3383,7 @@
             break;
           }
         }
-        header.classList.toggle('header--on-light', onLight);
+        headerEl.classList.toggle('header--on-light', onLight);
         scrollTicking = false;
       });
     }, { passive: true });
