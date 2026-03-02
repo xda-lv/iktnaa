@@ -119,7 +119,7 @@
     .header.scrolled .logo-text { color: var(--dark); }
     .header.scrolled .logo-accent { color: var(--accent); }
     .header.scrolled .nav-links a { color: var(--text-secondary); }
-    .header.scrolled .nav-links a:hover { color: var(--dark); background: rgba(0,0,0,0.04); }
+    .header.scrolled .nav-links a:hover { color: var(--dark); background: rgba(37,87,167,0.06); border-color: rgba(37,87,167,0.1); }
     .header.scrolled .lang-toggle { background: rgba(0,0,0,0.05); }
     .header.scrolled .lang-toggle button { color: var(--text-muted); }
     .header.scrolled .lang-toggle button.active { background: var(--accent); color: var(--white); }
@@ -167,25 +167,19 @@
       text-decoration: none;
       font-size: 0.875rem;
       font-weight: 500;
-      padding: 0.5rem 0.875rem;
-      border-radius: 8px;
-      transition: all 0.25s;
+      padding: 0.5rem 1rem;
+      border-radius: 100px;
+      transition: all 0.3s var(--ease);
       position: relative;
+      border: 1px solid transparent;
     }
 
-    .nav-links a::after {
-      content: '';
-      position: absolute;
-      bottom: 4px;
-      left: 50%;
-      width: 0;
-      height: 1.5px;
-      background: currentColor;
-      transition: width 0.3s var(--ease), left 0.3s var(--ease);
-      border-radius: 1px;
+    .nav-links a:hover {
+      color: var(--white);
+      background: rgba(255,255,255,0.1);
+      border-color: rgba(255,255,255,0.08);
+      box-shadow: 0 0 20px rgba(91,155,240,0.1);
     }
-    .nav-links a:hover { color: var(--white); background: rgba(255,255,255,0.08); }
-    .nav-links a:hover::after { width: 50%; left: 25%; }
 
     .lang-dropdown {
       position: relative;
@@ -316,29 +310,83 @@
     .hero-gradient {
       position: absolute;
       inset: 0;
-      background: radial-gradient(ellipse 55% 50% at 25% 55%, rgba(37,87,167,0.1) 0%, transparent 70%);
+      background: radial-gradient(ellipse 55% 50% at 25% 55%, rgba(37,87,167,0.15) 0%, transparent 70%);
       z-index: 1;
     }
 
-    .hero .container { position: relative; z-index: 2; }
-
-    .hero-content {
-      max-width: 680px;
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
+    /* Animated gradient orbs */
+    .hero-orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(80px);
+      opacity: 0.15;
+      z-index: 1;
+      pointer-events: none;
+    }
+    .hero-orb-1 {
+      width: 500px; height: 500px;
+      background: radial-gradient(circle, #2557A7, transparent 70%);
+      top: -10%; right: -5%;
+      animation: orbFloat1 12s ease-in-out infinite;
+    }
+    .hero-orb-2 {
+      width: 350px; height: 350px;
+      background: radial-gradient(circle, #5B9BF0, transparent 70%);
+      bottom: 5%; left: 10%;
+      animation: orbFloat2 15s ease-in-out infinite;
+    }
+    .hero-orb-3 {
+      width: 250px; height: 250px;
+      background: radial-gradient(circle, #34d399, transparent 70%);
+      top: 30%; right: 20%;
+      animation: orbFloat3 10s ease-in-out infinite;
+    }
+    @keyframes orbFloat1 {
+      0%, 100% { transform: translate(0, 0) scale(1); }
+      33% { transform: translate(-40px, 30px) scale(1.1); }
+      66% { transform: translate(20px, -20px) scale(0.95); }
+    }
+    @keyframes orbFloat2 {
+      0%, 100% { transform: translate(0, 0) scale(1); }
+      50% { transform: translate(50px, -30px) scale(1.15); }
+    }
+    @keyframes orbFloat3 {
+      0%, 100% { transform: translate(0, 0); opacity: 0.15; }
+      50% { transform: translate(-30px, 20px); opacity: 0.25; }
     }
 
+    .hero .container { position: relative; z-index: 2; max-width: 1000px; }
+
+    .hero-content {
+      max-width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      animation: heroIn 1s var(--ease) both;
+    }
+
+    @keyframes heroIn {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .hero-logo { animation: heroIn 0.8s var(--ease) 0.1s both, float 6s ease-in-out 1s infinite; }
+    .hero-badge { animation: heroIn 0.8s var(--ease) 0.2s both; }
+    .hero h1 { animation: heroIn 0.8s var(--ease) 0.3s both; }
+    .hero-desc { animation: heroIn 0.8s var(--ease) 0.4s both; }
+    .hero-actions { animation: heroIn 0.8s var(--ease) 0.5s both; }
+    .hero-stats { animation: heroIn 0.8s var(--ease) 0.7s both; }
+
     .hero-logo {
-      width: 68px;
-      height: 68px;
+      width: 80px;
+      height: 80px;
       margin-bottom: 2rem;
       background: white;
-      border-radius: 10px;
-      padding: 4px;
-      box-shadow: 0 4px 24px rgba(37,87,167,0.25);
+      border-radius: 16px;
+      padding: 6px;
+      box-shadow: 0 8px 40px rgba(37,87,167,0.35);
       object-fit: contain;
-      animation: float 6s ease-in-out infinite;
     }
 
     @keyframes float {
@@ -350,20 +398,21 @@
       display: inline-flex;
       align-items: center;
       gap: 0.5rem;
-      font-size: 0.8rem;
+      font-size: 0.85rem;
       font-weight: 500;
-      color: rgba(255,255,255,0.7);
-      background: rgba(255,255,255,0.06);
-      border: 1px solid rgba(255,255,255,0.1);
-      padding: 0.4rem 1rem;
+      color: rgba(255,255,255,0.8);
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.12);
+      padding: 0.5rem 1.25rem;
       border-radius: 100px;
-      margin-bottom: 1.5rem;
+      margin-bottom: 2rem;
+      backdrop-filter: blur(10px);
     }
 
     .hero-badge::before {
       content: '';
-      width: 6px;
-      height: 6px;
+      width: 7px;
+      height: 7px;
       border-radius: 50%;
       background: #34d399;
       animation: pulse 2s ease-in-out infinite;
@@ -375,37 +424,113 @@
     }
 
     .hero h1 {
-      font-size: clamp(2.5rem, 5.5vw, 3.5rem);
+      font-size: clamp(3rem, 7vw, 4.5rem);
       font-weight: 700;
-      line-height: 1.15;
-      letter-spacing: -0.03em;
+      line-height: 1.1;
+      letter-spacing: -0.035em;
       color: var(--white);
-      margin-bottom: 1.5rem;
+      margin-bottom: 1.75rem;
     }
 
     .hero h1 em {
       font-style: normal;
-      color: #5B9BF0;
+      background: linear-gradient(135deg, #5B9BF0, #34d399);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
     }
 
     .hero-desc {
-      font-size: 1.0625rem;
-      color: rgba(255,255,255,0.65);
-      max-width: 560px;
-      line-height: 1.75;
+      font-size: 1.2rem;
+      color: rgba(255,255,255,0.6);
+      max-width: 640px;
+      line-height: 1.7;
       margin-bottom: 2.5rem;
     }
 
-    .hero-actions { display: flex; gap: 1rem; flex-wrap: wrap; }
+    .hero-actions {
+      display: flex;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-bottom: 3rem;
+    }
+
+    /* Hero inline stats */
+    .hero-stats {
+      display: flex;
+      gap: 2.5rem;
+      padding-top: 2.5rem;
+      border-top: 1px solid rgba(255,255,255,0.08);
+    }
+    .hero-stat {
+      text-align: center;
+    }
+    .hero-stat-num {
+      font-size: 1.75rem;
+      font-weight: 700;
+      color: var(--white);
+      letter-spacing: -0.03em;
+      line-height: 1;
+      margin-bottom: 0.35rem;
+    }
+    .hero-stat-num span { color: #5B9BF0; }
+    .hero-stat-label {
+      font-size: 0.75rem;
+      color: rgba(255,255,255,0.4);
+      max-width: 120px;
+    }
+
+    /* Scroll indicator */
+    .hero-scroll {
+      position: absolute;
+      bottom: 2rem;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+      color: rgba(255,255,255,0.3);
+      font-size: 0.7rem;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+    .hero-scroll:hover { color: rgba(255,255,255,0.6); }
+    .hero-scroll-line {
+      width: 1px;
+      height: 32px;
+      background: rgba(255,255,255,0.15);
+      position: relative;
+      overflow: hidden;
+    }
+    .hero-scroll-line::after {
+      content: '';
+      position: absolute;
+      top: -100%;
+      left: 0;
+      width: 100%;
+      height: 50%;
+      background: linear-gradient(to bottom, transparent, #5B9BF0);
+      animation: scrollDown 2s ease-in-out infinite;
+    }
+    @keyframes scrollDown {
+      0% { top: -50%; }
+      100% { top: 100%; }
+    }
 
     .btn {
       display: inline-flex;
       align-items: center;
       gap: 0.5rem;
-      padding: 0.875rem 1.75rem;
-      border-radius: var(--r-sm);
+      padding: 1rem 2rem;
+      border-radius: var(--r);
       font-family: var(--font);
-      font-size: 0.9rem;
+      font-size: 0.95rem;
       font-weight: 600;
       text-decoration: none;
       transition: all 0.3s var(--ease);
@@ -416,8 +541,30 @@
     }
 
     .btn-primary {
-      background: var(--accent);
+      background: linear-gradient(135deg, var(--accent), #3B7DD8);
       color: var(--white);
+      box-shadow: 0 4px 16px rgba(37,87,167,0.25);
+    }
+
+    .btn-accent {
+      background: linear-gradient(135deg, #34d399, #059669);
+      color: var(--white);
+      box-shadow: 0 4px 16px rgba(52,211,153,0.25);
+    }
+    .btn-accent:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 28px rgba(52,211,153,0.35);
+    }
+    .btn-accent::after {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -75%;
+      width: 50%;
+      height: 200%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent);
+      transform: skewX(-20deg);
+      animation: shimmer 5s ease-in-out infinite 1s;
     }
 
     .btn-primary::after {
@@ -450,28 +597,91 @@
     }
 
     .btn-ghost:hover {
-      background: rgba(255,255,255,0.15);
+      background: rgba(255,255,255,0.12);
       border-color: rgba(255,255,255,0.25);
       color: var(--white);
       transform: translateY(-2px);
+      box-shadow: 0 4px 20px rgba(255,255,255,0.06);
+    }
+
+    /* ===== NEWS TICKER ===== */
+    .ticker {
+      background: var(--dark);
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      overflow: hidden;
+      white-space: nowrap;
+      position: relative;
+      z-index: 3;
+    }
+    .ticker-track {
+      display: inline-flex;
+      animation: tickerScroll 30s linear infinite;
+    }
+    .ticker-track:hover { animation-play-state: paused; }
+    .ticker-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.6rem 2rem;
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: rgba(255,255,255,0.6);
+    }
+    .ticker-dot {
+      width: 5px; height: 5px;
+      border-radius: 50%;
+      background: var(--accent);
+      flex-shrink: 0;
+    }
+    .ticker-dot.live {
+      background: #34d399;
+      animation: pulse 2s ease-in-out infinite;
+    }
+    @keyframes tickerScroll {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+
+    /* ===== NEWS BADGE ===== */
+    .news-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      font-size: 0.65rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #fff;
+      background: linear-gradient(135deg, var(--accent), #5B9BF0);
+      padding: 0.2rem 0.6rem;
+      border-radius: 100px;
+      margin-bottom: 0.625rem;
+    }
+    .news-badge::before {
+      content: '';
+      width: 5px; height: 5px;
+      border-radius: 50%;
+      background: #fff;
+      animation: pulse 2s ease-in-out infinite;
     }
 
     /* ===== STATS BAR ===== */
     .stats-bar {
       position: relative;
       z-index: 3;
-      padding: 0;
-      margin-top: -3rem;
+      padding: 2rem 0;
     }
 
     .stats-grid {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
-      background: var(--white);
-      border: 1px solid var(--border);
+      background: rgba(255,255,255,0.85);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255,255,255,0.5);
       border-radius: var(--r);
       overflow: hidden;
-      box-shadow: 0 4px 24px rgba(15,27,53,0.08);
+      box-shadow: 0 8px 32px rgba(15,27,53,0.1), 0 1px 0 rgba(255,255,255,0.8) inset;
     }
 
     .stat-item {
@@ -511,36 +721,51 @@
       line-height: 1.5;
     }
 
+    .stats-source {
+      text-align: center;
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      opacity: 0.7;
+      margin-top: 1rem;
+      padding-top: 0.75rem;
+      border-top: 1px solid var(--border);
+    }
+
     /* ===== SECTIONS ===== */
     .section { padding: 6rem 0; position: relative; background: var(--bg); }
     .section-alt { background: var(--bg-alt); }
 
-    .section-header { margin-bottom: 3.5rem; }
+    .section-header { margin-bottom: 3.5rem; text-align: center; }
 
     .section-tag {
       display: inline-block;
-      font-size: 0.75rem;
+      font-size: 0.7rem;
       font-weight: 600;
       text-transform: uppercase;
       letter-spacing: 0.1em;
       color: var(--accent);
-      padding: 0.35rem 0;
+      background: rgba(37,87,167,0.06);
+      border: 1px solid rgba(37,87,167,0.1);
+      padding: 0.35rem 1rem;
+      border-radius: 100px;
       margin-bottom: 1rem;
     }
 
     .section-header h2 {
-      font-size: clamp(1.875rem, 3.5vw, 2.75rem);
+      font-size: clamp(2.25rem, 4.5vw, 3.25rem);
       font-weight: 700;
       color: var(--dark);
       letter-spacing: -0.03em;
-      line-height: 1.15;
-      margin-bottom: 1rem;
+      line-height: 1.1;
+      margin-bottom: 1.25rem;
     }
 
     .section-header p {
-      font-size: 1.0625rem;
+      font-size: 1.125rem;
       color: var(--text-secondary);
-      max-width: 580px;
+      max-width: 620px;
+      margin-left: auto;
+      margin-right: auto;
       line-height: 1.7;
     }
 
@@ -548,15 +773,17 @@
     .cards-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 1.25rem;
+      gap: 1.5rem;
       perspective: 1200px;
+      max-width: 1000px;
+      margin: 0 auto;
     }
 
     .card {
       background: var(--white);
       border: 1px solid var(--border);
-      border-radius: var(--r);
-      padding: 2rem;
+      border-radius: 16px;
+      padding: 2.25rem;
       transition: all 0.4s var(--ease), transform 0.15s ease-out;
       position: relative;
       overflow: hidden;
@@ -570,9 +797,15 @@
       left: 0;
       right: 0;
       height: 2px;
-      background: linear-gradient(90deg, var(--accent), rgba(37,87,167,0.3), transparent);
+      background: linear-gradient(90deg, var(--accent), #5B9BF0, #34d399);
+      background-size: 200% 100%;
       opacity: 0;
       transition: opacity 0.4s;
+      animation: gradientSlide 3s ease infinite;
+    }
+    @keyframes gradientSlide {
+      0%, 100% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
     }
 
     .card::after {
@@ -619,15 +852,15 @@
     }
 
     .card h3 {
-      font-size: 1.0625rem;
+      font-size: 1.15rem;
       font-weight: 600;
       color: var(--dark);
-      margin-bottom: 0.625rem;
+      margin-bottom: 0.75rem;
       letter-spacing: -0.01em;
     }
 
     .card p {
-      font-size: 0.875rem;
+      font-size: 0.9rem;
       color: var(--text-secondary);
       line-height: 1.7;
     }
@@ -636,14 +869,16 @@
     .news-grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
-      gap: 1.25rem;
+      gap: 1.5rem;
+      max-width: 900px;
+      margin: 0 auto;
     }
 
     .news-card {
       background: var(--white);
       border: 1px solid var(--border);
-      border-radius: var(--r);
-      padding: 2rem;
+      border-radius: 16px;
+      padding: 2.25rem;
       transition: all 0.4s var(--ease);
       display: flex;
       flex-direction: column;
@@ -679,16 +914,16 @@
     }
 
     .news-card h3 {
-      font-size: 1.125rem;
+      font-size: 1.25rem;
       font-weight: 600;
       color: var(--dark);
       margin-bottom: 0.75rem;
-      line-height: 1.35;
-      letter-spacing: -0.01em;
+      line-height: 1.3;
+      letter-spacing: -0.015em;
     }
 
     .news-card p {
-      font-size: 0.875rem;
+      font-size: 0.95rem;
       color: var(--text-secondary);
       line-height: 1.7;
       flex: 1;
@@ -716,6 +951,8 @@
       grid-template-columns: 1fr 1fr;
       gap: 3rem;
       align-items: start;
+      max-width: 900px;
+      margin: 0 auto;
     }
 
     .benefits-list { list-style: none; display: flex; flex-direction: column; gap: 0.75rem; }
@@ -762,11 +999,12 @@
     }
 
     .members-cta-box {
-      background: var(--dark);
-      border-radius: var(--r);
+      background: linear-gradient(135deg, var(--dark), var(--dark-3));
+      border-radius: 20px;
       padding: 2.5rem;
       position: relative;
       overflow: hidden;
+      border: 1px solid rgba(91,155,240,0.15);
     }
 
     .members-cta-box::before {
@@ -777,8 +1015,9 @@
       width: 300px;
       height: 300px;
       border-radius: 50%;
-      background: rgba(37,87,167,0.1);
+      background: radial-gradient(circle, rgba(91,155,240,0.15), transparent 70%);
       filter: blur(60px);
+      animation: orbFloat2 15s ease-in-out infinite;
     }
 
     .members-cta-box > * { position: relative; z-index: 1; }
@@ -800,31 +1039,34 @@
 
     /* ===== QUOTE ===== */
     .quote-section {
-      padding: 6rem 0;
+      padding: 7rem 0;
       text-align: center;
       position: relative;
       overflow: hidden;
-      background: var(--dark);
+      background: linear-gradient(135deg, var(--dark), var(--dark-3));
     }
 
     .quote-section::before {
       content: '';
       position: absolute;
       inset: 0;
-      background: radial-gradient(ellipse 50% 50% at 50% 50%, rgba(37,87,167,0.08), transparent 70%);
+      background: radial-gradient(ellipse 60% 60% at 50% 50%, rgba(37,87,167,0.12), transparent 70%);
     }
 
     .quote-mark {
-      font-size: 5rem;
+      font-size: 6rem;
       font-weight: 700;
-      color: var(--accent);
-      opacity: 0.15;
+      background: linear-gradient(135deg, var(--accent), #5B9BF0);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      opacity: 0.2;
       line-height: 1;
       margin-bottom: -1rem;
     }
 
     .quote-text {
-      font-size: clamp(1.125rem, 2.5vw, 1.5rem);
+      font-size: clamp(1.25rem, 2.5vw, 1.75rem);
       font-weight: 400;
       color: rgba(255,255,255,0.85);
       max-width: 740px;
@@ -1059,147 +1301,170 @@
 
     .cookie-accept:hover { background: var(--accent-hover); }
 
-    /* ===== CHATBOT ===== */
-    /* ===== CHATBOT — modern ===== */
+    /* ===== CHATBOT — modern glass ===== */
     .chat-fab {
       position: fixed;
       bottom: 2rem;
       right: 2rem;
-      width: 52px;
-      height: 52px;
-      border-radius: 16px;
-      background: var(--dark);
+      width: 56px;
+      height: 56px;
+      border-radius: 18px;
+      background: linear-gradient(135deg, var(--dark), var(--dark-3));
       color: var(--white);
-      border: 1px solid rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.1);
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
       z-index: 95;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+      box-shadow: 0 8px 32px rgba(0,0,0,0.2);
       transition: all 0.3s var(--ease);
     }
-
-    .chat-fab:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(0,0,0,0.2); }
+    .chat-fab::before {
+      content: '';
+      position: absolute;
+      inset: -2px;
+      border-radius: 20px;
+      background: linear-gradient(135deg, var(--accent), #34d399);
+      z-index: -1;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    .chat-fab:hover { transform: translateY(-3px) scale(1.05); box-shadow: 0 12px 40px rgba(0,0,0,0.25); }
+    .chat-fab:hover::before { opacity: 1; }
     .chat-fab.hidden { opacity: 0; pointer-events: none; transform: scale(0.8); }
 
     .chat-window {
       position: fixed;
       bottom: 2rem;
       right: 2rem;
-      width: 360px;
-      max-height: 500px;
-      background: var(--white);
-      border-radius: 20px;
-      box-shadow: 0 16px 60px rgba(15,27,53,0.18);
-      border: 1px solid rgba(0,0,0,0.06);
+      width: 380px;
+      max-height: 540px;
+      background: rgba(255,255,255,0.95);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border-radius: 24px;
+      box-shadow: 0 24px 80px rgba(15,27,53,0.2), 0 0 0 1px rgba(0,0,0,0.04);
       z-index: 96;
       display: flex;
       flex-direction: column;
       overflow: hidden;
       opacity: 0;
       visibility: hidden;
-      transform: translateY(12px) scale(0.97);
-      transition: all 0.25s var(--ease);
+      transform: translateY(16px) scale(0.95);
+      transition: all 0.3s var(--ease);
     }
 
     .chat-window.open { opacity: 1; visibility: visible; transform: translateY(0) scale(1); }
 
     .chat-head {
-      background: var(--dark);
+      background: linear-gradient(135deg, var(--dark), var(--dark-3));
       color: var(--white);
-      padding: 0.875rem 1rem;
+      padding: 1rem 1.25rem;
       display: flex;
       align-items: center;
       justify-content: space-between;
+      position: relative;
+      overflow: hidden;
+    }
+    .chat-head::after {
+      content: '';
+      position: absolute;
+      top: -50%; right: -30%;
+      width: 200px; height: 200px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(91,155,240,0.15), transparent 70%);
     }
 
-    .chat-head-info { display: flex; align-items: center; gap: 0.5rem; }
+    .chat-head-info { display: flex; align-items: center; gap: 0.625rem; position: relative; z-index: 1; }
 
     .chat-head-avatar {
-      width: 28px;
-      height: 28px;
-      border-radius: 8px;
+      width: 36px;
+      height: 36px;
+      border-radius: 12px;
       object-fit: cover;
       background: white;
-      padding: 2px;
+      padding: 3px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
     }
 
     .chat-head-meta { display: flex; flex-direction: column; }
-    .chat-head-name { font-size: 0.825rem; font-weight: 600; line-height: 1.2; }
-    .chat-head-status { font-size: 0.65rem; color: rgba(255,255,255,0.45); display: flex; align-items: center; gap: 0.3rem; }
-    .chat-head-status::before { content: ''; width: 5px; height: 5px; border-radius: 50%; background: #34d399; }
+    .chat-head-name { font-size: 0.9rem; font-weight: 600; line-height: 1.2; }
+    .chat-head-status { font-size: 0.7rem; color: rgba(255,255,255,0.5); display: flex; align-items: center; gap: 0.35rem; }
+    .chat-head-status::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: #34d399; animation: pulse 2s ease-in-out infinite; }
 
     .chat-close {
-      background: rgba(255,255,255,0.06);
+      background: rgba(255,255,255,0.08);
       border: none;
       color: rgba(255,255,255,0.5);
       cursor: pointer;
-      width: 28px;
-      height: 28px;
-      border-radius: 8px;
+      width: 32px;
+      height: 32px;
+      border-radius: 10px;
       display: flex;
       align-items: center;
       justify-content: center;
       transition: all 0.2s;
-      font-size: 0.9rem;
+      font-size: 1rem;
+      position: relative;
+      z-index: 1;
     }
 
-    .chat-close:hover { background: rgba(255,255,255,0.1); color: var(--white); }
+    .chat-close:hover { background: rgba(255,255,255,0.15); color: var(--white); }
 
     .chat-body {
       flex: 1;
       overflow-y: auto;
-      padding: 0.875rem;
+      padding: 1rem;
       display: flex;
       flex-direction: column;
-      gap: 0.5rem;
-      min-height: 220px;
-      max-height: 290px;
+      gap: 0.625rem;
+      min-height: 240px;
+      max-height: 300px;
       background: var(--bg);
     }
 
     .chat-msg {
-      max-width: 88%;
-      padding: 0.6rem 0.8rem;
-      font-size: 0.8rem;
-      line-height: 1.55;
-      animation: msgIn 0.25s var(--ease);
+      max-width: 85%;
+      padding: 0.75rem 1rem;
+      font-size: 0.85rem;
+      line-height: 1.6;
+      animation: msgIn 0.3s var(--ease);
     }
 
     @keyframes msgIn {
-      from { opacity: 0; transform: translateY(6px); }
-      to { opacity: 1; transform: translateY(0); }
+      from { opacity: 0; transform: translateY(8px) scale(0.98); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
     }
 
     .chat-msg.bot {
       background: var(--white);
       color: var(--text);
       align-self: flex-start;
-      border-radius: 4px 14px 14px 14px;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+      border-radius: 6px 18px 18px 18px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
     }
 
     .chat-msg.user {
-      background: var(--accent);
+      background: linear-gradient(135deg, var(--accent), #3B7DD8);
       color: var(--white);
       align-self: flex-end;
-      border-radius: 14px 14px 4px 14px;
+      border-radius: 18px 18px 6px 18px;
     }
 
     .chat-typing {
       display: flex;
-      gap: 3px;
-      padding: 0.6rem 0.8rem;
+      gap: 4px;
+      padding: 0.75rem 1rem;
       align-self: flex-start;
       background: var(--white);
-      border-radius: 4px 14px 14px 14px;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+      border-radius: 6px 18px 18px 18px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
     }
 
     .chat-typing span {
-      width: 5px;
-      height: 5px;
+      width: 6px;
+      height: 6px;
       border-radius: 50%;
       background: var(--text-muted);
       animation: typingDot 1.2s ease-in-out infinite;
@@ -1210,35 +1475,37 @@
 
     @keyframes typingDot {
       0%, 60%, 100% { opacity: 0.3; transform: translateY(0); }
-      30% { opacity: 1; transform: translateY(-3px); }
+      30% { opacity: 1; transform: translateY(-4px); }
     }
 
     .chat-questions {
-      padding: 0.625rem 0.875rem;
+      padding: 0.75rem 1rem;
       border-top: 1px solid rgba(0,0,0,0.04);
       display: flex;
       flex-wrap: wrap;
-      gap: 0.3rem;
+      gap: 0.375rem;
       background: var(--white);
     }
 
     .chat-q-btn {
-      background: none;
+      background: var(--bg);
       border: 1px solid var(--border);
       border-radius: 100px;
-      padding: 0.3rem 0.625rem;
+      padding: 0.4rem 0.875rem;
       font-family: var(--font);
-      font-size: 0.7rem;
+      font-size: 0.75rem;
       font-weight: 500;
       color: var(--text-secondary);
       cursor: pointer;
-      transition: all 0.2s;
+      transition: all 0.25s var(--ease);
     }
 
     .chat-q-btn:hover {
       border-color: var(--accent);
-      color: var(--accent);
-      background: rgba(37,87,167,0.04);
+      color: var(--white);
+      background: var(--accent);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(37,87,167,0.2);
     }
 
     @media (max-width: 480px) {
@@ -1301,11 +1568,13 @@
       left: 0;
       right: 0;
       bottom: 0;
-      background: var(--dark);
+      background: rgba(15,27,53,0.97);
+      backdrop-filter: blur(30px);
+      -webkit-backdrop-filter: blur(30px);
       z-index: 110;
       padding: 0;
       opacity: 0;
-      transition: opacity 0.35s var(--ease);
+      transition: opacity 0.4s var(--ease);
       overflow: hidden;
     }
 
@@ -1407,17 +1676,18 @@
     }
 
     .mobile-menu .nav-links a {
-      font-size: 1.375rem;
-      font-weight: 600;
-      padding: 1rem 1.25rem;
+      font-size: 1.75rem;
+      font-weight: 700;
+      padding: 1.125rem 1.25rem;
       display: flex;
       align-items: center;
       gap: 1rem;
-      border-radius: var(--r);
+      border-radius: 16px;
       color: rgba(255,255,255,0.7) !important;
+      border: 1px solid transparent;
       transition: all 0.3s var(--ease);
       position: relative;
-      letter-spacing: -0.01em;
+      letter-spacing: -0.02em;
     }
 
     .mobile-menu .nav-links a::before {
@@ -1444,9 +1714,11 @@
     .mobile-menu .nav-links li:last-child a::after { display: none; }
 
     .mobile-menu .nav-links a:hover {
-      background: rgba(255,255,255,0.04);
+      background: rgba(255,255,255,0.06);
+      border-color: rgba(255,255,255,0.08);
       color: var(--white) !important;
       padding-left: 1.5rem;
+      box-shadow: 0 0 30px rgba(91,155,240,0.08);
     }
 
     .mobile-menu .nav-links a:hover::before { opacity: 1; }
@@ -1494,35 +1766,34 @@
       .cards-grid { grid-template-columns: repeat(2, 1fr); }
       .members-layout { grid-template-columns: 1fr; gap: 2rem; }
       .footer-grid { grid-template-columns: 1fr 1fr 1fr; }
-      .stats-grid { grid-template-columns: repeat(2, 1fr); }
-      .stat-item:nth-child(2)::after { display: none; }
     }
 
     @media (max-width: 768px) {
       .nav { display: none; }
       .mobile-toggle { display: flex; }
-      .hero { min-height: auto; padding: 8rem 0 4rem; }
+      .hero { min-height: auto; padding: 8rem 0 5rem; }
       .hero-logo { width: 64px; height: 64px; }
+      .hero-stats { gap: 1.5rem; }
+      .hero-scroll { display: none; }
       .section { padding: 4rem 0; }
       .cards-grid { grid-template-columns: repeat(2, 1fr); }
       .news-grid { grid-template-columns: 1fr; }
       .footer-grid { grid-template-columns: 1fr 1fr; gap: 2rem; }
       .footer-bottom { flex-direction: column; gap: 1rem; text-align: center; }
-      .stats-grid { grid-template-columns: repeat(2, 1fr); }
-      .stat-item::after { display: none !important; }
-      .stats-bar { margin-top: 0; }
       .cookie-bar { bottom: 5rem; }
     }
 
     @media (max-width: 480px) {
       .container { padding: 0 1.25rem; }
-      .hero h1 { font-size: 2rem; }
+      .hero h1 { font-size: 2.25rem; }
+      .hero-desc { font-size: 1rem; }
       .hero-actions { flex-direction: column; width: 100%; }
       .hero-actions .btn { justify-content: center; width: 100%; }
+      .hero-stats { flex-direction: column; gap: 1rem; border-top: none; padding-top: 1.5rem; }
+      .hero-stat { flex-direction: row; gap: 0.75rem; text-align: left; }
+      .hero-stat-label { max-width: none; }
       .cards-grid { grid-template-columns: 1fr; }
       .footer-grid { grid-template-columns: 1fr; }
-      .stats-grid { grid-template-columns: 1fr 1fr; }
-      .stats-bar { margin-top: 0; }
       .cookie-bar { bottom: 5.5rem; }
     }
   </style>
@@ -1606,45 +1877,51 @@
   <section class="hero">
     <div class="hero-canvas" id="hero-canvas"></div>
     <div class="hero-gradient"></div>
+    <div class="hero-orb hero-orb-1"></div>
+    <div class="hero-orb hero-orb-2"></div>
+    <div class="hero-orb hero-orb-3"></div>
     <div class="container">
       <div class="hero-content">
         <img src="img/logo-white.jpg" alt="" class="hero-logo">
         <div class="hero-badge">
-          <span data-i18n="hero.tag">Asociācija dibināta 2025. gadā</span>
+          <span data-i18n="hero.tag">Asociācija dibināta 2026. gadā</span>
         </div>
         <h1 data-i18n="hero.title">IKT nodarbināto <em>atbalsta</em> asociācija</h1>
         <p class="hero-desc" data-i18n="hero.desc">Aizstāvam informācijas un komunikācijas tehnoloģiju nozarē nodarbināto speciālistu tiesības un profesionālās intereses Latvijā.</p>
         <div class="hero-actions">
-          <a href="#biedriem" class="btn btn-primary" data-i18n="hero.cta">Kļūsti par biedru</a>
+          <a href="mailto:info@iktnaa.lv" class="btn btn-accent" data-i18n="hero.cta">Kļūsti par biedru</a>
+          <a href="#aktualitates" class="btn btn-primary" data-i18n="hero.cta3">Aktualitātes</a>
           <a href="#par-mums" class="btn btn-ghost" data-i18n="hero.cta2">Uzzināt vairāk</a>
+          <a href="https://www.linkedin.com/company/iktnaa" class="btn btn-ghost" target="_blank" rel="noopener"><svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M20.47 2H3.53A1.45 1.45 0 002.06 3.43v17.14A1.45 1.45 0 003.53 22h16.94a1.45 1.45 0 001.47-1.43V3.43A1.45 1.45 0 0020.47 2zM8.09 18.74h-3v-9h3v9zM6.59 8.48a1.56 1.56 0 110-3.12 1.56 1.56 0 010 3.12zM18.91 18.74h-3v-4.38c0-1.05-.02-2.38-1.45-2.38-1.45 0-1.67 1.13-1.67 2.3v4.46h-3v-9h2.88v1.23h.04a3.16 3.16 0 012.85-1.56c3.04 0 3.6 2 3.6 4.61v4.72z"/></svg> <span data-i18n="hero.cta4">LinkedIn</span></a>
+        </div>
+        <div class="hero-stats">
+          <div class="hero-stat">
+            <div class="hero-stat-num"><span>30</span>%</div>
+            <div class="hero-stat-label" data-i18n="stats.l1">IT vakanču neaizpildītas valsts sektorā</div>
+          </div>
+          <div class="hero-stat">
+            <div class="hero-stat-num"><span>2</span>x</div>
+            <div class="hero-stat-label" data-i18n="stats.l2">Algu atšķirība starp privāto un publisko sektoru</div>
+          </div>
+          <div class="hero-stat">
+            <div class="hero-stat-num"><span>2026</span></div>
+            <div class="hero-stat-label" data-i18n="stats.l3">Gads, kad dibināta IKTNAA</div>
+          </div>
         </div>
       </div>
     </div>
+    <a href="#par-mums" class="hero-scroll">
+      <span data-i18n="hero.scroll">Uzzināt vairāk</span>
+      <div class="hero-scroll-line"></div>
+    </a>
   </section>
 
-  <!-- Stats -->
-  <div class="stats-bar">
-    <div class="container">
-      <div class="stats-grid">
-        <div class="stat-item reveal">
-          <div class="stat-number"><span class="counter" data-target="30">0</span><span>%</span></div>
-          <div class="stat-label" data-i18n="stats.l1">IT vakanču neaizpildītas valsts sektorā</div>
-        </div>
-        <div class="stat-item reveal reveal-delay-1">
-          <div class="stat-number"><span class="counter" data-target="2">0</span><span>x</span></div>
-          <div class="stat-label" data-i18n="stats.l2">Algu atšķirība starp privāto un publisko sektoru</div>
-        </div>
-        <div class="stat-item reveal reveal-delay-2">
-          <div class="stat-number"><span class="counter" data-target="2025">0</span></div>
-          <div class="stat-label" data-i18n="stats.l3">Gads, kad dibināta IKTNAA</div>
-        </div>
-        <div class="stat-item reveal reveal-delay-3">
-          <div class="stat-number"><span class="counter" data-target="100">0</span><span>+</span></div>
-          <div class="stat-label" data-i18n="stats.l4">IKT speciālisti, kurus pārstāvam</div>
-        </div>
-      </div>
-    </div>
+  <!-- Ticker -->
+  <div class="ticker" id="ticker">
+    <div class="ticker-track" id="ticker-track"></div>
   </div>
+
+  <!-- Stats (moved inline to hero) -->
 
   <!-- Par mums -->
   <section class="section" id="par-mums">
@@ -1725,6 +2002,7 @@
       </div>
       <div class="news-grid">
         <article class="news-card reveal">
+          <div class="news-badge" data-i18n="news.badge">Jauns</div>
           <div class="news-date" data-i18n="news.item1.date">2026. gada 27. februāris</div>
           <h3 data-i18n="news.item1.title">Kriminālatbildības risks padziļinas IT speciālistu trūkumu valsts pārvaldē</h3>
           <p data-i18n="news.item1.desc">IKTNAA pauž bažas, ka kriminālatbildības nenoteiktība un risks kiberdrošības jomā atturēs kvalificētus IT speciālistus no darba valsts sektorā, kur jau pastāv būtisks kadru trūkums.</p>
@@ -1860,14 +2138,15 @@
     const T = {
       lv: {
         'nav.about': 'Par mums', 'nav.news': 'Aktualitātes', 'nav.members': 'Biedriem', 'nav.contact': 'Kontakti',
-        'hero.tag': 'Asociācija dibināta 2025. gadā',
+        'hero.tag': 'Asociācija dibināta 2026. gadā',
         'hero.title': 'IKT nodarbināto <em>atbalsta</em> asociācija',
         'hero.desc': 'Aizstāvam informācijas un komunikācijas tehnoloģiju nozarē nodarbināto speciālistu tiesības un profesionālās intereses Latvijā.',
-        'hero.cta': 'Kļūsti par biedru', 'hero.cta2': 'Uzzināt vairāk',
+        'hero.cta': 'Kļūsti par biedru', 'hero.cta2': 'Uzzināt vairāk', 'hero.cta3': 'Aktualitātes', 'hero.cta4': 'LinkedIn', 'hero.scroll': 'Uzzināt vairāk',
         'stats.l1': 'IT vakanču neaizpildītas valsts sektorā',
         'stats.l2': 'Algu atšķirība starp privāto un publisko sektoru',
         'stats.l3': 'Gads, kad dibināta IKTNAA',
-        'stats.l4': 'IKT speciālisti, kurus pārstāvam',
+        'stats.l4': 'Biedri asociācijā',
+        'stats.source': '* Avots: CSP, NVA dati. Precīzas atsauces tiks papildinātas.',
         'about.tag': 'Par mums', 'about.title': 'Aizstāvam IT speciālistu intereses',
         'about.desc': 'IKTNAA ir dibināta, lai nodrošinātu IKT nozarē strādājošo speciālistu tiesisko aizsardzību, veicinātu profesionālo attīstību un stiprinātu nozares kopienu Latvijā.',
         'about.card1.title': 'Profesionālo interešu aizstāvība', 'about.card1.desc': 'Pārstāvam IKT speciālistu profesionālās intereses, attīstot standartus, ētiku un kvalifikācijas atzīšanu, aizstāvot nozares reputāciju institūcijās.',
@@ -1884,6 +2163,12 @@
         'news.item2.date': '2026. gada februāris', 'news.item2.title': 'IKTNAA pozīcija: profesionālais risks nav krimināltiesiska atbildība',
         'news.item2.desc': 'Asociācija aicina uz atbilstošu tiesību normu interpretāciju, jaunu amatu klasifikāciju IT nozarē un birokrātiskās slodzes mazināšanu IT projektos valsts pārvaldē.',
         'news.readmore': 'Lasīt vairāk',
+        'news.badge': 'Jauns',
+        'ticker.1': 'IKTNAA dibināta 2026. gadā — pievienojies!',
+        'ticker.2': 'IT kadru trūkums valsts sektorā — 30% vakanču nav aizpildītas',
+        'ticker.3': 'Algas publiskajā sektorā 2x zemākas nekā privātajā',
+        'ticker.4': 'Jauna pozīcija: profesionālais risks nav kriminālatbildība',
+        'ticker.5': 'Pievienojies asociācijai — info@iktnaa.lv',
         'members.tag': 'Biedriem', 'members.title': 'Kāpēc pievienoties IKTNAA?',
         'members.b1': 'Profesionālā interešu aizstāvība valsts un pašvaldību līmenī',
         'members.b2': 'Juridiskais atbalsts un konsultācijas darba tiesību jautājumos',
@@ -1900,14 +2185,15 @@
       },
       en: {
         'nav.about': 'About Us', 'nav.news': 'News', 'nav.members': 'Membership', 'nav.contact': 'Contact',
-        'hero.tag': 'Association founded in 2025',
+        'hero.tag': 'Association founded in 2026',
         'hero.title': 'ICT Workers <em>Support</em> Association',
         'hero.desc': 'We advocate for the rights and professional interests of information and communications technology specialists in Latvia.',
-        'hero.cta': 'Become a Member', 'hero.cta2': 'Learn More',
+        'hero.cta': 'Become a Member', 'hero.cta2': 'Learn More', 'hero.cta3': 'News', 'hero.cta4': 'LinkedIn', 'hero.scroll': 'Learn More',
         'stats.l1': 'IT vacancies unfilled in the public sector',
         'stats.l2': 'Salary gap between private and public sector',
         'stats.l3': 'Year IKTNAA was founded',
-        'stats.l4': 'ICT specialists we represent',
+        'stats.l4': 'Members in the association',
+        'stats.source': '* Source: CSB, SEA data. Exact references to be added.',
         'about.tag': 'About Us', 'about.title': 'Advocating for IT professionals',
         'about.desc': 'IKTNAA was founded to ensure legal protection for ICT professionals, promote professional development, and strengthen the industry community in Latvia.',
         'about.card1.title': 'Professional Advocacy', 'about.card1.desc': 'We represent ICT professionals\' interests by developing standards, ethics, and qualification recognition, and defending the industry\'s reputation.',
@@ -1924,6 +2210,12 @@
         'news.item2.date': 'February 2026', 'news.item2.title': 'IKTNAA Position: Professional Risk Is Not Criminal Liability',
         'news.item2.desc': 'The association calls for appropriate legal interpretation, new job classifications in IT, and reduced bureaucratic burden on IT projects in public administration.',
         'news.readmore': 'Read more',
+        'news.badge': 'New',
+        'ticker.1': 'IKTNAA founded in 2026 — join us!',
+        'ticker.2': 'IT staff shortage in public sector — 30% of vacancies unfilled',
+        'ticker.3': 'Public sector salaries 2x lower than private',
+        'ticker.4': 'New position: professional risk is not criminal liability',
+        'ticker.5': 'Join the association — info@iktnaa.lv',
         'members.tag': 'Membership', 'members.title': 'Why join IKTNAA?',
         'members.b1': 'Professional advocacy at national and municipal level',
         'members.b2': 'Legal support and consultations on employment law',
@@ -1985,6 +2277,23 @@
       document.querySelectorAll('.mm-lang-btn').forEach(b =>
         b.classList.toggle('active', b.dataset.lang === l)
       );
+
+      // Update ticker
+      buildTicker(l);
+    }
+
+    function buildTicker(l) {
+      const track = document.getElementById('ticker-track');
+      const items = [];
+      for (let i = 1; i <= 5; i++) {
+        const key = 'ticker.' + i;
+        const text = T[l]?.[key];
+        if (text) items.push(text);
+      }
+      const html = items.map((t, i) =>
+        `<span class="ticker-item"><span class="ticker-dot${i === 0 ? ' live' : ''}"></span>${t}</span>`
+      ).join('');
+      track.innerHTML = html + html;
     }
 
     // RU translations (placeholder — copies LV for now)
@@ -2122,18 +2431,44 @@
 
     document.querySelectorAll('.counter').forEach(el => counterObserver.observe(el));
 
-    /* ===== Card 3D tilt ===== */
+    /* ===== Card 3D tilt + cursor glow ===== */
     document.querySelectorAll('.card').forEach(card => {
       card.addEventListener('mousemove', e => {
         const rect = card.getBoundingClientRect();
         const x = (e.clientX - rect.left) / rect.width - 0.5;
         const y = (e.clientY - rect.top) / rect.height - 0.5;
         card.style.transform = `translateY(-4px) rotateY(${x * 6}deg) rotateX(${-y * 6}deg)`;
+        card.style.background = `radial-gradient(600px circle at ${e.clientX - rect.left}px ${e.clientY - rect.top}px, rgba(37,87,167,0.04), transparent 40%) no-repeat, var(--white)`;
       });
       card.addEventListener('mouseleave', () => {
         card.style.transform = '';
+        card.style.background = '';
       });
     });
+
+    /* ===== Hero stat counter (inline) ===== */
+    const heroStatObserver = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          const el = e.target;
+          const numEl = el.querySelector('.hero-stat-num span');
+          if (!numEl) return;
+          const target = parseInt(numEl.textContent);
+          const duration = target > 100 ? 2000 : 1000;
+          const start = performance.now();
+          function step(now) {
+            const progress = Math.min((now - start) / duration, 1);
+            const eased = 1 - Math.pow(1 - progress, 3);
+            numEl.textContent = Math.round(eased * target);
+            if (progress < 1) requestAnimationFrame(step);
+          }
+          numEl.textContent = '0';
+          requestAnimationFrame(step);
+          heroStatObserver.unobserve(el);
+        }
+      });
+    }, { threshold: 0.5 });
+    document.querySelectorAll('.hero-stat').forEach(el => heroStatObserver.observe(el));
 
     /* ===== Stat item hover glow ===== */
     document.querySelectorAll('.stat-item').forEach(item => {
@@ -2250,7 +2585,7 @@
       lv: {
         welcome: 'Sveiki! 👋 Esmu IKTNAA virtuālais palīgs. Kā varu palīdzēt?',
         questions: [
-          { q: 'Kas ir IKTNAA?', a: 'IKTNAA ir IKT nodarbināto atbalsta asociācija — biedrība, kas dibināta 2025. gadā, lai aizstāvētu informācijas un komunikācijas tehnoloģiju nozarē strādājošo profesionālās, ekonomiskās un sociālās intereses Latvijā.' },
+          { q: 'Kas ir IKTNAA?', a: 'IKTNAA ir IKT nodarbināto atbalsta asociācija — biedrība, kas dibināta 2026. gadā, lai aizstāvētu informācijas un komunikācijas tehnoloģiju nozarē strādājošo profesionālās, ekonomiskās un sociālās intereses Latvijā.' },
           { q: 'Kā kļūt par biedru?', a: 'Lai pievienotos IKTNAA, rakstiet mums uz info@iktnaa.lv vai sazinieties caur LinkedIn. Biedra statuss ir pieejams visiem IKT nozarē nodarbinātajiem — gan publiskajā, gan privātajā sektorā.' },
           { q: 'Kādi ir mērķi?', a: 'Mūsu galvenie mērķi: 1) Profesionālo interešu aizstāvība, 2) Taisnīgs atalgojums un nodarbinātības drošība, 3) Droši darba apstākļi un sociālās garantijas, 4) Tiesību aizstāvība attiecībās ar darba devēju, 5) Nozares attīstība Latvijā un Baltijā, 6) Profesionālā pilnveide un starptautiskā sadarbība.' },
           { q: 'Vai ir biedra maksa?', a: 'Par biedra maksas apmēru un nosacījumiem lūdzam sazināties ar mums tiešā veidā — info@iktnaa.lv. Mūsu mērķis ir padarīt dalību pieejamu ikvienam IKT speciālistam.' },
@@ -2261,7 +2596,7 @@
       en: {
         welcome: 'Hello! 👋 I\'m the IKTNAA virtual assistant. How can I help you?',
         questions: [
-          { q: 'What is IKTNAA?', a: 'IKTNAA is the ICT Workers Support Association — founded in 2025 to advocate for the professional, economic, and social interests of information and communications technology workers in Latvia.' },
+          { q: 'What is IKTNAA?', a: 'IKTNAA is the ICT Workers Support Association — founded in 2026 to advocate for the professional, economic, and social interests of information and communications technology workers in Latvia.' },
           { q: 'How to join?', a: 'To join IKTNAA, contact us at info@iktnaa.lv or through LinkedIn. Membership is available to all ICT professionals — both in the public and private sectors.' },
           { q: 'What are the goals?', a: 'Our main goals: 1) Professional advocacy, 2) Fair compensation and job security, 3) Safe working conditions and social guarantees, 4) Workers\' rights protection, 5) Industry development in Latvia and the Baltics, 6) Professional growth and international cooperation.' },
           { q: 'Is there a fee?', a: 'For information about membership fees and conditions, please contact us directly at info@iktnaa.lv. Our goal is to make membership accessible to every ICT specialist.' },
