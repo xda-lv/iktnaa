@@ -34,7 +34,7 @@
       --max-w: 1200px;
       --r: 12px;
       --r-sm: 8px;
-      --ease: cubic-bezier(0.22, 1, 0.36, 1);
+      --ease: cubic-bezier(0.16, 1, 0.3, 1);
     }
 
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
@@ -47,6 +47,207 @@
       line-height: 1.6;
       -webkit-font-smoothing: antialiased;
       overflow-x: hidden;
+    }
+
+    /* ===== PAGE LOAD OVERLAY ===== */
+    .page-loader {
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      background: var(--dark);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 1.25rem;
+      transition: opacity 0.8s ease, visibility 0.8s;
+    }
+    .page-loader.done {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+    /* subtle radial glow behind logo */
+    .page-loader::before {
+      content: '';
+      position: absolute;
+      width: 400px; height: 400px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(91,155,240,0.08), transparent 70%);
+      pointer-events: none;
+    }
+    .loader-logo {
+      width: 64px;
+      height: 64px;
+      border-radius: 16px;
+      background: white;
+      padding: 5px;
+      object-fit: contain;
+      position: relative;
+      z-index: 1;
+      opacity: 0;
+      animation: ldFade 0.5s ease 0.1s forwards;
+    }
+    .loader-text {
+      font-family: var(--font);
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: var(--white);
+      letter-spacing: -0.03em;
+      position: relative;
+      z-index: 1;
+      opacity: 0;
+      animation: ldFade 0.5s ease 0.25s forwards;
+    }
+    .loader-text span { color: #5B9BF0; }
+    .loader-bar {
+      width: 160px;
+      height: 2px;
+      background: rgba(255,255,255,0.06);
+      border-radius: 2px;
+      overflow: hidden;
+      position: relative;
+      z-index: 1;
+      opacity: 0;
+      animation: ldFade 0.4s ease 0.4s forwards;
+    }
+    .loader-bar-fill {
+      height: 100%;
+      width: 0%;
+      background: #5B9BF0;
+      border-radius: 2px;
+      animation: ldProgress 2.2s cubic-bezier(0.4, 0, 0.2, 1) 0.5s forwards;
+    }
+    /* Welcome text — hidden initially, shown by JS */
+    .loader-welcome {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      margin-top: 0.5rem;
+      opacity: 0;
+      transform: translateY(6px);
+      transition: opacity 0.5s ease, transform 0.5s ease;
+    }
+    .loader-welcome.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .welcome-greeting {
+      font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: #5B9BF0;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+    .welcome-cursor {
+      display: inline-block;
+      width: 2px;
+      height: 1em;
+      background: #5B9BF0;
+      margin-left: 2px;
+      vertical-align: text-bottom;
+      animation: cursorBlink 0.6s step-end infinite;
+    }
+    @keyframes cursorBlink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0; }
+    }
+    @keyframes ldFade {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes ldProgress {
+      0% { width: 0%; }
+      40% { width: 60%; }
+      80% { width: 90%; }
+      100% { width: 100%; }
+    }
+
+    /* ===== PAGE REVEAL — hold everything until loader done ===== */
+    /* Pause ALL hero stagger animations */
+    .hero-content,
+    .hero-logo-group,
+    .hero-badge,
+    .hero h1,
+    .hero-desc,
+    .hero-actions,
+    .hero-stats {
+      animation-play-state: paused !important;
+    }
+    body.page-loaded .hero-content,
+    body.page-loaded .hero-logo-group,
+    body.page-loaded .hero-badge,
+    body.page-loaded .hero h1,
+    body.page-loaded .hero-desc,
+    body.page-loaded .hero-actions,
+    body.page-loaded .hero-stats {
+      animation-play-state: running !important;
+    }
+    /* Header — slides down from top */
+    body:not(.page-loaded) .header {
+      opacity: 0 !important;
+      transform: translateY(-100%);
+    }
+    body.page-loaded .header {
+      opacity: 1 !important;
+      transform: translateY(0);
+      transition: opacity 0.7s ease 0.1s, transform 0.7s var(--ease) 0.1s;
+    }
+    /* Ticker — slides in from left */
+    body:not(.page-loaded) .ticker {
+      opacity: 0;
+      transform: translateX(-100%);
+    }
+    body.page-loaded .ticker {
+      opacity: 1;
+      transform: translateX(0);
+      transition: opacity 0.6s ease 0.8s, transform 0.8s var(--ease) 0.8s;
+    }
+    /* Hero scroll — slides up from below */
+    body:not(.page-loaded) .hero-scroll {
+      opacity: 0 !important;
+      transform: translateX(-50%) translateY(30px) !important;
+    }
+    body.page-loaded .hero-scroll {
+      transform: translateX(-50%) translateY(0) !important;
+      transition: opacity 0.6s ease 1.8s, transform 0.6s var(--ease) 1.8s;
+    }
+    /* Canvas + gradient — fade in */
+    body:not(.page-loaded) .hero-canvas,
+    body:not(.page-loaded) .hero-gradient {
+      opacity: 0 !important;
+    }
+    body.page-loaded .hero-canvas,
+    body.page-loaded .hero-gradient {
+      opacity: 1 !important;
+      transition: opacity 1.5s ease 0.2s;
+    }
+    /* Orbs — fade in later */
+    body:not(.page-loaded) .hero-orb-1,
+    body:not(.page-loaded) .hero-orb-2,
+    body:not(.page-loaded) .hero-orb-3 {
+      opacity: 0 !important;
+    }
+    body.page-loaded .hero-orb-1,
+    body.page-loaded .hero-orb-2,
+    body.page-loaded .hero-orb-3 {
+      opacity: 0.15 !important;
+      transition: opacity 2s ease 0.5s;
+    }
+
+    /* ===== LANG TRANSITION OVERLAY ===== */
+    .lang-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 9998;
+      background: var(--dark);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.4s ease;
+    }
+    .lang-overlay.active {
+      opacity: 0.12;
     }
 
     /* ===== SCROLL PROGRESS ===== */
@@ -63,11 +264,12 @@
 
     /* ===== LANG SWITCH ANIMATION ===== */
     [data-i18n] {
-      transition: opacity 0.18s ease, transform 0.18s ease;
+      transition: opacity 0.35s ease, transform 0.35s ease, filter 0.35s ease;
     }
     .lang-switching [data-i18n] {
       opacity: 0;
-      transform: translateY(3px);
+      transform: translateY(6px);
+      filter: blur(2px);
     }
 
     /* Loading bar that plays on language switch */
@@ -86,11 +288,12 @@
     }
     .lang-loading-bar.active {
       opacity: 1;
-      animation: langLoad 0.5s var(--ease) forwards;
+      animation: langLoad 0.7s var(--ease) forwards;
     }
     @keyframes langLoad {
       0% { width: 0; }
-      40% { width: 65%; }
+      30% { width: 50%; }
+      70% { width: 85%; }
       100% { width: 100%; }
     }
 
@@ -103,8 +306,8 @@
       left: 0;
       right: 0;
       z-index: 100;
-      padding: 1rem 0;
-      transition: all 0.4s var(--ease);
+      padding: 1.25rem 0;
+      transition: all 0.5s var(--ease);
       background: transparent;
     }
 
@@ -113,20 +316,18 @@
       backdrop-filter: blur(20px);
       -webkit-backdrop-filter: blur(20px);
       border-bottom: 1px solid var(--border);
-      padding: 0.75rem 0;
+      padding: 0.85rem 0;
+      transition: all 0.5s var(--ease);
     }
 
-    .header.scrolled .logo-text { color: var(--dark); }
-    .header.scrolled .logo-accent { color: var(--accent); }
-    .header.scrolled .nav-links a { color: var(--text-secondary); }
-    .header.scrolled .nav-links a:hover { color: var(--dark); background: rgba(37,87,167,0.06); border-color: rgba(37,87,167,0.1); }
+    /* scrolled nav overrides moved to .header.scrolled .nav block */
     .header.scrolled .lang-toggle { background: rgba(0,0,0,0.05); }
     .header.scrolled .lang-toggle button { color: var(--text-muted); }
     .header.scrolled .lang-toggle button.active { background: var(--accent); color: var(--white); }
     .header.scrolled .lang-toggle button:hover:not(.active) { color: var(--dark); }
     .header.scrolled .mobile-toggle span { background: var(--text); }
 
-    .header .container { display: flex; align-items: center; justify-content: space-between; }
+    .header .container { display: flex; align-items: center; justify-content: center; position: relative; }
 
     .logo {
       display: inline-flex;
@@ -159,26 +360,45 @@
     }
     .logo-accent { color: #3B7DD8; }
 
-    .nav { display: flex; align-items: center; gap: 2.5rem; }
-    .nav-links { list-style: none; display: flex; gap: 0.25rem; }
+    .nav {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      background: rgba(255,255,255,0.06);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 100px;
+      padding: 0.35rem;
+    }
+    .header.scrolled .nav {
+      background: var(--dark);
+      border-color: var(--dark-2);
+    }
+    .header.scrolled .nav-links a { color: rgba(255,255,255,0.7); }
+    .header.scrolled .nav-links a:hover { color: var(--white); background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.08); }
+    .header.scrolled .lang-current { background: rgba(255,255,255,0.08); color: rgba(255,255,255,0.8); }
+    .header.scrolled .lang-current:hover { background: rgba(255,255,255,0.12); }
+    .nav-links { list-style: none; display: flex; gap: 0.2rem; }
 
     .nav-links a {
-      color: rgba(255,255,255,0.7);
+      color: rgba(255,255,255,0.75);
       text-decoration: none;
-      font-size: 0.875rem;
-      font-weight: 500;
-      padding: 0.5rem 1rem;
+      font-size: 0.9rem;
+      font-weight: 600;
+      padding: 0.55rem 1.25rem;
       border-radius: 100px;
-      transition: all 0.3s var(--ease);
+      transition: all 0.25s var(--ease);
       position: relative;
       border: 1px solid transparent;
+      background: transparent;
+      letter-spacing: -0.01em;
     }
 
     .nav-links a:hover {
       color: var(--white);
-      background: rgba(255,255,255,0.1);
-      border-color: rgba(255,255,255,0.08);
-      box-shadow: 0 0 20px rgba(91,155,240,0.1);
+      background: rgba(255,255,255,0.12);
+      border-color: rgba(255,255,255,0.1);
     }
 
     .lang-dropdown {
@@ -190,9 +410,9 @@
       align-items: center;
       gap: 0.4rem;
       background: rgba(255,255,255,0.08);
-      border: 1px solid rgba(255,255,255,0.1);
-      border-radius: 8px;
-      padding: 0.4rem 0.65rem;
+      border: 1px solid transparent;
+      border-radius: 100px;
+      padding: 0.45rem 0.75rem;
       cursor: pointer;
       font-family: var(--font);
       font-size: 0.8rem;
@@ -248,21 +468,15 @@
     .lang-list li.active { color: var(--white); background: rgba(37,87,167,0.15); }
     .lang-list .flag { font-size: 1rem; }
 
-    /* Scrolled header overrides */
-    .header.scrolled .lang-current {
-      background: rgba(0,0,0,0.04);
-      border-color: var(--border);
-      color: var(--text);
-    }
-    .header.scrolled .lang-current:hover { background: rgba(0,0,0,0.07); }
+    /* Scrolled header overrides — nav stays dark */
     .header.scrolled .lang-list {
-      background: var(--white);
-      border-color: var(--border);
-      box-shadow: 0 8px 30px rgba(15,27,53,0.12);
+      background: var(--dark);
+      border-color: rgba(255,255,255,0.1);
+      box-shadow: 0 8px 30px rgba(0,0,0,0.3);
     }
-    .header.scrolled .lang-list li { color: var(--text-secondary); }
-    .header.scrolled .lang-list li:hover { background: var(--bg-alt); color: var(--dark); }
-    .header.scrolled .lang-list li.active { color: var(--accent); background: rgba(37,87,167,0.06); }
+    .header.scrolled .lang-list li { color: rgba(255,255,255,0.6); }
+    .header.scrolled .lang-list li:hover { background: rgba(255,255,255,0.06); color: var(--white); }
+    .header.scrolled .lang-list li.active { color: var(--white); background: rgba(37,87,167,0.15); }
 
     .mobile-toggle {
       display: none;
@@ -272,6 +486,10 @@
       padding: 0.5rem;
       flex-direction: column;
       gap: 5px;
+      position: absolute;
+      right: 2rem;
+      top: 50%;
+      transform: translateY(-50%);
     }
 
     .mobile-toggle span {
@@ -295,7 +513,7 @@
       align-items: center;
       position: relative;
       overflow: hidden;
-      padding: 8rem 0 5rem;
+      padding: 8rem 0 7rem;
       background: var(--dark);
     }
 
@@ -363,20 +581,35 @@
       flex-direction: column;
       align-items: center;
       text-align: center;
-      animation: heroIn 1s var(--ease) both;
+      animation: heroIn 1.2s var(--ease) both;
     }
 
     @keyframes heroIn {
-      from { opacity: 0; transform: translateY(30px); }
-      to { opacity: 1; transform: translateY(0); }
+      from { opacity: 0; transform: translateY(60px); filter: blur(6px); }
+      to { opacity: 1; transform: translateY(0); filter: blur(0); }
     }
 
-    .hero-logo { animation: heroIn 0.8s var(--ease) 0.1s both, logoGlow 3s ease-in-out 1s infinite; }
-    .hero-badge { animation: heroIn 0.8s var(--ease) 0.2s both; }
-    .hero h1 { animation: heroIn 0.8s var(--ease) 0.3s both; }
-    .hero-desc { animation: heroIn 0.8s var(--ease) 0.4s both; }
-    .hero-actions { animation: heroIn 0.8s var(--ease) 0.5s both; }
-    .hero-stats { animation: heroIn 0.8s var(--ease) 0.7s both; }
+    .hero-logo-group {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      animation: heroIn 1s var(--ease) 0.1s both;
+    }
+    .hero-logo-text {
+      font-size: 2rem;
+      font-weight: 800;
+      color: var(--white);
+      letter-spacing: -0.02em;
+    }
+    .hero-logo-text span {
+      color: #5B9BF0;
+    }
+    .hero-logo { animation: logoGlow 3s ease-in-out infinite; }
+    .hero-badge { animation: heroIn 1s var(--ease) 0.25s both; }
+    .hero h1 { animation: heroIn 1s var(--ease) 0.4s both; }
+    .hero-desc { animation: heroIn 1s var(--ease) 0.55s both; }
+    .hero-actions { animation: heroIn 1s var(--ease) 0.7s both; }
+    .hero-stats { animation: heroIn 1s var(--ease) 0.9s both; }
 
     .hero-logo {
       width: 80px;
@@ -485,6 +718,7 @@
       display: flex;
       gap: 2.5rem;
       padding-top: 2.5rem;
+      margin-bottom: 2rem;
       border-top: 1px solid rgba(255,255,255,0.08);
     }
     .hero-stat {
@@ -508,7 +742,7 @@
     /* Scroll indicator */
     .hero-scroll {
       position: absolute;
-      bottom: 2rem;
+      bottom: 1.5rem;
       left: 50%;
       transform: translateX(-50%);
       z-index: 2;
@@ -847,7 +1081,7 @@
       border: 1px solid var(--border);
       border-radius: 16px;
       padding: 2.25rem;
-      transition: all 0.4s var(--ease), transform 0.15s ease-out;
+      transition: all 0.5s var(--ease), transform 0.18s ease-out;
       position: relative;
       overflow: hidden;
       transform-style: preserve-3d;
@@ -941,22 +1175,24 @@
     /* ===== NEWS ===== */
     .news-grid {
       display: grid;
-      grid-template-columns: repeat(2, 1fr);
+      grid-template-columns: repeat(3, 1fr);
       gap: 1.5rem;
-      max-width: 900px;
+      max-width: 1000px;
       margin: 0 auto;
     }
 
+    .news-grid { perspective: 1200px; }
     .news-card {
       background: var(--white);
       border: 1px solid var(--border);
       border-radius: 16px;
       padding: 2.25rem;
-      transition: all 0.4s var(--ease);
+      transition: border-color 0.4s var(--ease), box-shadow 0.4s var(--ease), transform 0.15s ease-out;
       display: flex;
       flex-direction: column;
       position: relative;
       overflow: hidden;
+      transform-style: preserve-3d;
     }
 
     .news-card::after {
@@ -973,8 +1209,8 @@
 
     .news-card:hover {
       border-color: rgba(37,87,167,0.2);
-      transform: translateY(-8px) scale(1.02);
-      box-shadow: 0 20px 50px rgba(15,27,53,0.1), 0 0 0 1px rgba(37,87,167,0.06);
+      box-shadow: 0 20px 50px rgba(15,27,53,0.12), 0 0 0 1px rgba(37,87,167,0.08);
+      z-index: 2;
     }
 
     .news-card:hover::after { height: 3px; }
@@ -1305,7 +1541,7 @@
       display: flex;
       align-items: center;
       gap: 0.625rem;
-      transition: transform 0.5s var(--ease), opacity 0.5s;
+      transition: transform 0.6s var(--ease), opacity 0.6s ease;
       border: 1px solid rgba(255,255,255,0.08);
       border-radius: 12px;
       box-shadow: 0 12px 40px rgba(0,0,0,0.25);
@@ -1395,8 +1631,9 @@
       position: fixed;
       bottom: 2rem;
       right: 2rem;
-      width: 56px;
       height: 56px;
+      padding: 0 1.25rem;
+      gap: 0.5rem;
       border-radius: 18px;
       background: linear-gradient(135deg, var(--dark), var(--dark-3));
       color: var(--white);
@@ -1421,6 +1658,12 @@
     }
     .chat-fab:hover { transform: translateY(-3px) scale(1.05); box-shadow: 0 12px 40px rgba(0,0,0,0.25); }
     .chat-fab:hover::before { opacity: 1; }
+    .chat-fab-label {
+      font-family: var(--font);
+      font-size: 0.85rem;
+      font-weight: 600;
+      letter-spacing: 0.01em;
+    }
     .chat-fab.hidden { opacity: 0; pointer-events: none; transform: scale(0.8); }
 
     .chat-window {
@@ -1441,7 +1684,7 @@
       opacity: 0;
       visibility: hidden;
       transform: translateY(16px) scale(0.95);
-      transition: all 0.3s var(--ease);
+      transition: all 0.4s var(--ease);
     }
 
     .chat-window.open { opacity: 1; visibility: visible; transform: translateY(0) scale(1); }
@@ -1663,7 +1906,7 @@
       z-index: 110;
       padding: 0;
       opacity: 0;
-      transition: opacity 0.4s var(--ease);
+      transition: opacity 0.5s var(--ease);
       overflow: hidden;
     }
 
@@ -1836,25 +2079,382 @@
       font-style: italic;
     }
 
+    /* ===== MISSION & VISION ===== */
+    .mission-section {
+      padding: 6rem 0;
+      background: linear-gradient(135deg, var(--dark), var(--dark-2));
+      position: relative;
+      overflow: hidden;
+    }
+    .mission-section::before {
+      content: '';
+      position: absolute;
+      top: -20%; right: -10%;
+      width: 600px; height: 600px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(37,87,167,0.1), transparent 70%);
+      filter: blur(80px);
+    }
+    .mission-section::after {
+      content: '';
+      position: absolute;
+      bottom: -15%; left: -5%;
+      width: 400px; height: 400px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(52,211,153,0.06), transparent 70%);
+      filter: blur(60px);
+    }
+    .mission-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3rem;
+      max-width: 960px;
+      margin: 0 auto;
+    }
+    .mission-item {
+      padding: 2.5rem;
+      border-radius: 20px;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.06);
+      position: relative;
+      z-index: 1;
+      transition: all 0.5s var(--ease);
+    }
+    .mission-item:hover {
+      background: rgba(255,255,255,0.06);
+      border-color: rgba(255,255,255,0.1);
+      transform: translateY(-4px);
+      box-shadow: 0 12px 40px rgba(0,0,0,0.15);
+    }
+    .mission-item-icon {
+      width: 48px; height: 48px;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1.25rem;
+    }
+    .mission-item:first-child .mission-item-icon { background: rgba(91,155,240,0.12); border: 1px solid rgba(91,155,240,0.2); }
+    .mission-item:last-child .mission-item-icon { background: rgba(52,211,153,0.12); border: 1px solid rgba(52,211,153,0.2); }
+    .mission-item h3 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: var(--white);
+      margin-bottom: 1rem;
+      letter-spacing: -0.02em;
+    }
+    .mission-item p {
+      color: rgba(255,255,255,0.6);
+      font-size: 1rem;
+      line-height: 1.8;
+    }
+
+    /* ===== SECTION DIVIDER ===== */
+    .section-divider {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--border), transparent);
+    }
+    .section-divider-dark {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.06), transparent);
+    }
+
+    /* ===== DATA / STATISTICS ===== */
+    .data-section {
+      padding: 7rem 0;
+      background: var(--bg-alt);
+      position: relative;
+      overflow: hidden;
+    }
+    .data-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    .data-item {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 2rem;
+      transition: all 0.5s var(--ease);
+    }
+    .data-item:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 16px 48px rgba(15,27,53,0.1);
+    }
+    .data-label {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 0.75rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 0.75rem;
+    }
+    .data-value {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--accent);
+      letter-spacing: -0.03em;
+      flex-shrink: 0;
+    }
+    .data-bar-track {
+      height: 8px;
+      background: var(--bg-alt);
+      border-radius: 100px;
+      overflow: hidden;
+      margin-bottom: 0.5rem;
+    }
+    .data-bar-fill {
+      height: 100%;
+      border-radius: 100px;
+      background: linear-gradient(90deg, var(--accent), #5B9BF0);
+      width: 0%;
+      transition: width 2s var(--ease);
+    }
+    .data-item:nth-child(2) .data-bar-fill { background: linear-gradient(90deg, #e11d48, #f43f5e); }
+    .data-item:nth-child(3) .data-bar-fill { background: linear-gradient(90deg, #7c3aed, #a78bfa); }
+    .data-item:nth-child(4) .data-bar-fill { background: linear-gradient(90deg, #059669, #34d399); }
+    .data-item:nth-child(2) .data-value { color: #e11d48; }
+    .data-item:nth-child(3) .data-value { color: #7c3aed; }
+    .data-item:nth-child(4) .data-value { color: #059669; }
+    .data-context {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+    .data-source {
+      text-align: center;
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      opacity: 0.7;
+      margin-top: 2rem;
+    }
+
+    /* ===== TESTIMONIALS ===== */
+    .testimonials-section {
+      padding: 7rem 0;
+      background: var(--bg);
+      position: relative;
+      overflow: hidden;
+    }
+    .testimonials-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+    .testimonial-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 2rem;
+      transition: all 0.5s var(--ease);
+      position: relative;
+      overflow: hidden;
+    }
+    .testimonial-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--accent), #5B9BF0);
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    .testimonial-card:nth-child(2)::before { background: linear-gradient(90deg, #34d399, #059669); }
+    .testimonial-card:nth-child(3)::before { background: linear-gradient(90deg, #f59e0b, #d97706); }
+    .testimonial-card:hover::before { opacity: 1; }
+    .testimonial-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 16px 40px rgba(15,27,53,0.08);
+      border-color: rgba(37,87,167,0.15);
+    }
+    .testimonial-text {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      line-height: 1.7;
+      font-style: italic;
+      margin-bottom: 1.5rem;
+    }
+    .testimonial-author {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    .testimonial-avatar {
+      width: 40px; height: 40px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent), #5B9BF0);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--white);
+      flex-shrink: 0;
+    }
+    .testimonial-meta strong {
+      display: block;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--dark);
+    }
+    .testimonial-meta span {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    /* ===== CTA BANNER ===== */
+    .cta-banner {
+      padding: 5rem 0;
+      background: linear-gradient(135deg, var(--accent), #3B7DD8);
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .cta-banner::before {
+      content: '';
+      position: absolute;
+      top: -50%; left: -10%;
+      width: 400px; height: 400px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.08);
+      filter: blur(80px);
+    }
+    .cta-banner::after {
+      content: '';
+      position: absolute;
+      bottom: -30%; right: -5%;
+      width: 300px; height: 300px;
+      border-radius: 50%;
+      background: rgba(52,211,153,0.1);
+      filter: blur(60px);
+    }
+    .cta-banner h2 {
+      font-size: clamp(1.75rem, 3.5vw, 2.5rem);
+      font-weight: 700;
+      color: var(--white);
+      margin-bottom: 1rem;
+      letter-spacing: -0.03em;
+      position: relative;
+      z-index: 1;
+    }
+    .cta-banner p {
+      font-size: 1.1rem;
+      color: rgba(255,255,255,0.8);
+      max-width: 560px;
+      margin: 0 auto 2rem;
+      line-height: 1.7;
+      position: relative;
+      z-index: 1;
+    }
+    .cta-banner .btn { position: relative; z-index: 1; }
+    .btn-white {
+      background: var(--white);
+      color: var(--accent);
+      font-weight: 700;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+    }
+    .btn-white:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 28px rgba(0,0,0,0.15);
+      background: #f8faff;
+    }
+
+    /* ===== FOCUS AREAS ===== */
+    .focus-section {
+      padding: 7rem 0;
+      background: var(--bg);
+      position: relative;
+      overflow: hidden;
+    }
+    .focus-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1.5rem;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+    .focus-card {
+      text-align: center;
+      padding: 2.5rem 1.5rem;
+      border-radius: 16px;
+      background: var(--white);
+      border: 1px solid var(--border);
+      transition: all 0.5s var(--ease);
+      position: relative;
+      overflow: hidden;
+    }
+    .focus-card::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--accent), #5B9BF0, #34d399);
+      transform: scaleX(0);
+      transition: transform 0.5s var(--ease);
+      transform-origin: left;
+    }
+    .focus-card:hover::after { transform: scaleX(1); }
+    .focus-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 12px 40px rgba(15,27,53,0.08);
+      border-color: rgba(37,87,167,0.15);
+    }
+    .focus-num {
+      font-size: 2.5rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, var(--accent), #5B9BF0);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      opacity: 0.2;
+      margin-bottom: 1rem;
+      line-height: 1;
+      transition: opacity 0.3s;
+    }
+    .focus-card:hover .focus-num { opacity: 0.5; }
+    .focus-card h3 {
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--dark);
+      margin-bottom: 0.5rem;
+    }
+    .focus-card p {
+      font-size: 0.825rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+
     /* ===== REVEAL ===== */
     .reveal {
       opacity: 0;
-      transform: translateY(30px);
-      transition: opacity 0.7s var(--ease), transform 0.7s var(--ease);
+      transform: translateY(40px);
+      filter: blur(4px);
+      transition: opacity 0.9s var(--ease), transform 0.9s var(--ease), filter 0.9s var(--ease);
     }
 
-    .reveal.visible { opacity: 1; transform: translateY(0); }
-    .reveal-delay-1 { transition-delay: 0.1s; }
-    .reveal-delay-2 { transition-delay: 0.2s; }
-    .reveal-delay-3 { transition-delay: 0.3s; }
-    .reveal-delay-4 { transition-delay: 0.4s; }
-    .reveal-delay-5 { transition-delay: 0.5s; }
+    .reveal.visible { opacity: 1; transform: translateY(0); filter: blur(0); }
+    .reveal-delay-1 { transition-delay: 0.12s; }
+    .reveal-delay-2 { transition-delay: 0.24s; }
+    .reveal-delay-3 { transition-delay: 0.36s; }
+    .reveal-delay-4 { transition-delay: 0.48s; }
+    .reveal-delay-5 { transition-delay: 0.6s; }
 
     /* ===== RESPONSIVE ===== */
     @media (max-width: 960px) {
       .cards-grid { grid-template-columns: repeat(2, 1fr); }
       .members-layout { grid-template-columns: 1fr; gap: 2rem; }
       .footer-grid { grid-template-columns: 1fr 1fr 1fr; }
+      .mission-grid { grid-template-columns: 1fr; }
+      .testimonials-grid { grid-template-columns: 1fr 1fr; }
+      .focus-grid { grid-template-columns: repeat(2, 1fr); }
+      .news-grid { grid-template-columns: repeat(2, 1fr); }
     }
 
     @media (max-width: 768px) {
@@ -1870,6 +2470,8 @@
       .footer-grid { grid-template-columns: 1fr 1fr; gap: 2rem; }
       .footer-bottom { flex-direction: column; gap: 1rem; text-align: center; }
       .cookie-bar { bottom: 5rem; }
+      .data-grid { grid-template-columns: 1fr; }
+      .testimonials-grid { grid-template-columns: 1fr; }
     }
 
     @media (max-width: 480px) {
@@ -1884,10 +2486,24 @@
       .cards-grid { grid-template-columns: 1fr; }
       .footer-grid { grid-template-columns: 1fr; }
       .cookie-bar { bottom: 5.5rem; }
+      .focus-grid { grid-template-columns: 1fr; }
     }
   </style>
 </head>
 <body>
+
+  <!-- Page loader -->
+  <div class="page-loader" id="page-loader">
+    <img src="img/logo-white.jpg" alt="" class="loader-logo">
+    <div class="loader-text">IKT<span>NAA</span></div>
+    <div class="loader-bar"><div class="loader-bar-fill"></div></div>
+    <div class="loader-welcome" id="loader-welcome">
+      <span class="welcome-greeting" id="welcome-greeting"></span><span class="welcome-cursor"></span>
+    </div>
+  </div>
+
+  <!-- Language transition overlay -->
+  <div class="lang-overlay" id="lang-overlay"></div>
 
   <!-- Language loading bar -->
   <div class="lang-loading-bar" id="lang-loading-bar"></div>
@@ -1905,7 +2521,6 @@
   <!-- Header -->
   <header class="header" id="header">
     <div class="container">
-      <a href="/" class="logo"><img src="img/logo-white.jpg" alt="IKTNAA" class="logo-img"><span class="logo-text">IKT<span class="logo-accent">NAA</span></span></a>
       <nav class="nav">
         <ul class="nav-links">
           <li><a href="#par-mums" data-i18n="nav.about">Par mums</a></li>
@@ -1971,7 +2586,10 @@
     <div class="hero-orb hero-orb-3"></div>
     <div class="container">
       <div class="hero-content">
-        <img src="img/logo-white.jpg" alt="" class="hero-logo">
+        <div class="hero-logo-group">
+          <img src="img/logo-white.jpg" alt="" class="hero-logo">
+          <span class="hero-logo-text">IKT<span>NAA</span></span>
+        </div>
         <div class="hero-badge">
           <span data-i18n="hero.tag">Asociācija dibināta 2026. gadā</span>
         </div>
@@ -2010,8 +2628,6 @@
   <div class="ticker" id="ticker">
     <div class="ticker-track" id="ticker-track"></div>
   </div>
-
-  <!-- Stats (moved inline to hero) -->
 
   <!-- Par mums -->
   <section class="section" id="par-mums">
@@ -2075,6 +2691,63 @@
     </div>
   </section>
 
+  <!-- Misija un vīzija -->
+  <section class="mission-section">
+    <div class="container">
+      <div class="mission-grid">
+        <div class="mission-item reveal">
+          <div class="mission-item-icon">
+            <svg width="24" height="24" fill="none" stroke="#5B9BF0" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><path d="M22 4L12 14.01l-3-3"/></svg>
+          </div>
+          <h3 data-i18n="mission.m.title">Misija</h3>
+          <p data-i18n="mission.m.desc">Nodrošināt informācijas un komunikācijas tehnoloģiju nozarē strādājošo speciālistu profesionālo, ekonomisko un sociālo interešu aizsardzību, veicinot taisnīgu darba vidi un profesionālo atzīšanu Latvijā.</p>
+        </div>
+        <div class="mission-item reveal reveal-delay-1">
+          <div class="mission-item-icon">
+            <svg width="24" height="24" fill="none" stroke="#34d399" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+          </div>
+          <h3 data-i18n="mission.v.title">Vīzija</h3>
+          <p data-i18n="mission.v.desc">Latvija kā valsts, kurā IKT speciālisti strādā godīgi atlīdzinātā, droši regulētā un profesionāli atzītā vidē — gan publiskajā, gan privātajā sektorā.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Skaitļi un fakti -->
+  <section class="data-section">
+    <div class="section-dots"><span class="section-dot"></span><span class="section-dot"></span><span class="section-dot"></span><span class="section-dot"></span><span class="section-dot"></span></div>
+    <div class="container">
+      <div class="section-header reveal">
+        <div class="section-tag" data-i18n="data.tag">Skaitļi</div>
+        <h2 data-i18n="data.title">IKT nozare skaitļos</h2>
+        <p data-i18n="data.desc">Galvenā statistika par informācijas tehnoloģiju nozares izaicinājumiem Latvijā.</p>
+      </div>
+      <div class="data-grid">
+        <div class="data-item reveal">
+          <div class="data-label"><span data-i18n="data.d1.label">IT vakanču neaizpildīšanas līmenis valsts sektorā</span> <span class="data-value">30%</span></div>
+          <div class="data-bar-track"><div class="data-bar-fill" data-width="30"></div></div>
+          <div class="data-context" data-i18n="data.d1.ctx">Katrs trešais IT amats valsts pārvaldē paliek neaizpildīts kadru trūkuma dēļ.</div>
+        </div>
+        <div class="data-item reveal reveal-delay-1">
+          <div class="data-label"><span data-i18n="data.d2.label">Algu atšķirība: privātais vs publiskais sektors</span> <span class="data-value">2x</span></div>
+          <div class="data-bar-track"><div class="data-bar-fill" data-width="65"></div></div>
+          <div class="data-context" data-i18n="data.d2.ctx">Publiskajā sektorā IT speciālistu atalgojums vidēji ir 2 reizes zemāks nekā privātajā.</div>
+        </div>
+        <div class="data-item reveal reveal-delay-2">
+          <div class="data-label"><span data-i18n="data.d3.label">IKT speciālistu skaits Latvijā</span> <span class="data-value">35 000+</span></div>
+          <div class="data-bar-track"><div class="data-bar-fill" data-width="45"></div></div>
+          <div class="data-context" data-i18n="data.d3.ctx">Aptuveni 3.5% no visiem nodarbinātajiem strādā IKT nozarē — zem ES vidējā rādītāja.</div>
+        </div>
+        <div class="data-item reveal reveal-delay-3">
+          <div class="data-label"><span data-i18n="data.d4.label">IT speciālistu pieprasījuma pieaugums</span> <span class="data-value">+18%</span></div>
+          <div class="data-bar-track"><div class="data-bar-fill" data-width="78"></div></div>
+          <div class="data-context" data-i18n="data.d4.ctx">Ikgadējais pieprasījuma pieaugums pēc kvalificētiem IKT speciālistiem Latvijā.</div>
+        </div>
+      </div>
+      <div class="data-source" data-i18n="data.source">* Avots: CSP, Eurostat, NVA dati. Precīzas atsauces tiks papildinātas.</div>
+    </div>
+  </section>
+
   <!-- Quote -->
   <section class="quote-section">
     <div class="container">
@@ -2106,6 +2779,98 @@
           <p data-i18n="news.item2.desc">Asociācija aicina uz atbilstošu tiesību normu interpretāciju, jaunu amatu klasifikāciju IT nozarē un birokrātiskās slodzes mazināšanu IT projektos valsts pārvaldē.</p>
           <a href="https://www.linkedin.com/company/iktnaa" class="news-link" target="_blank" rel="noopener"><span data-i18n="news.readmore">Lasīt vairāk</span> <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l6-5-6-5"/></svg></a>
         </article>
+        <article class="news-card reveal reveal-delay-2">
+          <div class="news-date" data-i18n="news.item3.date">2026. gada janvāris</div>
+          <h3 data-i18n="news.item3.title">IKTNAA uzsāk darbību — pirmie soļi IT speciālistu interešu aizstāvībā</h3>
+          <p data-i18n="news.item3.desc">Asociācija sāk aktīvu darbu, apzinot IKT nozarē nodarbināto galvenās problēmas un veidojot kontaktus ar valsts institūcijām un nozares organizācijām.</p>
+          <a href="https://www.linkedin.com/company/iktnaa" class="news-link" target="_blank" rel="noopener"><span data-i18n="news.readmore">Lasīt vairāk</span> <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l6-5-6-5"/></svg></a>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- Viedokļi -->
+  <section class="testimonials-section">
+    <div class="section-dots"><span class="section-dot"></span><span class="section-dot"></span><span class="section-dot"></span><span class="section-dot"></span><span class="section-dot"></span></div>
+    <div class="container">
+      <div class="section-header reveal">
+        <div class="section-tag" data-i18n="test.tag">Viedokļi</div>
+        <h2 data-i18n="test.title">Ko saka nozares profesionāļi</h2>
+      </div>
+      <div class="testimonials-grid">
+        <div class="testimonial-card reveal">
+          <p class="testimonial-text" data-i18n="test.t1.text">Pēdējos gados esmu redzējis, kā talantīgi kolēģi aiziet no valsts sektora — ne tāpēc, ka darbs nav interesants, bet tāpēc, ka apstākļi ir netaisnīgi. IKTNAA ir iespēja to mainīt.</p>
+          <div class="testimonial-author">
+            <div class="testimonial-avatar">MK</div>
+            <div class="testimonial-meta">
+              <strong data-i18n="test.t1.name">Mārtiņš K.</strong>
+              <span data-i18n="test.t1.role">Sistēmu administrators, valsts pārvalde</span>
+            </div>
+          </div>
+        </div>
+        <div class="testimonial-card reveal reveal-delay-1">
+          <p class="testimonial-text" data-i18n="test.t2.text">Kā IT projektu vadītāja, saskaros ar situācijām, kur lēmumu pieņemšana tiek novirzīta uz speciālistiem bez atbilstošas juridiskās aizsardzības. Asociācija risina reālu problēmu.</p>
+          <div class="testimonial-author">
+            <div class="testimonial-avatar" style="background: linear-gradient(135deg, #34d399, #059669);">LV</div>
+            <div class="testimonial-meta">
+              <strong data-i18n="test.t2.name">Laura V.</strong>
+              <span data-i18n="test.t2.role">IT projektu vadītāja</span>
+            </div>
+          </div>
+        </div>
+        <div class="testimonial-card reveal reveal-delay-2">
+          <p class="testimonial-text" data-i18n="test.t3.text">Privātajā sektorā atalgojums ir labs, bet kolēģi valsts iestādēs dara kritiski svarīgu darbu par daudz mazāku atlīdzību. Tas nav ilgtspējīgi — un kādam tas ir jāsaka skaļi.</p>
+          <div class="testimonial-author">
+            <div class="testimonial-avatar" style="background: linear-gradient(135deg, #f59e0b, #d97706);">AP</div>
+            <div class="testimonial-meta">
+              <strong data-i18n="test.t3.name">Artūrs P.</strong>
+              <span data-i18n="test.t3.role">Kiberdrošības inženieris</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Banner -->
+  <section class="cta-banner">
+    <div class="container">
+      <h2 class="reveal" data-i18n="ctab.title">Kopā mēs varam vairāk</h2>
+      <p class="reveal reveal-delay-1" data-i18n="ctab.desc">Pievienojies IKTNAA un palīdzi veidot nozari, kurā IT speciālisti strādā taisnīgi atlīdzinātā, droši regulētā un profesionāli atzītā vidē.</p>
+      <a href="mailto:info@iktnaa.lv" class="btn btn-white reveal reveal-delay-2" data-i18n="ctab.btn">Sazināties ar mums</a>
+    </div>
+  </section>
+
+  <!-- Darbības virzieni -->
+  <section class="focus-section">
+    <div class="section-dots"><span class="section-dot"></span><span class="section-dot"></span><span class="section-dot"></span><span class="section-dot"></span><span class="section-dot"></span></div>
+    <div class="container">
+      <div class="section-header reveal">
+        <div class="section-tag" data-i18n="focus.tag">Darbības virzieni</div>
+        <h2 data-i18n="focus.title">Kur strādā IKTNAA</h2>
+        <p data-i18n="focus.desc">Asociācijas galvenie darbības virzieni, kas veido mūsu ikdienas darbu.</p>
+      </div>
+      <div class="focus-grid">
+        <div class="focus-card reveal">
+          <div class="focus-num">01</div>
+          <h3 data-i18n="focus.f1.title">Sociālais dialogs</h3>
+          <p data-i18n="focus.f1.desc">Dialogs ar valdību, darba devējiem un arodbiedrībām par IKT nozares izaicinājumiem.</p>
+        </div>
+        <div class="focus-card reveal reveal-delay-1">
+          <div class="focus-num">02</div>
+          <h3 data-i18n="focus.f2.title">Tiesiskais ietvars</h3>
+          <p data-i18n="focus.f2.desc">Likumdošanas uzraudzība un priekšlikumi par IT speciālistu tiesisko aizsardzību.</p>
+        </div>
+        <div class="focus-card reveal reveal-delay-2">
+          <div class="focus-num">03</div>
+          <h3 data-i18n="focus.f3.title">Izglītība un sertifikācija</h3>
+          <p data-i18n="focus.f3.desc">Profesionālās kvalifikācijas sistēmu attīstība un starptautisku standartu ieviešana.</p>
+        </div>
+        <div class="focus-card reveal reveal-delay-3">
+          <div class="focus-num">04</div>
+          <h3 data-i18n="focus.f4.title">Kopienas stiprināšana</h3>
+          <p data-i18n="focus.f4.desc">Tīklošanās pasākumi, mentorings un pieredzes apmaiņas platformas nozares profesionāļiem.</p>
+        </div>
       </div>
     </div>
   </section>
@@ -2208,6 +2973,7 @@
   <!-- Chat FAB -->
   <button class="chat-fab" id="chat-fab" aria-label="Chat">
     <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+    <span class="chat-fab-label" data-i18n="chat.fab">Jautā</span>
   </button>
 
   <!-- Chat window -->
@@ -2273,8 +3039,37 @@
         'footer.desc': 'IKT nodarbināto atbalsta asociācija — aizstāvam IT speciālistu intereses Latvijā.',
         'footer.tagline': 'Par stipru, godīgu un profesionālu IKT nozari.',
         'footer.nav': 'Navigācija', 'footer.contact': 'Kontakti', 'footer.legal': 'Rekvizīti', 'footer.privacy': 'Privātuma politika',
+        'mission.tag': 'Mūsu virziens', 'mission.title': 'Misija un vīzija',
+        'mission.m.title': 'Misija', 'mission.m.desc': 'Nodrošināt informācijas un komunikācijas tehnoloģiju nozarē strādājošo speciālistu profesionālo, ekonomisko un sociālo interešu aizsardzību, veicinot taisnīgu darba vidi un profesionālo atzīšanu Latvijā.',
+        'mission.v.title': 'Vīzija', 'mission.v.desc': 'Latvija kā valsts, kurā IKT speciālisti strādā godīgi atlīdzinātā, droši regulētā un profesionāli atzītā vidē — gan publiskajā, gan privātajā sektorā.',
+        'data.tag': 'Skaitļi', 'data.title': 'IKT nozare skaitļos',
+        'data.desc': 'Galvenā statistika par informācijas tehnoloģiju nozares izaicinājumiem Latvijā.',
+        'data.d1.label': 'IT vakanču neaizpildīšanas līmenis valsts sektorā', 'data.d1.ctx': 'Katrs trešais IT amats valsts pārvaldē paliek neaizpildīts kadru trūkuma dēļ.',
+        'data.d2.label': 'Algu atšķirība: privātais vs publiskais sektors', 'data.d2.ctx': 'Publiskajā sektorā IT speciālistu atalgojums vidēji ir 2 reizes zemāks nekā privātajā.',
+        'data.d3.label': 'IKT speciālistu skaits Latvijā', 'data.d3.ctx': 'Aptuveni 3.5% no visiem nodarbinātajiem strādā IKT nozarē — zem ES vidējā rādītāja.',
+        'data.d4.label': 'IT speciālistu pieprasījuma pieaugums', 'data.d4.ctx': 'Ikgadējais pieprasījuma pieaugums pēc kvalificētiem IKT speciālistiem Latvijā.',
+        'data.source': '* Avots: CSP, Eurostat, NVA dati. Precīzas atsauces tiks papildinātas.',
+        'test.tag': 'Viedokļi', 'test.title': 'Ko saka nozares profesionāļi',
+        'test.t1.text': 'Pēdējos gados esmu redzējis, kā talantīgi kolēģi aiziet no valsts sektora — ne tāpēc, ka darbs nav interesants, bet tāpēc, ka apstākļi ir netaisnīgi. IKTNAA ir iespēja to mainīt.',
+        'test.t1.name': 'Mārtiņš K.', 'test.t1.role': 'Sistēmu administrators, valsts pārvalde',
+        'test.t2.text': 'Kā IT projektu vadītāja, saskaros ar situācijām, kur lēmumu pieņemšana tiek novirzīta uz speciālistiem bez atbilstošas juridiskās aizsardzības. Asociācija risina reālu problēmu.',
+        'test.t2.name': 'Laura V.', 'test.t2.role': 'IT projektu vadītāja',
+        'test.t3.text': 'Privātajā sektorā atalgojums ir labs, bet kolēģi valsts iestādēs dara kritiski svarīgu darbu par daudz mazāku atlīdzību. Tas nav ilgtspējīgi — un kādam tas ir jāsaka skaļi.',
+        'test.t3.name': 'Artūrs P.', 'test.t3.role': 'Kiberdrošības inženieris',
+        'ctab.title': 'Kopā mēs varam vairāk',
+        'ctab.desc': 'Pievienojies IKTNAA un palīdzi veidot nozari, kurā IT speciālisti strādā taisnīgi atlīdzinātā, droši regulētā un profesionāli atzītā vidē.',
+        'ctab.btn': 'Sazināties ar mums',
+        'focus.tag': 'Darbības virzieni', 'focus.title': 'Kur strādā IKTNAA',
+        'focus.desc': 'Asociācijas galvenie darbības virzieni, kas veido mūsu ikdienas darbu.',
+        'focus.f1.title': 'Sociālais dialogs', 'focus.f1.desc': 'Dialogs ar valdību, darba devējiem un arodbiedrībām par IKT nozares izaicinājumiem.',
+        'focus.f2.title': 'Tiesiskais ietvars', 'focus.f2.desc': 'Likumdošanas uzraudzība un priekšlikumi par IT speciālistu tiesisko aizsardzību.',
+        'focus.f3.title': 'Izglītība un sertifikācija', 'focus.f3.desc': 'Profesionālās kvalifikācijas sistēmu attīstība un starptautisku standartu ieviešana.',
+        'focus.f4.title': 'Kopienas stiprināšana', 'focus.f4.desc': 'Tīklošanās pasākumi, mentorings un pieredzes apmaiņas platformas nozares profesionāļiem.',
+        'news.item3.date': '2026. gada janvāris', 'news.item3.title': 'IKTNAA uzsāk darbību — pirmie soļi IT speciālistu interešu aizstāvībā',
+        'news.item3.desc': 'Asociācija sāk aktīvu darbu, apzinot IKT nozarē nodarbināto galvenās problēmas un veidojot kontaktus ar valsts institūcijām un nozares organizācijām.',
         'cookie.text': 'Šī vietne izmanto sīkdatnes. <a href="privatuma-politika/">Vairāk</a>', 'cookie.accept': 'Piekrītu',
-        'chat.status': 'Tiešsaistē', 'chat.welcome': 'Sveiki! 👋 Esmu IKTNAA virtuālais palīgs. Kā varu palīdzēt?'
+        'chat.status': 'Tiešsaistē', 'chat.welcome': 'Sveiki! 👋 Esmu IKTNAA virtuālais palīgs. Kā varu palīdzēt?',
+        'chat.fab': 'Jautā'
       },
       en: {
         'nav.about': 'About Us', 'nav.news': 'News', 'nav.members': 'Membership', 'nav.contact': 'Contact',
@@ -2320,14 +3115,43 @@
         'footer.desc': 'ICT Workers Support Association — advocating for IT professionals in Latvia.',
         'footer.tagline': 'For a strong, fair, and professional ICT industry.',
         'footer.nav': 'Navigation', 'footer.contact': 'Contact', 'footer.legal': 'Details', 'footer.privacy': 'Privacy Policy',
+        'mission.tag': 'Our Direction', 'mission.title': 'Mission & Vision',
+        'mission.m.title': 'Mission', 'mission.m.desc': 'To ensure protection of professional, economic, and social interests of ICT sector employees, promoting a fair working environment and professional recognition in Latvia.',
+        'mission.v.title': 'Vision', 'mission.v.desc': 'Latvia as a country where ICT specialists work in a fairly compensated, safely regulated, and professionally recognized environment — in both the public and private sectors.',
+        'data.tag': 'Data', 'data.title': 'ICT Sector in Numbers',
+        'data.desc': 'Key statistics about the challenges facing the information technology sector in Latvia.',
+        'data.d1.label': 'IT vacancy unfill rate in the public sector', 'data.d1.ctx': 'Every third IT position in public administration remains unfilled due to staff shortages.',
+        'data.d2.label': 'Salary gap: private vs public sector', 'data.d2.ctx': 'In the public sector, IT specialist compensation is on average 2 times lower than in the private sector.',
+        'data.d3.label': 'Number of ICT specialists in Latvia', 'data.d3.ctx': 'Approximately 3.5% of all employed people work in ICT — below the EU average.',
+        'data.d4.label': 'Annual demand growth for IT specialists', 'data.d4.ctx': 'Annual demand growth for qualified ICT specialists in Latvia.',
+        'data.source': '* Source: CSB, Eurostat, SEA data. Exact references to be added.',
+        'test.tag': 'Testimonials', 'test.title': 'What industry professionals say',
+        'test.t1.text': 'In recent years, I\'ve watched talented colleagues leave the public sector — not because the work isn\'t interesting, but because the conditions are unfair. IKTNAA is a chance to change that.',
+        'test.t1.name': 'Mārtiņš K.', 'test.t1.role': 'Systems Administrator, Public Administration',
+        'test.t2.text': 'As an IT project manager, I encounter situations where decision-making is shifted to specialists without adequate legal protection. The association addresses a real problem.',
+        'test.t2.name': 'Laura V.', 'test.t2.role': 'IT Project Manager',
+        'test.t3.text': 'In the private sector, compensation is good, but colleagues in government agencies do critically important work for much less pay. That\'s not sustainable — and someone needs to say it loudly.',
+        'test.t3.name': 'Artūrs P.', 'test.t3.role': 'Cybersecurity Engineer',
+        'ctab.title': 'Together we can do more',
+        'ctab.desc': 'Join IKTNAA and help build an industry where IT specialists work in a fairly compensated, safely regulated, and professionally recognized environment.',
+        'ctab.btn': 'Contact us',
+        'focus.tag': 'Focus Areas', 'focus.title': 'Where IKTNAA Works',
+        'focus.desc': 'The association\'s key areas of activity that shape our daily work.',
+        'focus.f1.title': 'Social Dialogue', 'focus.f1.desc': 'Dialogue with government, employers, and trade unions on ICT sector challenges.',
+        'focus.f2.title': 'Legal Framework', 'focus.f2.desc': 'Legislative monitoring and proposals for legal protection of IT specialists.',
+        'focus.f3.title': 'Education & Certification', 'focus.f3.desc': 'Development of professional qualification systems and implementation of international standards.',
+        'focus.f4.title': 'Community Building', 'focus.f4.desc': 'Networking events, mentoring, and experience-sharing platforms for industry professionals.',
+        'news.item3.date': 'January 2026', 'news.item3.title': 'IKTNAA Launches Operations — First Steps in IT Advocacy',
+        'news.item3.desc': 'The association begins active work, identifying key challenges for ICT workers and establishing contacts with government institutions and industry organizations.',
         'cookie.text': 'This site uses cookies. <a href="privatuma-politika/">Learn more</a>', 'cookie.accept': 'Accept',
-        'chat.status': 'Online', 'chat.welcome': 'Hello! 👋 I\'m the IKTNAA virtual assistant. How can I help?'
+        'chat.status': 'Online', 'chat.welcome': 'Hello! 👋 I\'m the IKTNAA virtual assistant. How can I help?',
+        'chat.fab': 'Ask'
       }
     };
 
     let lang = localStorage.getItem('iktnaa-lang') || 'lv';
 
-    function setLang(l) {
+    function setLang(l, initial) {
       lang = l;
       localStorage.setItem('iktnaa-lang', l);
       document.documentElement.lang = l;
@@ -2335,11 +3159,33 @@
         ? 'IKTNAA — IKT nodarbināto atbalsta asociācija'
         : 'IKTNAA — ICT Workers Support Association';
 
-      // Loading bar + fade animation
+      // Skip animation on initial page load (loader handles it)
+      if (initial) {
+        document.querySelectorAll('[data-i18n]').forEach(el => {
+          const key = el.getAttribute('data-i18n');
+          const val = T[l]?.[key];
+          if (val) {
+            if (val.includes('<')) { el.innerHTML = val; }
+            else { el.textContent = val; }
+          }
+        });
+        langFlag.textContent = FLAGS[l] || '🇱🇻';
+        langLabel.textContent = LABELS[l] || 'LV';
+        langListItems.forEach(li => li.classList.toggle('active', li.dataset.lang === l));
+        document.querySelectorAll('.mm-lang-btn').forEach(b =>
+          b.classList.toggle('active', b.dataset.lang === l)
+        );
+        buildTicker(l);
+        return;
+      }
+
+      // Loading bar + overlay animation
       const loadBar = document.getElementById('lang-loading-bar');
+      const overlay = document.getElementById('lang-overlay');
       loadBar.classList.remove('active');
-      void loadBar.offsetWidth; // reflow to restart animation
+      void loadBar.offsetWidth;
       loadBar.classList.add('active');
+      overlay.classList.add('active');
 
       // Fade out text
       document.body.classList.add('lang-switching');
@@ -2356,10 +3202,11 @@
         });
         // Fade back in
         document.body.classList.remove('lang-switching');
+        overlay.classList.remove('active');
 
         // Hide loading bar after animation completes
-        setTimeout(() => { loadBar.classList.remove('active'); }, 350);
-      }, 180);
+        setTimeout(() => { loadBar.classList.remove('active'); }, 400);
+      }, 300);
 
       // Update dropdown (instant — not translated content)
       langFlag.textContent = FLAGS[l] || '🇱🇻';
@@ -2496,7 +3343,7 @@
           observer.unobserve(e.target);
         }
       });
-    }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+    }, { threshold: 0.08, rootMargin: '0px 0px -60px 0px' });
 
     document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
@@ -2539,27 +3386,52 @@
       });
     });
 
-    /* ===== Hero stat counter (inline) ===== */
+    /* ===== News card 3D tilt + glow ===== */
+    document.querySelectorAll('.news-card').forEach(card => {
+      card.addEventListener('mousemove', e => {
+        const rect = card.getBoundingClientRect();
+        const x = (e.clientX - rect.left) / rect.width - 0.5;
+        const y = (e.clientY - rect.top) / rect.height - 0.5;
+        card.style.transform = `translateY(-8px) scale(1.03) rotateY(${x * 12}deg) rotateX(${-y * 12}deg)`;
+        card.style.background = `radial-gradient(350px circle at ${e.clientX - rect.left}px ${e.clientY - rect.top}px, rgba(37,87,167,0.06), transparent 40%) no-repeat, var(--white)`;
+      });
+      card.addEventListener('mouseleave', () => {
+        card.style.transform = '';
+        card.style.background = '';
+      });
+    });
+
+    /* ===== Hero stat counter (inline) — elastic bounce ===== */
+    function animateCount(el, target, duration, suffix) {
+      el.textContent = '0';
+      const start = performance.now();
+      function step(now) {
+        const t = Math.min((now - start) / duration, 1);
+        // smooth ease-out quartic
+        const eased = 1 - Math.pow(1 - t, 4);
+        const val = Math.round(Math.min(eased, 1) * target);
+        el.textContent = val;
+        if (t < 1) requestAnimationFrame(step);
+        else {
+          el.textContent = target;
+          el.style.transform = 'scale(1.12)';
+          el.style.transition = 'transform 0.4s var(--ease)';
+          setTimeout(() => { el.style.transform = ''; }, 400);
+        }
+      }
+      requestAnimationFrame(step);
+    }
+
     setTimeout(() => {
       document.querySelectorAll('.hero-stat').forEach((el, i) => {
         const numEl = el.querySelector('.hero-stat-num span');
         if (!numEl) return;
         const target = parseInt(numEl.textContent);
         if (isNaN(target)) return;
-        const duration = target > 100 ? 2000 : 1200;
-        numEl.textContent = '0';
-        setTimeout(() => {
-          const start = performance.now();
-          function step(now) {
-            const progress = Math.min((now - start) / duration, 1);
-            const eased = 1 - Math.pow(1 - progress, 3);
-            numEl.textContent = Math.round(eased * target);
-            if (progress < 1) requestAnimationFrame(step);
-          }
-          requestAnimationFrame(step);
-        }, i * 200);
+        const duration = target > 100 ? 3000 : 2000;
+        setTimeout(() => animateCount(numEl, target, duration), i * 500);
       });
-    }, 1200);
+    }, 4800);
 
     /* ===== Stat item hover glow ===== */
     document.querySelectorAll('.stat-item').forEach(item => {
@@ -2819,9 +3691,80 @@
       setTimeout(tick, 1200);
     })();
 
+    /* ===== Data bar + value animation ===== */
+    const dataObserver = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          const item = e.target;
+          // Animate bar
+          const bar = item.querySelector('.data-bar-fill');
+          if (bar) bar.style.width = bar.dataset.width + '%';
+          // Animate value number
+          const valEl = item.querySelector('.data-value');
+          if (valEl) {
+            const origText = valEl.textContent.trim();
+            const numMatch = origText.match(/[\d]+/);
+            if (numMatch) {
+              const target = parseInt(numMatch[0]);
+              const prefix = origText.slice(0, origText.indexOf(numMatch[0]));
+              const suffix = origText.slice(origText.indexOf(numMatch[0]) + numMatch[0].length);
+              const duration = target > 100 ? 2800 : 1800;
+              valEl.textContent = prefix + '0' + suffix;
+              const start = performance.now();
+              function step(now) {
+                const t = Math.min((now - start) / duration, 1);
+                const eased = 1 - Math.pow(1 - t, 4);
+                valEl.textContent = prefix + Math.round(eased * target) + suffix;
+                if (t < 1) requestAnimationFrame(step);
+                else {
+                  valEl.textContent = origText;
+                  valEl.style.transform = 'scale(1.15)';
+                  valEl.style.transition = 'transform 0.3s var(--ease)';
+                  setTimeout(() => { valEl.style.transform = ''; }, 300);
+                }
+              }
+              requestAnimationFrame(step);
+            }
+          }
+          dataObserver.unobserve(item);
+        }
+      });
+    }, { threshold: 0.3 });
+    document.querySelectorAll('.data-item').forEach(el => dataObserver.observe(el));
+
     /* ===== Init ===== */
-    setLang(lang);
+    setLang(lang, true);
     if (chatOpen) initChat();
+
+    /* ===== Page loader — typing welcome + fade out ===== */
+    window.addEventListener('load', () => {
+      const loader = document.getElementById('page-loader');
+      const greetings = { lv: '> Sveicināti_', en: '> Welcome_' };
+      const greeting = greetings[lang] || greetings.lv;
+      const el = document.getElementById('welcome-greeting');
+      const wrap = document.getElementById('loader-welcome');
+
+      // At 2s: show welcome, type out greeting
+      setTimeout(() => {
+        wrap.classList.add('show');
+        let i = 0;
+        function typeChar() {
+          if (i < greeting.length) {
+            el.textContent = greeting.slice(0, i + 1);
+            i++;
+            setTimeout(typeChar, 50 + Math.random() * 30);
+          }
+        }
+        typeChar();
+      }, 2000);
+
+      // At 3.8s: fade out loader, reveal page
+      setTimeout(() => {
+        document.body.classList.add('page-loaded');
+        loader.classList.add('done');
+        loader.addEventListener('transitionend', () => loader.remove(), { once: true });
+      }, 3800);
+    });
   </script>
 </body>
 </html>
