@@ -3160,11 +3160,10 @@
             <span data-i18n="join.trust">Datus izmantojam tikai saziņai ar tevi</span>
           </div>
         </div>
-        <form class="join-card reveal reveal-delay-1" action="https://formsubmit.co/info@itna.lv" method="POST">
+        <form class="join-card reveal reveal-delay-1" id="join-form" action="https://formsubmit.co/info@itna.lv" method="POST">
           <input type="hidden" name="_subject" value="Jauns IKTNAA dalībnieks">
           <input type="hidden" name="_captcha" value="false">
           <input type="hidden" name="_template" value="table">
-          <input type="hidden" name="_next" value="https://itna.lv/">
           <input type="text" name="_honey" style="display:none">
           <h3 data-i18n="join.form.title">Aizpildi pieteikumu</h3>
           <div class="form-row">
@@ -3185,7 +3184,7 @@
             <label data-i18n="join.form.field">Nozare / amats (neobligāts)</label>
             <input type="text" name="Nozare" class="form-input" placeholder="Backend izstrādātājs">
           </div>
-          <button type="submit" class="btn-join" data-i18n="join.form.btn">Pievienoties</button>
+          <button type="submit" class="btn-join" id="join-btn" data-i18n="join.form.btn">Pievienoties</button>
         </form>
       </div>
     </div>
@@ -3202,11 +3201,10 @@
           <h2 data-i18n="report.title">Dalies ar pieredzi</h2>
           <p data-i18n="report.desc">Ierosini sev aktuālu jautājumu vai situāciju. Tava pieredze palīdz mums identificēt reālas problēmas un rīkoties.</p>
         </div>
-        <form class="report-card reveal reveal-delay-1" action="https://formsubmit.co/info@itna.lv" method="POST">
+        <form class="report-card reveal reveal-delay-1" id="report-form" action="https://formsubmit.co/info@itna.lv" method="POST">
           <input type="hidden" name="_subject" value="Anonīms ziņojums — IKTNAA">
           <input type="hidden" name="_captcha" value="false">
           <input type="hidden" name="_template" value="table">
-          <input type="hidden" name="_next" value="https://itna.lv/">
           <input type="text" name="_honey" style="display:none">
           <div class="form-group-light">
             <label data-i18n="report.form.category">Tēmas kategorija</label>
@@ -3222,7 +3220,7 @@
             <label data-i18n="report.form.text">Apraksti situāciju</label>
             <textarea name="Situācija" class="form-input-light" id="report-text" placeholder="" data-i18n-placeholder="report.form.placeholder" required></textarea>
           </div>
-          <button type="submit" class="btn-report" data-i18n="report.form.btn">Nosūtīt anonīmi</button>
+          <button type="submit" class="btn-report" id="report-btn" data-i18n="report.form.btn">Nosūtīt anonīmi</button>
         </form>
         <div class="report-trust reveal reveal-delay-2">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
@@ -3481,7 +3479,11 @@
         'news.item3.desc': 'Asociācija sāk aktīvu darbu, apzinot IKT nozarē nodarbināto galvenās problēmas un veidojot kontaktus ar valsts institūcijām un nozares organizācijām.',
         'cookie.text': 'Šī vietne izmanto sīkdatnes. <a href="privatuma-politika/">Vairāk</a>', 'cookie.accept': 'Piekrītu',
         'chat.status': 'Tiešsaistē', 'chat.welcome': 'Sveiki! 👋 Esmu IKTNAA virtuālais palīgs. Kā varu palīdzēt?',
-        'chat.fab': 'Jautā'
+        'chat.fab': 'Jautā',
+        'notification.join.success': 'Paldies, Jūsu ziņojums ir saņemts',
+        'notification.report.success': 'Paldies, Jūsu ziņojums ir saņemts pilnībā anonīmi',
+        'form.sending': 'Nosūta...',
+        'form.error': 'Radās kļūda nosūtot ziņojumu. Lūdzu, mēģiniet vēlreiz.'
       },
       en: {
         'nav.about': 'About Us', 'nav.news': 'News', 'nav.members': 'Membership', 'nav.contact': 'Contact',
@@ -3574,7 +3576,11 @@
         'news.item3.desc': 'The association begins active work, identifying key challenges for ICT workers and establishing contacts with government institutions and industry organizations.',
         'cookie.text': 'This site uses cookies. <a href="privatuma-politika/">Learn more</a>', 'cookie.accept': 'Accept',
         'chat.status': 'Online', 'chat.welcome': 'Hello! 👋 I\'m the IKTNAA virtual assistant. How can I help?',
-        'chat.fab': 'Ask'
+        'chat.fab': 'Ask',
+        'notification.join.success': 'Thank you, your message has been received',
+        'notification.report.success': 'Thank you, your message has been received completely anonymously',
+        'form.sending': 'Sending...',
+        'form.error': 'An error occurred sending the message. Please try again.'
       }
     };
 
@@ -4264,6 +4270,66 @@
         loader.addEventListener('transitionend', () => loader.remove(), { once: true });
       }, 3800);
     });
+
+    /* ===== AJAX Form Submission ===== */
+    function submitFormAjax(form, successMessageKey) {
+      const submitBtn = form.querySelector('button[type="submit"]');
+      const originalText = submitBtn.textContent;
+
+      // Show loading state
+      submitBtn.disabled = true;
+      submitBtn.textContent = T[lang]['form.sending'];
+
+      // Prepare form data
+      const formData = new FormData(form);
+
+      // Submit form via AJAX
+      fetch(form.action, {
+        method: 'POST',
+        body: formData,
+        headers: {
+          'Accept': 'application/json'
+        }
+      })
+      .then(response => {
+        if (response.ok) {
+          // Show success message
+          showToast(T[lang][successMessageKey]);
+          // Reset form
+          form.reset();
+        } else {
+          throw new Error('Network response was not ok');
+        }
+      })
+      .catch(error => {
+        console.error('Form submission error:', error);
+        // Show error message
+        showToast(T[lang]['form.error']);
+      })
+      .finally(() => {
+        // Restore button state
+        submitBtn.disabled = false;
+        submitBtn.textContent = originalText;
+      });
+    }
+
+    // Handle join form submission
+    const joinForm = document.getElementById('join-form');
+    if (joinForm) {
+      joinForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        submitFormAjax(joinForm, 'notification.join.success');
+      });
+    }
+
+    // Handle report form submission
+    const reportForm = document.getElementById('report-form');
+    if (reportForm) {
+      reportForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        submitFormAjax(reportForm, 'notification.report.success');
+      });
+    }
   </script>
 </body>
 </html>
